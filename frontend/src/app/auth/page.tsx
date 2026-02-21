@@ -19,6 +19,17 @@ function AuthContent() {
     const defaultTab = searchParams.get("tab") === "signup" ? "signup" : "signin";
     const defaultRole = searchParams.get("role") || "creator";
 
+    // Map raw Supabase errors to user-friendly messages
+    const getSafeErrorMessage = (err: any): string => {
+        const msg = err?.message?.toLowerCase() || "";
+        if (msg.includes("invalid login")) return "Invalid email or password.";
+        if (msg.includes("email not confirmed")) return "Please check your email to confirm your account.";
+        if (msg.includes("already registered")) return "An account with this email already exists.";
+        if (msg.includes("rate limit")) return "Too many attempts. Please try again later.";
+        if (msg.includes("weak password") || msg.includes("password")) return "Password is too weak. Use at least 8 characters.";
+        return "Something went wrong. Please try again.";
+    };
+
     const [activeTab, setActiveTab] = useState(defaultTab);
     const [role, setRole] = useState<"brand" | "creator">(defaultRole as "brand" | "creator");
     const [email, setEmail] = useState("");
@@ -51,7 +62,7 @@ function AuthContent() {
                 router.push("/creator");
             }
         } catch (err: any) {
-            setMessage(err.message || "An error occurred");
+            setMessage(getSafeErrorMessage(err));
         } finally {
             setLoading(false);
         }
@@ -59,6 +70,10 @@ function AuthContent() {
 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (password.length < 8) {
+            setMessage("Password must be at least 8 characters.");
+            return;
+        }
         setLoading(true);
         setMessage("");
         try {
@@ -80,7 +95,7 @@ function AuthContent() {
                 router.push("/brand");
             }
         } catch (err: any) {
-            setMessage(err.message || "An error occurred");
+            setMessage(getSafeErrorMessage(err));
         } finally {
             setLoading(false);
         }
@@ -140,6 +155,7 @@ function AuthContent() {
                                                 id="signin-email"
                                                 type="email"
                                                 placeholder="you@example.com"
+                                                maxLength={100}
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 className="pl-10"
@@ -155,6 +171,7 @@ function AuthContent() {
                                                 id="signin-password"
                                                 type="password"
                                                 placeholder="••••••••"
+                                                maxLength={128}
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 className="pl-10"
@@ -213,6 +230,7 @@ function AuthContent() {
                                                 id="signup-name"
                                                 type="text"
                                                 placeholder={role === "brand" ? "Your Brand" : "John Doe"}
+                                                maxLength={100}
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)}
                                                 className="pl-10"
@@ -229,6 +247,7 @@ function AuthContent() {
                                                 id="signup-email"
                                                 type="email"
                                                 placeholder="you@example.com"
+                                                maxLength={100}
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 className="pl-10"
@@ -245,6 +264,8 @@ function AuthContent() {
                                                 id="signup-password"
                                                 type="password"
                                                 placeholder="••••••••"
+                                                maxLength={128}
+                                                minLength={8}
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 className="pl-10"

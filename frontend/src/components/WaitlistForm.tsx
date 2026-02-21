@@ -1,13 +1,17 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Loader2, CheckCircle2, Search, ChevronDown, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+
+const EDGE_FUNCTION_URL =
+    process.env.NEXT_PUBLIC_SUPABASE_URL
+        ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/waitlist-submit`
+        : "https://pwjlzpjbozbtrddvddhv.supabase.co/functions/v1/waitlist-submit";
 
 const CATEGORIES = [
     "Skincare",
@@ -167,8 +171,8 @@ function CategorySelect({
                                                 setOpen(false);
                                             }}
                                             className={`w-full text-left px-4 py-2.5 text-sm transition-colors border-t border-black/[0.04] mt-1 ${"Other" === value
-                                                    ? "bg-black/[0.04] font-medium text-foreground"
-                                                    : "text-foreground/50 hover:bg-black/[0.03]"
+                                                ? "bg-black/[0.04] font-medium text-foreground"
+                                                : "text-foreground/50 hover:bg-black/[0.03]"
                                                 }`}
                                         >
                                             Other
@@ -196,14 +200,22 @@ export default function WaitlistForm() {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [rank, setRank] = useState<number | null>(null);
+    const [submittedRecently, setSubmittedRecently] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Client-side debounce
+        if (submittedRecently) {
+            setError("Please wait a moment before submitting again.");
+            return;
+        }
+
         setLoading(true);
         setError(null);
 
         try {
-            const payload: Record<string, string | null> = {
+            const payload = {
                 email,
                 name: role === "creator" ? name : null,
                 role,
@@ -213,25 +225,20 @@ export default function WaitlistForm() {
                 company_name: role === "brand" ? companyName || null : null,
             };
 
-            const { error: dbError } = await supabase
-                .from("waitlist")
-                .insert([payload]);
+            const res = await fetch(EDGE_FUNCTION_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
 
-            if (dbError) {
-                if (dbError.code === "23505") {
-                    throw new Error(
-                        "You're already on the waitlist! We'll be in touch."
-                    );
-                }
-                throw dbError;
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Something went wrong. Please try again.");
             }
 
-            const { count, error: countError } = await supabase
-                .from("waitlist")
-                .select("*", { count: "exact", head: true });
-
-            if (!countError && count !== null) {
-                setRank(count);
+            if (data.rank) {
+                setRank(data.rank);
             }
 
             setSuccess(true);
@@ -240,8 +247,11 @@ export default function WaitlistForm() {
             setInstagramHandle("");
             setCompanyName("");
             setCategory("");
+
+            // Debounce: prevent rapid re-submissions
+            setSubmittedRecently(true);
+            setTimeout(() => setSubmittedRecently(false), 10000);
         } catch (err: any) {
-            console.error("Waitlist error:", err);
             setError(err.message || "Something went wrong. Please try again.");
         } finally {
             setLoading(false);
@@ -350,6 +360,7 @@ export default function WaitlistForm() {
                                                     id="name"
                                                     placeholder="Jane Doe"
                                                     value={name}
+                                                    maxLength={100}
                                                     onChange={(e) =>
                                                         setName(e.target.value)
                                                     }
@@ -369,6 +380,7 @@ export default function WaitlistForm() {
                                                     id="email"
                                                     type="email"
                                                     required
+                                                    maxLength={100}
                                                     placeholder="jane@example.com"
                                                     value={email}
                                                     onChange={(e) =>
@@ -395,6 +407,7 @@ export default function WaitlistForm() {
                                                     <Input
                                                         id="instagram"
                                                         placeholder="yourhandle"
+                                                        maxLength={50}
                                                         value={instagramHandle}
                                                         onChange={(e) =>
                                                             setInstagramHandle(
@@ -422,6 +435,7 @@ export default function WaitlistForm() {
                                                 <Input
                                                     id="company"
                                                     placeholder="Acme Inc."
+                                                    maxLength={100}
                                                     value={companyName}
                                                     onChange={(e) =>
                                                         setCompanyName(
@@ -444,6 +458,7 @@ export default function WaitlistForm() {
                                                     id="email"
                                                     type="email"
                                                     required
+                                                    maxLength={100}
                                                     placeholder="hello@acme.com"
                                                     value={email}
                                                     onChange={(e) =>
