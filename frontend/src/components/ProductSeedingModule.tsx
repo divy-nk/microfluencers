@@ -111,7 +111,7 @@ export default function ProductSeedingModule() {
                             <Video className="w-8 h-8 text-white/80 mb-6" strokeWidth={1.5} />
                             <h3 className="text-2xl font-heading font-semibold text-white/90 mb-3">Influencers: Claim, Film & Get Paid</h3>
                             <p className="text-white/40 font-light leading-relaxed">
-                                Browse curated drops, order high-end D2C products for free, and shoot a video using the brand's chosen hook. Send for approval and get reimbursed instantly.
+                                Browse curated drops, order high-end D2C products for free, and shoot a video using the brand's chosen hook. Submit for verification and get reimbursed instantly.
                             </p>
                         </div>
 
@@ -180,7 +180,7 @@ export default function ProductSeedingModule() {
                                 <span className="relative z-10">02</span>
                             </div>
                             <h4 className="text-lg font-heading font-medium text-white/90 mb-3">Influencers</h4>
-                            <p className="text-white/40 font-light text-sm leading-relaxed">Claim drops, order products, shoot a video with the brand's hook, and send it for approval.</p>
+                            <p className="text-white/40 font-light text-sm leading-relaxed">Claim drops, order products, shoot a video with the brand's hook, and submit for verification.</p>
                         </motion.div>
 
                         {/* Step 3 */}
@@ -189,9 +189,9 @@ export default function ProductSeedingModule() {
                                 <CheckCircle2 className="w-5 h-5 opacity-80" strokeWidth={1.5} />
                             </div>
                             <h4 className="text-lg font-heading font-medium text-white/90 mb-3 flex items-center justify-center gap-2">
-                                Approval
+                                Payout
                             </h4>
-                            <p className="text-white/40 font-light text-sm leading-relaxed">Once brands approve, get reimbursed and enjoy the product for free.</p>
+                            <p className="text-white/40 font-light text-sm leading-relaxed">Upon content verification, get reimbursed instantly and enjoy the product for free.</p>
                         </motion.div>
                     </div>
                 </motion.div>

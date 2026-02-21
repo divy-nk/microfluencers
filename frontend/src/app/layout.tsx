@@ -19,6 +19,10 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "brandklip.com — Product for Content",
   description: "Connect brands with micro-influencers. Ship products, get authentic video content.",
+  icons: {
+    icon: "/logo-white.png",
+    apple: "/logo-white.png",
+  },
 };
 
 export const viewport = {

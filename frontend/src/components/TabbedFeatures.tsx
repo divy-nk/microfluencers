@@ -77,21 +77,21 @@ export default function TabbedFeatures({ tabs, title, subtitle, badge }: TabbedF
                 </div>
 
                 {/* Tab Selector with Sliding Pill Micro-interaction */}
-                <div className="flex justify-center mb-12 w-full mx-auto pb-4 overflow-x-auto scrollbar-hide">
-                    <div className="relative inline-flex items-center justify-between w-full max-w-sm sm:max-w-2xl bg-gray-100/80 backdrop-blur-sm rounded-full p-2 gap-2 border border-black/[0.04]">
+                <div className="flex justify-center mb-12 w-full mx-auto pb-4">
+                    <div className="relative flex sm:inline-flex items-center w-full sm:w-auto bg-gray-100/80 backdrop-blur-sm rounded-full p-1.5 sm:p-2 gap-1 sm:gap-2 border border-black/[0.04]">
                         {tabs.map((tab, index) => {
                             const isActive = activeIndex === index;
                             return (
                                 <button
                                     key={tab.id}
                                     onClick={() => handleTabChange(index)}
-                                    className={`relative z-10 flex-1 flex items-center justify-center gap-2 px-3 md:px-6 py-3 md:py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${isActive ? "text-foreground" : "text-foreground/50 hover:text-foreground/80"
+                                    className={`relative z-10 flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 sm:px-5 md:px-6 py-3.5 sm:py-3 md:py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${isActive ? "text-foreground" : "text-foreground/50 hover:text-foreground/80"
                                         }`}
                                 >
                                     {/* The text and icon */}
                                     <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
-                                        <tab.icon className="w-5 h-5 md:w-4 md:h-4 shrink-0" />
-                                        <span className="">{tab.label}</span>
+                                        <tab.icon className="w-5 h-5 shrink-0" />
+                                        <span className="hidden sm:inline">{tab.label}</span>
                                     </span>
 
                                     {/* The animated sliding background pill */}
@@ -128,57 +128,57 @@ export default function TabbedFeatures({ tabs, title, subtitle, badge }: TabbedF
                                 opacity: { duration: 0.2 },
                                 filter: { duration: 0.3 }
                             }}
-                            className="bg-white rounded-[2.5rem] border border-black/[0.04] p-8 md:p-12 shadow-sm shadow-black/[0.02] relative overflow-hidden group"
+                            className="bg-white rounded-[2.5rem] border border-black/[0.04] p-8 md:p-16 shadow-sm shadow-black/[0.02] relative overflow-hidden group"
                         >
                             {/* Subtle background glow that changes based on active tab to break up the gray */}
                             <div className="absolute top-0 right-0 -m-32 w-64 h-64 bg-slate-200/50 rounded-full blur-[80px] group-hover:bg-slate-300/50 transition-colors duration-700 pointer-events-none" />
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center relative z-10 w-full">
 
                                 {/* Left: Text Content */}
                                 <div>
-                                    <h3 className="text-3xl font-heading font-semibold text-foreground mb-4">
+                                    <h3 className="text-3xl sm:text-4xl font-heading font-semibold text-foreground mb-4">
                                         {activeData.title}
                                     </h3>
-                                    <p className="text-foreground/60 font-light leading-relaxed mb-8 text-[15px]">
+                                    <p className="text-foreground/60 font-light leading-relaxed mb-8 text-base sm:text-[17px]">
                                         {activeData.description}
                                     </p>
 
-                                    <ul className="space-y-3 mb-10">
+                                    <ul className="space-y-4 mb-10">
                                         {activeData.features.map((f, i) => (
-                                            <li key={i} className="flex items-center gap-3 text-sm text-foreground/70 font-medium">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-foreground/20" />
+                                            <li key={i} className="flex items-center gap-3 text-sm sm:text-base text-foreground/70 font-medium">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-foreground/20 shrink-0" />
                                                 {f}
                                             </li>
                                         ))}
                                     </ul>
 
                                     <WaitlistModal>
-                                        <button className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-white rounded-full text-sm font-semibold hover:scale-105 transition-transform shadow-lg shadow-black/10">
+                                        <button className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-white rounded-full text-[15px] font-semibold hover:scale-105 transition-transform shadow-lg shadow-black/10">
                                             {activeData.cta}
-                                            <ArrowRight className="w-4 h-4" />
+                                            <ArrowRight className="w-4 h-4 shrink-0" />
                                         </button>
                                     </WaitlistModal>
                                 </div>
 
                                 {/* Right: Premium Visual Card (taap.it style) */}
-                                <div className="flex justify-center md:justify-end">
-                                    <div className="relative w-72 h-80 bg-white rounded-3xl border border-black/[0.04] shadow-sm shadow-black/[0.02] p-8 flex flex-col items-center justify-center text-center overflow-hidden hover:shadow-md transition-shadow duration-500">
+                                <div className="flex justify-center md:justify-end w-full">
+                                    <div className="relative w-full max-w-sm md:max-w-md aspect-[4/5] sm:aspect-square bg-white rounded-3xl border border-black/[0.04] shadow-sm shadow-black/[0.02] p-8 flex flex-col items-center justify-center text-center overflow-hidden hover:shadow-md transition-shadow duration-500">
 
                                         {/* Super subtle inner gradient */}
                                         <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 to-white/0 pointer-events-none" />
 
                                         <div className="relative z-10 flex flex-col items-center">
                                             {/* Emoji/Icon container with soft shadow */}
-                                            <div className="w-16 h-16 bg-gray-50 rounded-2xl border border-black/[0.04] shadow-sm flex items-center justify-center text-3xl mb-6">
+                                            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-50 rounded-2xl sm:rounded-3xl border border-black/[0.04] shadow-sm flex items-center justify-center text-4xl sm:text-5xl mb-8">
                                                 {activeData.visual.emoji}
                                             </div>
 
-                                            <span className="text-5xl font-heading font-bold text-foreground tracking-tight mb-2">
+                                            <span className="text-6xl sm:text-7xl font-heading font-bold text-foreground tracking-tight mb-3">
                                                 {activeData.visual.stat}
                                             </span>
 
-                                            <span className="text-xs text-foreground/40 font-semibold tracking-widest uppercase mt-2">
+                                            <span className="text-xs sm:text-sm text-foreground/40 font-semibold tracking-widest uppercase mt-3">
                                                 {activeData.visual.statLabel}
                                             </span>
                                         </div>

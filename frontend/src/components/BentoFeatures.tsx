@@ -22,7 +22,7 @@ export default function BentoFeatures({ variant = 'main' }: BentoFeaturesProps) 
             card4Title: "ASCI-Compliant. Legally Bulletproof.",
             card4Desc: "Automated ASCI compliance and perpetual licensing.",
             card5Title: "Instant UPI Payouts",
-            card5Desc: "No net-30. No invoice chasing. Creators get reimbursed via UPI the second you hit approve.",
+            card5Desc: "No net-30. No invoice chasing. Creators get reimbursed via UPI the second you verify the content.",
             card5VisualLabel: "Payment Sent",
             card5VisualValue: "24,500"
         },
@@ -50,7 +50,7 @@ export default function BentoFeatures({ variant = 'main' }: BentoFeaturesProps) 
             card4Title: "Keep Every Product. No Strings.",
             card4Desc: "Skincare, tech, apparel — it's yours permanently. No returns, no catch.",
             card5Title: "Instant UPI Payouts",
-            card5Desc: "The moment your video is approved, your payout hits your UPI. No waiting 30 days.",
+            card5Desc: "The moment your video is accepted, your payout hits your UPI. No waiting 30 days.",
             card5VisualLabel: "Recent Payout",
             card5VisualValue: "15,200"
         }
@@ -121,11 +121,11 @@ export default function BentoFeatures({ variant = 'main' }: BentoFeaturesProps) 
                         transition={{ delay: 0.1 }}
                         className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-black/[0.03] border border-black/[0.04] flex items-center justify-center gap-6 h-[220px]"
                     >
+                        <div className="text-7xl md:text-[6rem] font-bold tracking-tighter text-foreground leading-none">
+                            {content.card2Stat}
+                        </div>
                         <div className="text-slate-500 font-medium leading-[1.15] text-xl">
                             {content.card2Label}
-                        </div>
-                        <div className="text-7xl md:text-[6rem] -ml-2 font-bold tracking-tighter text-foreground leading-none">
-                            {content.card2Stat}
                         </div>
                     </motion.div>
 

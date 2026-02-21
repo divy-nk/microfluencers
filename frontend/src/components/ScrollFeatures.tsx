@@ -242,7 +242,7 @@ export default function ScrollFeatures() {
                                 </div>
 
                                 <p className="text-slate-500 font-light text-sm leading-relaxed">
-                                    Here&apos;s the mechanism brands love: creators purchase your product directly on Amazon. They shoot the video. They only get reimbursed after you approve the content. Zero inventory shipped. Zero ghosting risk.
+                                    Here&apos;s the mechanism brands love: creators purchase your product directly on Amazon. They shoot the video. They get reimbursed instantly upon content verification. Zero inventory shipped. Zero ghosting risk.
                                 </p>
                             </motion.div>
                         </div>
