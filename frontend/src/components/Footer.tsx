@@ -15,13 +15,13 @@ export default function Footer() {
                             hello@brandklip.com
                         </a>
                         <Link href="#waitlist" className="text-lg md:text-xl font-medium hover:text-white/70 transition-colors">
-                            Get in touch
+                            Join the Waitlist
                         </Link>
                     </div>
 
                     <div className="mt-8">
                         <p className="text-sm text-white/40 max-w-xs leading-relaxed">
-                            BrandKlip powers the next generation of D2C growth with performance-first creative assets.
+                            BrandKlip connects D2C brands with vetted creators. They buy your product on Amazon, shoot the video, and get reimbursed only after you approve.
                         </p>
                     </div>
                 </div>

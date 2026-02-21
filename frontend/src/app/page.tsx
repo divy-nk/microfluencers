@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import WaitlistForm from "@/components/WaitlistForm";
 import WaitlistModal from "@/components/WaitlistModal";
@@ -17,13 +18,13 @@ const landingTabs = [
     label: "Barter Drop",
     icon: Package,
     title: "Product for Content",
-    description: "Ship your inventory to vetted micro-influencers. They create authentic video hooks using proven templates — you get diverse creative assets for ad testing. Zero cash fees.",
-    cta: "Create a barter drop",
-    features: ["Direct-ship or quick-commerce", "Multiple hook angles per SKU", "Perpetual usage rights"],
+    description: "Creators buy your product on Amazon and shoot authentic videos following your brief. You only reimburse them after you approve the content. Zero inventory risk. Zero cash wasted on bad videos.",
+    cta: "Join the Waitlist",
+    features: ["No inventory shipped — creators buy on Amazon", "Multiple creative angles per SKU", "Perpetual usage rights"],
     visual: {
       emoji: "📦",
       stat: "₹0",
-      statLabel: "cash cost per video",
+      statLabel: "inventory risk",
     }
   },
   {
@@ -31,8 +32,8 @@ const landingTabs = [
     label: "Performance Challenge",
     icon: TrendingUp,
     title: "Cash for Views",
-    description: "Pay creators based on actual unique views, not guesswork. Set a CPM rate and budget cap. Our engine tracks Instagram views in real-time and auto-distributes payouts.",
-    cta: "Launch a challenge",
+    description: "Pay creators based on actual unique views, not follower counts. Set a CPM rate and budget cap. Our engine tracks Instagram views in real-time and auto-distributes payouts.",
+    cta: "Join the Waitlist",
     features: ["Real-time view tracking", "Set your own CPM rate", "Auto-close at budget cap"],
     visual: {
       emoji: "📈",
@@ -45,13 +46,13 @@ const landingTabs = [
     label: "Boosted Drop",
     icon: Zap,
     title: "Product + Performance Bonus",
-    description: "The best of both worlds. Send a product for a base video. If the creator's content exceeds a view threshold, an automatic cash bonus is triggered. Incentivizes 'banger' hooks.",
-    cta: "Create a boosted drop",
+    description: "Send a product for a base video. If the creator's content crosses a view threshold, an automatic cash bonus kicks in. Maximum incentive for maximum effort.",
+    cta: "Join the Waitlist",
     features: ["Auto bonus on milestone", "Maximises creator effort", "Product + cash in one flow"],
     visual: {
       emoji: "🚀",
       stat: "78%",
-      statLabel: "avg hook retention",
+      statLabel: "avg retention",
     }
   },
 ];
@@ -85,7 +86,7 @@ export default function LandingPage() {
             className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/[0.06] bg-white shadow-sm"
           >
             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-xs font-medium text-foreground/50 tracking-wide">Product-for-content marketplace — live in India</span>
+            <span className="text-xs font-medium text-foreground/50 tracking-wide">Zero-risk UGC — live in India</span>
           </motion.div>
 
           {/* Headline */}
@@ -95,8 +96,8 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-heading font-semibold tracking-tight text-foreground mb-6 leading-[1.08]"
           >
-            An all-in-one platform to get <br className="hidden md:block" />
-            <span className="text-foreground/40">high-performing ad creatives.</span>
+            Where D2C Brands Meet <br className="hidden md:block" />
+            <span className="text-foreground/40">Vetted Creators. Zero Risk.</span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -106,7 +107,7 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-base sm:text-lg md:text-xl text-foreground/50 max-w-2xl mb-10 leading-relaxed font-light"
           >
-            Ship products to vetted micro-influencers and receive scroll-stopping video hooks for your D2C brand.
+            Brands get authentic UGC without shipping inventory or chasing creators. Creators get free products, clear briefs, and instant payouts. One platform. No DMs. No ghosting.
           </motion.p>
 
           {/* CTA */}
@@ -121,7 +122,7 @@ export default function LandingPage() {
                 className="group px-8 py-3.5 bg-foreground text-white rounded-full font-semibold text-sm overflow-hidden transition-all hover:scale-105 shadow-lg shadow-black/10"
               >
                 <span className="flex items-center justify-center gap-2">
-                  Create an account
+                  Join the Waitlist
                   <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
                 </span>
               </button>
@@ -138,13 +139,19 @@ export default function LandingPage() {
           >
             {/* Avatar stack */}
             <div className="flex -space-x-2">
-              {['🧑‍💼', '👩‍🎤', '🧑‍🎨', '👨‍💻', '👩‍🔬', '🧑‍🚀'].map((emoji, i) => (
-                <div key={i} className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-white flex items-center justify-center text-sm shadow-sm">
-                  {emoji}
+              {['1.jpg', '2.png', '3.png', '4.avif', '5.avif', '6.avif'].map((filename, index) => (
+                <div key={index} className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center overflow-hidden shadow-sm bg-gray-100">
+                  <Image
+                    src={`/${filename}`}
+                    alt={`Creator ${index + 1}`}
+                    width={36}
+                    height={36}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               ))}
             </div>
-            <p className="text-xs text-foreground/40">Trusted by India&apos;s fastest-growing D2C brands</p>
+            <p className="text-xs text-foreground/40">10,000+ creators already on the waitlist</p>
           </motion.div>
 
         </div>
@@ -156,8 +163,8 @@ export default function LandingPage() {
       ═══════════════════════════════════════════════════════ */}
       <TabbedFeatures
         tabs={landingTabs}
-        title="One platform. Three ways to scale."
-        subtitle="Choose how you engage creators. Mix and match as you grow."
+        title="One Platform. Three Ways to Get Content."
+        subtitle="Pick your campaign model. Mix and match as you scale."
       />
 
 

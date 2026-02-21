@@ -66,7 +66,7 @@ export default function WaitlistForm() {
                         <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-6 border border-green-100">
                             <CheckCircle2 className="w-8 h-8 text-green-600" />
                         </div>
-                        <h3 className="text-2xl font-heading font-semibold mb-3 text-foreground">We&apos;ve received your application.</h3>
+                        <h3 className="text-2xl font-heading font-semibold mb-3 text-foreground">You&apos;re In. We&apos;ll Be in Touch Soon.</h3>
                     </motion.div>
                 ) : (
                     <motion.form
@@ -76,8 +76,8 @@ export default function WaitlistForm() {
                         className="max-w-md mx-auto space-y-8 p-1 sm:p-0"
                     >
                         <div className="space-y-2 text-center mb-8">
-                            <h3 className="text-3xl font-heading font-semibold text-foreground">Get in touch</h3>
-                            <p className="text-foreground/50">Join the exclusive beta for brands and creators.</p>
+                            <h3 className="text-3xl font-heading font-semibold text-foreground">Claim Your Spot</h3>
+                            <p className="text-foreground/50">Early members get first access to exclusive brand drops and campaigns.</p>
                         </div>
 
                         <div className="space-y-6">
@@ -156,7 +156,7 @@ export default function WaitlistForm() {
                                     Saving...
                                 </>
                             ) : (
-                                "Join Waitlist"
+                                "Lock In My Spot"
                             )}
                         </Button>
                     </motion.form>

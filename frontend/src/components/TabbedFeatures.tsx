@@ -77,21 +77,21 @@ export default function TabbedFeatures({ tabs, title, subtitle, badge }: TabbedF
                 </div>
 
                 {/* Tab Selector with Sliding Pill Micro-interaction */}
-                <div className="flex justify-center mb-12">
-                    <div className="relative inline-flex items-center bg-gray-100/80 backdrop-blur-sm rounded-full p-1.5 gap-1 border border-black/[0.04]">
+                <div className="flex justify-center mb-12 w-full mx-auto pb-4 overflow-x-auto scrollbar-hide">
+                    <div className="relative inline-flex items-center justify-between w-full max-w-sm sm:max-w-2xl bg-gray-100/80 backdrop-blur-sm rounded-full p-2 gap-2 border border-black/[0.04]">
                         {tabs.map((tab, index) => {
                             const isActive = activeIndex === index;
                             return (
                                 <button
                                     key={tab.id}
                                     onClick={() => handleTabChange(index)}
-                                    className={`relative z-10 flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${isActive ? "text-foreground" : "text-foreground/50 hover:text-foreground/80"
+                                    className={`relative z-10 flex-1 flex items-center justify-center gap-2 px-3 md:px-6 py-3 md:py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${isActive ? "text-foreground" : "text-foreground/50 hover:text-foreground/80"
                                         }`}
                                 >
                                     {/* The text and icon */}
-                                    <span className="relative z-10 flex items-center gap-2">
-                                        <tab.icon className="w-4 h-4" />
-                                        {tab.label}
+                                    <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
+                                        <tab.icon className="w-5 h-5 md:w-4 md:h-4 shrink-0" />
+                                        <span className="">{tab.label}</span>
                                     </span>
 
                                     {/* The animated sliding background pill */}

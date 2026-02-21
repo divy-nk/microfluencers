@@ -18,12 +18,17 @@ const mockRecentVideos = [
 ];
 
 const cardVariants = {
-    hiddenLeft: { opacity: 0, x: -60 },
-    hiddenRight: { opacity: 0, x: 60 },
+    hiddenLeft: { opacity: 0, x: -60, scale: 0.95 },
+    hiddenRight: { opacity: 0, x: 60, scale: 0.95 },
     visible: {
         opacity: 1,
         x: 0,
-        transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }
+        scale: 1,
+        transition: {
+            duration: 0.8,
+            ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+            opacity: { duration: 0.5 }
+        }
     },
 };
 
@@ -52,17 +57,17 @@ export default function ScrollFeatures() {
 
                 {/* Section Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ margin: "-100px" }}
                     className="text-center mb-20"
                 >
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold uppercase tracking-widest mb-4 border border-slate-200">
-                        Features
+                        The Process
                     </span>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-semibold tracking-tight text-foreground mb-4">
-                        Everything you need,<br className="hidden sm:block" />
-                        in one place.
+                        How BrandKlip<br className="hidden sm:block" />
+                        Actually Works.
                     </h2>
                 </motion.div>
 
@@ -86,7 +91,7 @@ export default function ScrollFeatures() {
                             <motion.div
                                 initial={{ scale: 0 }}
                                 whileInView={{ scale: 1 }}
-                                viewport={{ once: true, margin: "-100px" }}
+                                viewport={{ margin: "-100px" }}
                                 transition={{ duration: 0.3, delay: 0.1 }}
                                 className="hidden md:flex absolute flex items-center justify-center left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white border-4 border-slate-200 z-20 shadow-sm"
                             />
@@ -94,12 +99,12 @@ export default function ScrollFeatures() {
                             <motion.div
                                 initial="hiddenLeft"
                                 whileInView="visible"
-                                viewport={{ once: true, margin: "-80px" }}
+                                viewport={{ margin: "-100px" }}
                                 variants={cardVariants}
                                 className="w-full md:w-[45%] bg-white rounded-[2rem] p-8 md:p-10 shadow-xl shadow-black/[0.03] border border-black/[0.04] flex flex-col gap-6"
                             >
                                 <h3 className="text-2xl font-heading font-semibold text-foreground tracking-tight">
-                                    Only vetted creators. <br /> Zero guesswork.
+                                    Every Creator is <br />Manually Vetted.
                                 </h3>
 
                                 {/* High Fidelity Graphic: Phone Mockup */}
@@ -144,7 +149,7 @@ export default function ScrollFeatures() {
                                 </div>
 
                                 <p className="text-slate-500 font-light text-sm leading-relaxed">
-                                    We handpick creators by niche, engagement rate, and content style. Only the top 1% make it through our vetting pipeline so you never waste product on bad content.
+                                    We don&apos;t let just anyone in. Every creator is hand-screened by niche, engagement rate, and content quality. Only verified talent makes the cut — so you never waste a single product on bad content.
                                 </p>
                             </motion.div>
                             <div className="hidden md:block w-[45%]" /> {/* Spacer */}
@@ -155,8 +160,8 @@ export default function ScrollFeatures() {
                             <motion.div
                                 initial={{ scale: 0 }}
                                 whileInView={{ scale: 1 }}
-                                viewport={{ once: true, margin: "-100px" }}
-                                transition={{ duration: 0.3, delay: 0.1 }}
+                                viewport={{ margin: "-100px" }}
+                                transition={{ duration: 0.3 }}
                                 className="hidden md:flex flex items-center justify-center absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white border-4 border-slate-200 z-20 shadow-sm"
                             />
 
@@ -164,78 +169,90 @@ export default function ScrollFeatures() {
                             <motion.div
                                 initial="hiddenRight"
                                 whileInView="visible"
-                                viewport={{ once: true, margin: "-80px" }}
+                                viewport={{ margin: "-100px" }}
                                 variants={cardVariants}
                                 className="w-full md:w-[45%] bg-white rounded-[2rem] p-8 md:p-10 shadow-xl shadow-black/[0.03] border border-black/[0.04] flex flex-col gap-6"
                             >
                                 <h3 className="text-2xl font-heading font-semibold text-foreground tracking-tight">
-                                    Use links that <br /> actually convert.
+                                    Creators Buy on Amazon. <br />You Stay Risk-Free.
                                 </h3>
 
-                                {/* High Fidelity Graphic: Flowchart/Diagram */}
-                                <div className="w-full bg-slate-50 rounded-2xl p-6 border border-black/[0.04] relative py-10 flex flex-col items-center justify-center">
+                                {/* High Fidelity Graphic: Product Delivery */}
+                                <div className="w-full bg-slate-50 rounded-2xl p-6 border border-black/[0.04] relative py-12 flex items-center justify-center min-h-[260px] overflow-hidden group">
+                                    {/* Background decorative elements */}
+                                    <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-amber-50/50 to-transparent" />
 
-                                    {/* Top Row (Inputs) */}
-                                    <div className="flex gap-8 mb-6">
-                                        <div className="w-10 h-10 bg-white rounded-full shadow-sm border border-black/[0.04] flex items-center justify-center relative translate-y-4">
-                                            <Instagram className="w-4 h-4 text-pink-500" />
-                                            <div className="absolute -bottom-6 w-px h-6 bg-slate-300 left-1/2 -translate-x-1/2" />
-                                        </div>
-                                        <div className="w-10 h-10 bg-white rounded-full shadow-sm border border-black/[0.04] flex items-center justify-center relative z-10">
-                                            <Youtube className="w-4 h-4 text-red-500" />
-                                            <div className="absolute -bottom-6 w-px h-6 bg-slate-300 left-1/2 -translate-x-1/2" />
-                                        </div>
-                                        <div className="w-10 h-10 bg-white rounded-full shadow-sm border border-black/[0.04] flex items-center justify-center relative translate-y-4">
-                                            <Link className="w-4 h-4 text-blue-500" />
-                                            <div className="absolute -bottom-6 w-px h-6 bg-slate-300 left-1/2 -translate-x-1/2" />
-                                        </div>
+                                    {/* Main Package Graphic */}
+                                    <div className="relative">
+                                        {/* Delivery Path/Dash Line */}
+                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[80%] w-64 h-32 border-t-2 border-dashed border-slate-300 rounded-[100%] opacity-50 z-0" />
+
+                                        {/* Store Icon (Left) */}
+                                        <motion.div
+                                            initial={{ scale: 0.8, x: -40, opacity: 0 }}
+                                            whileInView={{ scale: 1, x: 0, opacity: 1 }}
+                                            viewport={{ margin: "-100px" }}
+                                            transition={{ duration: 0.5, delay: 0.1 }}
+                                            className="absolute -left-20 top-0 w-12 h-12 bg-white rounded-xl shadow-md border border-black/5 flex items-center justify-center z-10"
+                                        >
+                                            <span className="text-2xl">🏪</span>
+                                        </motion.div>
+
+                                        {/* Creator Icon (Right) */}
+                                        <motion.div
+                                            initial={{ scale: 0.8, x: 40, opacity: 0 }}
+                                            whileInView={{ scale: 1, x: 0, opacity: 1 }}
+                                            viewport={{ margin: "-100px" }}
+                                            transition={{ duration: 0.5, delay: 0.3 }}
+                                            className="absolute -right-20 top-0 w-12 h-12 bg-white rounded-xl shadow-md border border-black/5 flex items-center justify-center z-10"
+                                        >
+                                            <span className="text-xl">🤳</span>
+                                        </motion.div>
+
+                                        {/* Center Moving Package */}
+                                        <motion.div
+                                            initial={{ y: 20 }}
+                                            whileHover={{ y: -5 }}
+                                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                            className="relative z-20 w-32 h-32 bg-white rounded-3xl shadow-xl border border-black/[0.04] flex items-center justify-center transform hover:shadow-2xl transition-all duration-300"
+                                        >
+                                            {/* Glow effect */}
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-amber-100 to-orange-50 rounded-3xl opacity-50" />
+
+                                            {/* Package Emoji */}
+                                            <span className="text-6xl relative z-10 drop-shadow-md group-hover:scale-110 transition-transform duration-300">📦</span>
+
+                                            {/* Floating mini-icons */}
+                                            <motion.div
+                                                animate={{ y: [0, -8, 0] }}
+                                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                                className="absolute -top-3 -right-3 w-8 h-8 bg-white rounded-full shadow-sm border border-black/5 flex items-center justify-center z-30"
+                                            >
+                                                <span className="text-sm">✨</span>
+                                            </motion.div>
+                                            <motion.div
+                                                animate={{ y: [0, 6, 0] }}
+                                                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                                className="absolute -bottom-2 -left-2 w-7 h-7 bg-white rounded-full shadow-sm border border-black/5 flex items-center justify-center z-30"
+                                            >
+                                                <span className="text-xs">🤝</span>
+                                            </motion.div>
+                                        </motion.div>
                                     </div>
-
-                                    {/* Horizontal connector wire */}
-                                    <div className="w-24 h-px bg-slate-300 mb-6 relative">
-                                        <div className="absolute top-0 left-1/2 w-px h-6 bg-slate-300 -translate-x-1/2" />
-                                    </div>
-
-                                    {/* Central Router Node */}
-                                    <div className="w-12 h-12 bg-green-50 rounded-full border border-green-200 flex items-center justify-center z-10 shadow-sm shadow-green-100">
-                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                    </div>
-
-                                    {/* Bottom connector wire */}
-                                    <div className="w-px h-6 bg-slate-300 relative">
-                                        <div className="absolute bottom-0 left-1/2 w-48 h-px bg-slate-300 -translate-x-1/2" />
-                                    </div>
-
-                                    {/* Bottom Row (Outputs) */}
-                                    <div className="flex gap-16 mt-6">
-                                        <div className="w-10 h-10 bg-white rounded-full shadow-sm border border-black/[0.04] flex items-center justify-center relative -translate-y-4">
-                                            <div className="absolute -top-6 w-px h-6 bg-slate-300 left-1/2 -translate-x-1/2" />
-                                            <span className="text-xl">🛍️</span>
-                                        </div>
-                                        <div className="w-10 h-10 bg-white rounded-full shadow-sm border border-black/[0.04] flex items-center justify-center relative z-10">
-                                            <div className="absolute -top-6 w-px h-6 bg-slate-300 left-1/2 -translate-x-1/2" />
-                                            <span className="text-xl">💳</span>
-                                        </div>
-                                        <div className="w-10 h-10 bg-white rounded-full shadow-sm border border-black/[0.04] flex items-center justify-center relative -translate-y-4">
-                                            <div className="absolute -top-6 w-px h-6 bg-slate-300 left-1/2 -translate-x-1/2" />
-                                            <span className="text-xl">📦</span>
-                                        </div>
-                                    </div>
-
                                 </div>
 
                                 <p className="text-slate-500 font-light text-sm leading-relaxed">
-                                    Stop losing users to internal browser blocks. Our deeplinks route traffic efficiently across social platforms directly to your checkout page.
+                                    Here&apos;s the mechanism brands love: creators purchase your product directly on Amazon. They shoot the video. They only get reimbursed after you approve the content. Zero inventory shipped. Zero ghosting risk.
                                 </p>
                             </motion.div>
                         </div>
 
-                        {/* FEATURE 3: Hook-First Videos (Left Card) */}
+                        {/* FEATURE 3: Authentic Videos (Left Card) */}
                         <div className="relative flex flex-col md:flex-row items-center justify-between">
                             <motion.div
                                 initial={{ scale: 0 }}
                                 whileInView={{ scale: 1 }}
-                                viewport={{ once: true, margin: "-100px" }}
+                                viewport={{ margin: "-100px" }}
                                 transition={{ duration: 0.3, delay: 0.1 }}
                                 className="hidden md:flex absolute flex items-center justify-center left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white border-4 border-slate-200 z-20 shadow-sm"
                             />
@@ -243,12 +260,12 @@ export default function ScrollFeatures() {
                             <motion.div
                                 initial="hiddenLeft"
                                 whileInView="visible"
-                                viewport={{ once: true, margin: "-80px" }}
+                                viewport={{ margin: "-100px" }}
                                 variants={cardVariants}
                                 className="w-full md:w-[45%] bg-white rounded-[2rem] p-8 md:p-10 shadow-xl shadow-black/[0.03] border border-black/[0.04] flex flex-col gap-6"
                             >
                                 <h3 className="text-2xl font-heading font-semibold text-foreground tracking-tight">
-                                    Hook-first videos. <br /> Built for scale.
+                                    Authentic Videos. <br />Not Polished Fluff.
                                 </h3>
 
                                 {/* High Fidelity Graphic: Video Timeline */}
@@ -272,15 +289,15 @@ export default function ScrollFeatures() {
                                                 {[95, 88, 85, 82, 78, 75, 72, 70, 68, 65, 62, 60, 58, 55, 52, 50, 48, 45, 42, 40].map((h, i) => (
                                                     <motion.div
                                                         key={i}
-                                                        initial={{ height: "0%" }}
-                                                        whileInView={{ height: `${h}%` }}
-                                                        viewport={{ once: true }}
-                                                        transition={{ duration: 0.5, delay: i * 0.05 }}
+                                                        initial={{ height: "0%", opacity: 0 }}
+                                                        whileInView={{ height: `${h}%`, opacity: 1 }}
+                                                        viewport={{ margin: "-80px" }}
+                                                        transition={{ duration: 0.3, delay: i * 0.02 }}
                                                         className={`flex-1 rounded-t-sm ${i < 4 ? 'bg-green-500' : 'bg-primary/60'}`}
                                                     />
                                                 ))}
                                                 <div className="absolute top-0 left-[20%] w-px h-full bg-white/50 border-r border-dashed border-white/50" />
-                                                <div className="absolute -top-4 left-[20%] text-[8px] font-bold text-white bg-green-500 px-1 rounded -translate-x-1/2">HOOK</div>
+                                                <div className="absolute -top-4 left-[20%] text-[8px] font-bold text-white bg-green-500 px-1 rounded -translate-x-1/2">INTRO</div>
                                             </div>
                                         </div>
                                     </div>
@@ -296,7 +313,7 @@ export default function ScrollFeatures() {
                                 </div>
 
                                 <p className="text-slate-500 font-light text-sm leading-relaxed">
-                                    Creators shoot using proven hook templates designed specifically for scroll-stopping performance. Stop burning budget on aesthetic videos that don't hold attention.
+                                    Creators shoot authentic videos following your brand brief — real people using your real product. Stop burning budget on studio ads nobody trusts. Get content that converts because it feels genuine.
                                 </p>
                             </motion.div>
                             <div className="hidden md:block w-[45%]" /> {/* Spacer */}
@@ -307,8 +324,8 @@ export default function ScrollFeatures() {
                             <motion.div
                                 initial={{ scale: 0 }}
                                 whileInView={{ scale: 1 }}
-                                viewport={{ once: true, margin: "-100px" }}
-                                transition={{ duration: 0.3, delay: 0.1 }}
+                                viewport={{ margin: "-100px" }}
+                                transition={{ duration: 0.3 }}
                                 className="hidden md:flex absolute flex items-center justify-center left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white border-4 border-slate-200 z-20 shadow-sm"
                             />
 
@@ -316,12 +333,12 @@ export default function ScrollFeatures() {
                             <motion.div
                                 initial="hiddenRight"
                                 whileInView="visible"
-                                viewport={{ once: true, margin: "-80px" }}
+                                viewport={{ margin: "-100px" }}
                                 variants={cardVariants}
                                 className="w-full md:w-[45%] bg-white rounded-[2rem] p-8 md:p-10 shadow-xl shadow-black/[0.03] border border-black/[0.04] flex flex-col gap-6"
                             >
                                 <h3 className="text-2xl font-heading font-semibold text-foreground tracking-tight">
-                                    Zero upfront cash. <br /> Pay only for results.
+                                    Zero Agency Fees. <br />Zero Creator Retainers.
                                 </h3>
 
                                 {/* High Fidelity Graphic: Payout UI */}
@@ -332,7 +349,7 @@ export default function ScrollFeatures() {
                                         <motion.div
                                             initial={{ scale: 0, opacity: 0 }}
                                             whileInView={{ scale: 1, opacity: 1 }}
-                                            viewport={{ once: true }}
+                                            viewport={{ margin: "-100px" }}
                                             transition={{ type: "spring", delay: 0.4 }}
                                             className="absolute -right-3 -top-3 w-8 h-8 bg-green-500 rounded-full border-2 border-white flex items-center justify-center shadow-lg"
                                         >
@@ -365,7 +382,7 @@ export default function ScrollFeatures() {
                                 </div>
 
                                 <p className="text-slate-500 font-light text-sm leading-relaxed">
-                                    Run entirely on our product-only barter model to generate dozens of high-quality assets without spending a single rupee on creator fees or agency retainers.
+                                    Forget five-figure agency invoices. Run entirely on our product-barter model and generate dozens of high-quality UGC assets without spending a single rupee on creator fees.
                                 </p>
                             </motion.div>
                         </div>

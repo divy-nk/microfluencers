@@ -26,13 +26,13 @@ const brandsTabs = [
         label: "Barter Drop",
         icon: Package,
         title: "Product for Content",
-        description: "Ship your inventory to vetted micro-influencers. They create authentic video hooks. You get diverse creative assets for ad testing — zero cash fees required.",
-        cta: "Create a barter drop",
-        features: ["Direct-ship or quick-commerce delivery", "Multiple hook angles per SKU", "Perpetual usage rights included"],
+        description: "Creators buy your product on Amazon and shoot authentic videos following your brief. You only reimburse them after you approve the content. Zero inventory risk. Zero cash wasted on bad videos.",
+        cta: "Join the Brand Waitlist",
+        features: ["No inventory shipped — creators buy on Amazon", "Multiple creative angles per SKU", "Perpetual usage rights included"],
         visual: {
             emoji: "📦",
             stat: "₹0",
-            statLabel: "cash cost per video",
+            statLabel: "inventory risk",
         }
     },
     {
@@ -40,8 +40,8 @@ const brandsTabs = [
         label: "Performance Challenge",
         icon: TrendingUp,
         title: "Cash for Views",
-        description: "Pay creators based on actual unique views, not guesswork. Set a CPM rate and budget cap. Our engine tracks Instagram views in real-time and auto-distributes payouts.",
-        cta: "Launch a challenge",
+        description: "Pay creators based on actual unique views, not follower counts. Set a CPM rate and budget cap. Our engine tracks Instagram views in real-time and auto-distributes payouts.",
+        cta: "Join the Brand Waitlist",
         features: ["Real-time Instagram view tracking", "Set your own CPM rate", "Auto-close when budget exhausted"],
         visual: {
             emoji: "📈",
@@ -54,13 +54,13 @@ const brandsTabs = [
         label: "Boosted Drop",
         icon: Zap,
         title: "Product + Performance Bonus",
-        description: "The best of both worlds. Send a product for a base video. If the creator's content exceeds a view threshold, an automatic cash bonus is triggered.",
-        cta: "Create a boosted drop",
+        description: "Send a product for a base video. If the creator's content crosses a view threshold, an automatic cash bonus kicks in. Maximum incentive for maximum effort.",
+        cta: "Join the Brand Waitlist",
         features: ["Automatic bonus trigger on milestone", "Maximizes creator motivation", "Product + cash in one flow"],
         visual: {
             emoji: "🚀",
             stat: "78%",
-            statLabel: "avg hook retention",
+            statLabel: "avg retention",
         }
     },
 ];
@@ -88,20 +88,20 @@ export default function BrandsPage() {
                 >
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/[0.06] bg-white shadow-sm text-xs font-medium text-foreground/50 tracking-wide mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Two-Speed Growth Engine
+                        For D2C Brands
                     </div>
                     <h1 className="text-4xl sm:text-5xl md:text-[4.25rem] font-heading font-semibold tracking-tight mb-6 leading-[1.08]">
-                        One Platform. <br className="hidden md:block" />
-                        <span className="text-foreground/40">Three Ways to Scale.</span>
+                        Get High-Quality UGC <br className="hidden md:block" />
+                        <span className="text-foreground/40">Without Sending a Single DM.</span>
                     </h1>
                     <p className="text-base sm:text-lg md:text-xl text-foreground/50 font-light leading-relaxed max-w-2xl mx-auto mb-10">
-                        Choose how you engage creators. Ship products for high-quality UGC, pay per view for guaranteed reach, or combine both for maximum ROI.
+                        Launch a campaign on BrandKlip. Creators buy your product on Amazon, shoot authentic videos, and get reimbursed only after you approve. Zero inventory risk. Zero chasing.
                     </p>
                     <WaitlistModal>
                         <button
                             className="px-8 py-3.5 bg-foreground text-white rounded-full font-semibold text-sm transition-transform hover:scale-105 shadow-lg shadow-black/10 inline-flex items-center gap-2"
                         >
-                            Start Your First Campaign
+                            Join the Brand Waitlist
                             <ArrowDown className="w-4 h-4" />
                         </button>
                     </WaitlistModal>
@@ -111,7 +111,7 @@ export default function BrandsPage() {
             {/* ─── CAMPAIGN MODELS (Now using TabbedFeatures) ─── */}
             <TabbedFeatures
                 tabs={brandsTabs}
-                title="Choose Your Campaign Model"
+                title="Pick Your Campaign Model"
                 subtitle="Each model solves a different challenge. Mix and match as you scale."
                 badge="Campaign Models"
             />

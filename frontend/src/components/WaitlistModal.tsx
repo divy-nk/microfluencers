@@ -19,8 +19,8 @@ export default function WaitlistModal({ children }: WaitlistModalProps) {
                   Hidden title/description for accessibility. 
                   WaitlistForm handles the actual visual title.
                 */}
-                <DialogTitle className="sr-only">Join Waitlist</DialogTitle>
-                <DialogDescription className="sr-only">Join the exclusive beta waitlist.</DialogDescription>
+                <DialogTitle className="sr-only">Claim Your Spot</DialogTitle>
+                <DialogDescription className="sr-only">Early access to exclusive brand drops and campaigns.</DialogDescription>
 
                 <div className="p-8 pt-10">
                     <WaitlistForm />

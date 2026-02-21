@@ -26,9 +26,9 @@ const creatorsTabs = [
         label: "Barter Drop",
         icon: Shirt,
         title: "Keep Free Products",
-        description: "Skincare, tech, apparel, fitness — browse curated drops, claim what you love. The brand ships it to your door. Make a killer video. Keep the product forever.",
-        cta: "Browse barter drops",
-        features: ["Premium D2C products delivered free", "Clear briefs, no endless revisions", "Keep the product forever"],
+        description: "Skincare, tech, apparel, fitness — browse curated drops and claim what you love. Buy it on Amazon, shoot an authentic video, and get 100% reimbursed when the brand approves. Keep the product forever.",
+        cta: "Apply for the Waitlist",
+        features: ["Premium D2C products — yours to keep", "Clear briefs, no endless revisions", "100% reimbursed after approval"],
         visual: {
             emoji: "🎁",
             stat: "₹5k+",
@@ -40,8 +40,8 @@ const creatorsTabs = [
         label: "Performance Challenge",
         icon: Eye,
         title: "Get Paid Per View",
-        description: "Create content, post it on Instagram, and earn direct cash based on your unique views. The more eyes, the bigger your payout. Tracked in real-time.",
-        cta: "Join a challenge",
+        description: "Create content, post it on Instagram, and earn direct cash based on your unique views. The more eyes, the bigger your payout. Tracked in real-time. No waiting.",
+        cta: "Apply for the Waitlist",
         features: ["Real-time Instagram view tracking", "Automated UPI payouts", "Earn up to ₹200 per 1k views"],
         visual: {
             emoji: "📈",
@@ -54,8 +54,8 @@ const creatorsTabs = [
         label: "Boosted Drop",
         icon: Zap,
         title: "Product + Cash Bonus",
-        description: "Get a free product AND earn a cash bonus if your content goes viral. Hit the view threshold and the bonus is triggered automatically. Maximum reward for maximum effort.",
-        cta: "Find boosted drops",
+        description: "Get a free product AND earn a cash bonus if your content takes off. Hit the view threshold and the bonus is triggered automatically. Maximum reward for maximum effort.",
+        cta: "Apply for the Waitlist",
         features: ["Automatic bonus at milestone views", "Product + cash in one campaign", "Maximum reward for effort"],
         visual: {
             emoji: "🚀",
@@ -88,20 +88,20 @@ export default function CreatorsPage() {
                 >
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/[0.06] bg-white shadow-sm text-xs font-medium text-foreground/50 tracking-wide mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
-                        Creator Earnings Hub
+                        For Creators (500+ Followers)
                     </div>
                     <h1 className="text-4xl sm:text-5xl md:text-[4.25rem] font-heading font-semibold tracking-tight mb-6 leading-[1.08]">
-                        Free Products. Real Cash. <br className="hidden md:block" />
-                        <span className="text-foreground/40">Your Choice.</span>
+                        Stop Begging Brands for Collabs. <br className="hidden md:block" />
+                        <span className="text-foreground/40">Let Them Come to You.</span>
                     </h1>
                     <p className="text-base sm:text-lg md:text-xl text-foreground/50 font-light leading-relaxed max-w-2xl mx-auto mb-10">
-                        Browse premium D2C drops, claim products for free, and earn real money through performance views. Three ways to get rewarded — pick the one that fits your style.
+                        If you have 500+ followers, BrandKlip is your shortcut. We match you with curated D2C brands. You buy the product, shoot the video, and get 100% reimbursed the second it&apos;s approved.
                     </p>
                     <WaitlistModal>
                         <button
                             className="px-8 py-3.5 bg-foreground text-white rounded-full font-semibold text-sm transition-transform hover:scale-105 shadow-lg shadow-black/10 inline-flex items-center gap-2"
                         >
-                            Join the Creator Vault
+                            Apply for the Creator Waitlist
                             <ArrowDown className="w-4 h-4" />
                         </button>
                     </WaitlistModal>
@@ -111,8 +111,8 @@ export default function CreatorsPage() {
             {/* ─── THREE EARNING MODELS (Now using TabbedFeatures) ─── */}
             <TabbedFeatures
                 tabs={creatorsTabs}
-                title="Three Ways to Earn"
-                subtitle="Pick your reward model. Or do all three."
+                title="Three Ways to Get Rewarded"
+                subtitle="Pick your model. Stack them. Scale up."
                 badge="Earning Models"
             />
 

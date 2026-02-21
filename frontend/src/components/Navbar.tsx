@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import WaitlistModal from "./WaitlistModal";
@@ -13,10 +14,17 @@ export default function Navbar() {
         <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl flex items-center justify-between px-8 py-4 bg-white/70 backdrop-blur-xl rounded-full border border-black/[0.06] shadow-[0_2px_20px_rgba(0,0,0,0.04)] text-foreground transition-all hover:shadow-[0_4px_30px_rgba(0,0,0,0.06)]">
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 group">
-                <span className="w-2 h-2 rounded-full bg-black group-hover:scale-125 transition-transform"></span>
-                <span className="text-lg md:text-xl font-heading font-semibold tracking-tight text-foreground">
-                    brandklip.com
+            <Link href="/" className="flex items-center gap-2.5 group">
+                <Image
+                    src="/logo-black.png"
+                    alt="Brandklip Logo"
+                    width={180}
+                    height={40}
+                    className="object-contain h-8 w-auto group-hover:opacity-80 transition-opacity"
+                    priority
+                />
+                <span className="text-xl md:text-2xl font-heading font-bold tracking-tight text-foreground transition-opacity group-hover:opacity-80">
+                    BrandKlip
                 </span>
             </Link>
 
@@ -34,7 +42,7 @@ export default function Navbar() {
             <div className="flex items-center gap-4">
                 <WaitlistModal>
                     <Button size="default" className="bg-foreground text-white hover:bg-foreground/90 rounded-full px-5 font-semibold text-sm transition-transform hover:scale-105">
-                        Get in touch
+                        Join the Waitlist
                     </Button>
                 </WaitlistModal>
             </div>

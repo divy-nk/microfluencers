@@ -12,45 +12,45 @@ interface BentoFeaturesProps {
 export default function BentoFeatures({ variant = 'main' }: BentoFeaturesProps) {
     const content = {
         main: {
-            header: "Everyone has a good reason to choose brandklip",
-            headerBtn: "Create an account",
+            header: "Why 10,000+ Creators and Top D2C Brands Choose BrandKlip",
+            headerBtn: "Join the Waitlist",
             card1Title: <>All your assets,<br />in one place.</>,
             card2Stat: "×3",
             card2Label: <>average<br />conversion<br />rate</>,
-            card3Title: "Get videos that actually convert.",
-            card3Desc: "Stop paying for polished ads that get ignored. Our creators ship native, hook-first UGC.",
-            card4Title: "Say goodbye to legal risks",
+            card3Title: "Videos That Sell. Not Just Look Pretty.",
+            card3Desc: "Your customers don't trust studio ads. They trust real people. Our creators shoot authentic UGC following your brief — content that drives clicks and sales.",
+            card4Title: "ASCI-Compliant. Legally Bulletproof.",
             card4Desc: "Automated ASCI compliance and perpetual licensing.",
             card5Title: "Instant UPI Payouts",
-            card5Desc: "Creators get paid the second you approve their content.",
+            card5Desc: "No net-30. No invoice chasing. Creators get reimbursed via UPI the second you hit approve.",
             card5VisualLabel: "Payment Sent",
             card5VisualValue: "24,500"
         },
         brands: {
-            header: "The Brandklip Advantage",
-            headerBtn: "Launch a campaign",
+            header: "Stop Chasing Creators. Start Scaling Content.",
+            headerBtn: "Join the Brand Waitlist",
             card1Title: <>Hyper-Targeted<br />Matching.</>,
             card2Stat: "₹0",
             card2Label: <>get<br />video<br />for</>,
             card3Desc: "Integrate with Blinkit/Zepto for instant gratification shipping.",
-            card4Title: "Customer → Creator",
-            card4Desc: "Turn your satisfied customers into a perpetual content engine.",
+            card4Title: "Turn Customers Into Your Content Engine",
+            card4Desc: "Your satisfied customers already love your product. Turn them into a perpetual UGC machine.",
             card5Title: "Real-Time Analytics",
-            card5Desc: "Track views, CPM, engagement rates, and spend live.",
+            card5Desc: "Track views, CPM, engagement rates, and spend live. No spreadsheets. No guessing.",
             card5VisualLabel: "Average CPM",
             card5VisualValue: "8.50"
         },
         creators: {
-            header: "Why Creators Love Brandklip",
-            headerBtn: "Join the Vault",
+            header: "Stop Sending DMs. Start Getting Paid.",
+            headerBtn: "Apply for Early Access",
             card1Title: <>Inbound Drops<br />Only.</>,
             card2Stat: "0",
             card2Label: <>days waiting<br />for net-30<br />payouts</>,
-            card3Desc: "Get crystal clear briefs. Brands tell you exactly what hook they need.",
-            card4Title: "Premium D2C Products",
-            card4Desc: "Keep the products forever. No returning, no strings attached.",
+            card3Desc: "No guesswork. Brands give you a clear brief. You shoot the video, submit it, and get fully reimbursed.",
+            card4Title: "Keep Every Product. No Strings.",
+            card4Desc: "Skincare, tech, apparel — it's yours permanently. No returns, no catch.",
             card5Title: "Instant UPI Payouts",
-            card5Desc: "The moment your video is approved, your payout hits your UPI.",
+            card5Desc: "The moment your video is approved, your payout hits your UPI. No waiting 30 days.",
             card5VisualLabel: "Recent Payout",
             card5VisualValue: "15,200"
         }
@@ -146,7 +146,7 @@ export default function BentoFeatures({ variant = 'main' }: BentoFeaturesProps) 
                                     <span className="font-bold text-white text-2xl tracking-tighter">zepto</span>
                                 </div>
                             </div>
-                        ) : content.card3Title === "Get videos that actually convert." ? (
+                        ) : variant === "main" ? (
                             <div className="w-full h-full flex flex-col pt-2 pb-0">
                                 <h3 className="text-2xl md:text-3xl font-semibold mb-2 text-foreground tracking-tight leading-tight">{content.card3Title}</h3>
 
@@ -236,7 +236,7 @@ export default function BentoFeatures({ variant = 'main' }: BentoFeaturesProps) 
                                 </div>
                             </div>
                         )}
-                        {content.card3Title !== "Get videos that actually convert." && (
+                        {variant !== "main" && variant !== "brands" && (
                             <>
                                 {content.card3Title && (
                                     <h3 className="text-xl font-semibold mb-2 text-foreground tracking-tight">{content.card3Title}</h3>
