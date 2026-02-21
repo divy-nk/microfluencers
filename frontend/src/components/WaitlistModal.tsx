@@ -14,7 +14,7 @@ export default function WaitlistModal({ children }: WaitlistModalProps) {
             <DialogTrigger asChild>
                 {children}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden bg-white/95 backdrop-blur-xl border-black/5 rounded-[2rem]">
+            <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden bg-white/95 backdrop-blur-xl border-black/5 rounded-[2rem]">
                 {/* 
                   Hidden title/description for accessibility. 
                   WaitlistForm handles the actual visual title.
@@ -22,7 +22,7 @@ export default function WaitlistModal({ children }: WaitlistModalProps) {
                 <DialogTitle className="sr-only">Claim Your Spot</DialogTitle>
                 <DialogDescription className="sr-only">Early access to exclusive brand drops and campaigns.</DialogDescription>
 
-                <div className="p-8 pt-10">
+                <div className="p-8 pt-10 max-h-[85vh] overflow-y-auto overscroll-contain">
                     <WaitlistForm />
                 </div>
             </DialogContent>
