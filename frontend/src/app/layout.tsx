@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   description: "Connect brands with micro-influencers. Ship products, get authentic video content.",
   icons: {
     icon: "/logo-white.png",
+    shortcut: "/logo-white.png",
     apple: "/logo-white.png",
   },
 };

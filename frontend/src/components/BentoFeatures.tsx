@@ -12,7 +12,7 @@ interface BentoFeaturesProps {
 export default function BentoFeatures({ variant = 'main' }: BentoFeaturesProps) {
     const content = {
         main: {
-            header: "Why 10,000+ Creators are joining the BrandKlip Waitlist",
+            header: "Claim Exclusive Drops from Top D2C Brands",
             headerBtn: "Join the Waitlist",
             card1Title: <>All your assets,<br />in one place.</>,
             card2Stat: "×3",

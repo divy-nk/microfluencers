@@ -151,7 +151,7 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-foreground/40">10,000+ creators already on the waitlist</p>
+            <p className="text-xs text-foreground/40">Join today for exclusive creator drops</p>
           </motion.div>
 
         </div>
