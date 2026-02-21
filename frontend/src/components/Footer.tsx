@@ -61,9 +61,9 @@ export default function Footer() {
 
             {/* 2. Massive Typography Brand Name */}
             <div className="relative border-t border-white/10 pt-4">
-                <h1 className="text-[12vw] md:text-[14vw] leading-[0.8] font-heading font-semibold tracking-tighter text-center select-none text-white pointer-events-none">
+                <span className="text-[12vw] md:text-[14vw] leading-[0.8] font-heading font-semibold tracking-tighter text-center select-none text-white pointer-events-none block" aria-hidden="true">
                     BRANDKLIP
-                </h1>
+                </span>
             </div>
 
             {/* 3. Bottom Bar */}
