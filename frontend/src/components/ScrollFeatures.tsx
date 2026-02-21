@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { CheckCircle2, TrendingUp, Instagram, Youtube, Link } from "lucide-react";
+import Image from "next/image";
 
 // Mock Data for the custom graphics
 const mockProfileStats = [
@@ -12,9 +13,26 @@ const mockProfileStats = [
 ];
 
 const mockRecentVideos = [
-    { id: 1, views: "12.4K", color: "bg-purple-100" },
-    { id: 2, views: "8.1K", color: "bg-blue-100" },
-    { id: 3, views: "45K", color: "bg-emerald-100" }
+    { id: 1, views: "12.4K", image: "/sarah-mockup/image.png", color: "bg-purple-100" },
+    { id: 2, views: "8.1K", image: "/sarah-mockup/image copy.png", color: "bg-blue-100" },
+    { id: 3, views: "45K", image: "/sarah-mockup/image copy 2.png", color: "bg-emerald-100" }
+];
+
+const reelImagesRow1 = [
+    "/sarah-mockup/image.png",
+    "/sarah-mockup/image copy.png",
+    "/sarah-mockup/image copy 2.png",
+    "/sarah-mockup/image copy 3.png",
+    "/sarah-mockup/image copy 4.png",
+    "/sarah-mockup/image copy 5.png",
+];
+
+const reelImagesRow2 = [
+    "/sarah-mockup/image copy 6.png",
+    "/sarah-mockup/image copy 7.png",
+    "/sarah-mockup/image copy 8.png",
+    "/sarah-mockup/image copy 9.png",
+    "/sarah-mockup/image copy 10.png",
 ];
 
 const cardVariants = {
@@ -139,7 +157,9 @@ export default function ScrollFeatures() {
                                     <div className="grid grid-cols-3 gap-2">
                                         {mockRecentVideos.map((video) => (
                                             <div key={video.id} className={`aspect-[3/4] ${video.color} rounded-lg relative overflow-hidden border border-black/[0.03]`}>
-                                                <div className="absolute bottom-1 left-1.5 flex items-center gap-1 text-[10px] font-medium text-black/70 bg-white/60 backdrop-blur-md px-1.5 py-0.5 rounded-md">
+                                                <Image src={video.image} alt="Video thumbnail" fill className="object-cover" />
+                                                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/20 to-transparent z-0" />
+                                                <div className="absolute bottom-1 left-1.5 flex items-center gap-1 text-[10px] font-medium text-black/70 bg-white/60 backdrop-blur-md px-1.5 py-0.5 rounded-md z-10">
                                                     <TrendingUp className="w-2.5 h-2.5" />
                                                     {video.views}
                                                 </div>
@@ -268,48 +288,35 @@ export default function ScrollFeatures() {
                                     Authentic Videos. <br />Not Polished Fluff.
                                 </h3>
 
-                                {/* High Fidelity Graphic: Video Timeline */}
-                                <div className="w-full bg-slate-50 rounded-2xl p-6 border border-black/[0.04] relative">
+                                {/* High Fidelity Graphic: Video Reels Mockup */}
+                                <div className="w-full h-64 sm:h-72 bg-slate-50 rounded-2xl py-6 border border-black/[0.04] relative overflow-hidden flex flex-col justify-center gap-4">
+                                    {/* Fade edges */}
+                                    <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
+                                    <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
 
-                                    {/* Video Player Mockup */}
-                                    <div className="w-full aspect-video bg-slate-900 rounded-xl overflow-hidden relative shadow-lg shadow-black/10 mb-6">
-                                        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center opacity-60 mix-blend-overlay" />
-
-                                        {/* Play Button Overlay */}
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 cursor-pointer hover:bg-white/30 transition-colors">
-                                                <div className="w-0 h-0 border-y-8 border-y-transparent border-l-[12px] border-l-white ml-1" />
+                                    <motion.div
+                                        className="flex gap-4 w-max px-4"
+                                        animate={{ x: ["0%", "-50%"] }}
+                                        transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
+                                    >
+                                        {[...reelImagesRow1, ...reelImagesRow1].map((src, i) => (
+                                            <div key={`row1-${i}`} className="w-24 sm:w-28 aspect-[9/16] rounded-xl overflow-hidden relative shadow-md shrink-0 border border-black/5 bg-slate-200">
+                                                <Image src={src} alt="Reel Mockup" fill sizes="(max-width: 768px) 96px, 112px" className="object-cover" />
                                             </div>
-                                        </div>
+                                        ))}
+                                    </motion.div>
 
-                                        {/* Retention Graph Overlay */}
-                                        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent flex items-end px-4 pb-4">
-                                            <div className="w-full h-8 relative flex items-end gap-1">
-                                                {/* Simulated retention curve */}
-                                                {[95, 88, 85, 82, 78, 75, 72, 70, 68, 65, 62, 60, 58, 55, 52, 50, 48, 45, 42, 40].map((h, i) => (
-                                                    <motion.div
-                                                        key={i}
-                                                        initial={{ height: "0%", opacity: 0 }}
-                                                        whileInView={{ height: `${h}%`, opacity: 1 }}
-                                                        viewport={{ margin: "-80px" }}
-                                                        transition={{ duration: 0.3, delay: i * 0.02 }}
-                                                        className={`flex-1 rounded-t-sm ${i < 4 ? 'bg-green-500' : 'bg-primary/60'}`}
-                                                    />
-                                                ))}
-                                                <div className="absolute top-0 left-[20%] w-px h-full bg-white/50 border-r border-dashed border-white/50" />
-                                                <div className="absolute -top-4 left-[20%] text-[8px] font-bold text-white bg-green-500 px-1 rounded -translate-x-1/2">INTRO</div>
+                                    <motion.div
+                                        className="flex gap-4 w-max px-4"
+                                        animate={{ x: ["-50%", "0%"] }}
+                                        transition={{ repeat: Infinity, ease: "linear", duration: 35 }}
+                                    >
+                                        {[...reelImagesRow2, ...reelImagesRow2].map((src, i) => (
+                                            <div key={`row2-${i}`} className="w-24 sm:w-28 aspect-[9/16] rounded-xl overflow-hidden relative shadow-md shrink-0 border border-black/5 bg-slate-200">
+                                                <Image src={src} alt="Reel Mockup" fill sizes="(max-width: 768px) 96px, 112px" className="object-cover" />
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Sub-stats */}
-                                    <div className="flex items-center justify-center gap-6 text-sm">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-green-500" />
-                                            <span className="font-semibold">78%</span>
-                                            <span className="text-slate-500 text-xs">Avg. Retention</span>
-                                        </div>
-                                    </div>
+                                        ))}
+                                    </motion.div>
                                 </div>
 
                                 <p className="text-slate-500 font-light text-sm leading-relaxed">

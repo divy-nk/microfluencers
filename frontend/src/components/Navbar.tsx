@@ -45,8 +45,9 @@ export default function Navbar() {
                 {/* Right side */}
                 <div className="flex items-center gap-3">
                     <WaitlistModal>
-                        <Button size="default" className="bg-foreground text-white hover:bg-foreground/90 rounded-full px-5 font-semibold text-sm transition-transform hover:scale-105">
-                            Join the Waitlist
+                        <Button size="default" className="bg-foreground text-white hover:bg-foreground/90 rounded-full px-4 sm:px-5 font-semibold text-sm transition-transform hover:scale-105">
+                            <span className="max-sm:hidden">Join the Waitlist</span>
+                            <span className="sm:hidden">Join Today</span>
                         </Button>
                     </WaitlistModal>
 
