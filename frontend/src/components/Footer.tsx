@@ -30,7 +30,7 @@ export default function Footer() {
                 <div className="flex flex-col space-y-8 md:border-l border-white/10 md:pl-12">
                     <h4 className="text-xs font-mono text-white/40 uppercase tracking-widest">Connect</h4>
                     <div className="flex flex-col space-y-2">
-                        <a href="https://www.instagram.com/getbrandklip" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-lg md:text-xl font-medium hover:text-white/70 transition-colors group">
+                        <a href="https://www.instagram.com/usebrandklip" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-lg md:text-xl font-medium hover:text-white/70 transition-colors group">
                             Instagram <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </a>
                         <a href="https://www.linkedin.com/company/brandklip/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-lg md:text-xl font-medium hover:text-white/70 transition-colors group">

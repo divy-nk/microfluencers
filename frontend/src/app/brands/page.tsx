@@ -26,9 +26,9 @@ const brandsTabs = [
         label: "Barter Drop",
         icon: Package,
         title: "Product for Content",
-        description: "Creators buy your product on Amazon and shoot authentic videos following your brief. You only reimburse them after you approve the content. Zero inventory risk. Zero cash wasted on bad videos.",
+        description: "Creators buy your products from a platform of your choice and shoot authentic videos following your brief. You reimburse them after they submit the video. Zero inventory risk. Zero cash wasted on bad videos.",
         cta: "Join the Brand Waitlist",
-        features: ["No inventory shipped — creators buy on Amazon", "Multiple creative angles per SKU", "Perpetual usage rights included"],
+        features: ["No inventory shipped — creators buy from your chosen platform", "Multiple creative angles per SKU", "Perpetual usage rights included"],
         visual: {
             emoji: "📦",
             stat: "₹0",
@@ -91,11 +91,11 @@ export default function BrandsPage() {
                         For D2C Brands
                     </div>
                     <h1 className="text-4xl sm:text-5xl md:text-[4.25rem] font-heading font-semibold tracking-tight mb-6 leading-[1.08]">
-                        Get High-Quality UGC <br className="hidden md:block" />
-                        <span className="text-foreground/40">Without Sending a Single DM.</span>
+                        High-Converting UGC. <br className="hidden md:block" />
+                        <span className="text-foreground/40">Zero Management Overhead.</span>
                     </h1>
                     <p className="text-base sm:text-lg md:text-xl text-foreground/50 font-light leading-relaxed max-w-2xl mx-auto mb-10">
-                        Launch a campaign on BrandKlip. Creators buy your product on Amazon, shoot authentic videos, and get reimbursed only after you approve. Zero inventory risk. Zero chasing.
+                        Launch campaigns in minutes, not weeks. Creators buy your product from the platform you choose, shoot authentic content, and get reimbursed only after the video is submitted. Focus on what you do best - managing your business and leave your UGC needs to us.
                     </p>
                     <WaitlistModal>
                         <button

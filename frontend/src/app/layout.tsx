@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, DM_Sans } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
-import Navbar from "@/components/Navbar";
+import NavbarWrapper from "@/components/NavbarWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -98,7 +98,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} ${dmSans.variable} font-sans antialiased text-foreground`}>
         <SmoothScroll />
-        <Navbar />
+        <NavbarWrapper />
         {children}
       </body>
     </html>

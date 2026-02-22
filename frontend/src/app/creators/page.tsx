@@ -26,7 +26,7 @@ const creatorsTabs = [
         label: "Barter Drop",
         icon: Shirt,
         title: "Keep Free Products",
-        description: "Skincare, tech, apparel, fitness — browse curated drops and claim what you love. Buy it on Amazon, shoot an authentic video, and get 100% reimbursed when the brand approves. Keep the product forever.",
+        description: "Skincare, tech, apparel, fitness — browse curated drops and claim what you love. Buy it from the brand's chosen platform, shoot an authentic video, and get 100% reimbursed when you submit the video. Keep the product forever.",
         cta: "Apply for the Waitlist",
         features: ["Premium D2C products — yours to keep", "Clear briefs, no endless revisions", "100% reimbursed after approval"],
         visual: {
@@ -95,7 +95,7 @@ export default function CreatorsPage() {
                         <span className="text-foreground/40">Let Them Come to You.</span>
                     </h1>
                     <p className="text-base sm:text-lg md:text-xl text-foreground/50 font-light leading-relaxed max-w-2xl mx-auto mb-10">
-                        If you have 500+ followers, BrandKlip is your shortcut. We match you with curated D2C brands. You buy the product, shoot the video, and get 100% reimbursed the second it&apos;s approved.
+                        If you have 500+ followers, BrandKlip is your shortcut. We match you with curated D2C brands. You buy the product, shoot the video, and get 100% reimbursed the second you submit the video.
                     </p>
                     <WaitlistModal>
                         <button

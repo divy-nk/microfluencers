@@ -18,9 +18,9 @@ const landingTabs = [
     label: "Barter Drop",
     icon: Package,
     title: "Product for Content",
-    description: "Creators buy your product on Amazon and shoot authentic videos following your brief. You only reimburse them after you approve the content. Zero inventory risk. Zero cash wasted on bad videos.",
+    description: "Creators buy your product from a platform of your choice and shoot authentic videos following your brief. You reimburse them after they submit the video. Zero inventory risk. Zero cash wasted on bad videos.",
     cta: "Join the Waitlist",
-    features: ["No inventory shipped — creators buy on Amazon", "Multiple creative angles per SKU", "Perpetual usage rights"],
+    features: ["No inventory shipped — creators buy from your chosen platform", "Multiple creative angles per SKU", "Perpetual usage rights"],
     visual: {
       emoji: "📦",
       stat: "₹0",
@@ -96,8 +96,8 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-heading font-semibold tracking-tight text-foreground mb-6 leading-[1.08]"
           >
-            Where D2C Brands Meet <br className="hidden md:block" />
-            <span className="text-foreground/40">Vetted Creators. Zero Risk.</span>
+            Stop Chasing Creators. <br className="hidden md:block" />
+            <span className="text-foreground/40">Start Getting Content.</span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -107,7 +107,7 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-base sm:text-lg md:text-xl text-foreground/50 max-w-2xl mb-10 leading-relaxed font-light"
           >
-            Brands get authentic UGC without shipping inventory or chasing creators. Creators get free products, clear briefs, and instant payouts. One platform. No DMs. No ghosting.
+            The first zero-risk UGC marketplace where D2C brands get authentic content without shipping inventory upfront or managing messy DMs.
           </motion.p>
 
           {/* CTA */}

@@ -1,333 +1,394 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import {
-    Rocket,
-    ExternalLink,
-    Upload,
     Package,
-    Video,
-    DollarSign,
-    CheckCircle2,
+    Upload,
+    Wallet,
+    ExternalLink,
     Clock,
-    LogOut,
-    Send,
+    CheckCircle2,
     ShoppingCart,
+    DollarSign,
+    Sparkles,
+    TrendingUp,
+    Zap,
 } from "lucide-react";
 
-// Mock data
-const mockAvailableDrops = [
-    {
-        id: "d1",
-        product_link: "https://amazon.in/dp/B0WIRELESS",
-        quantity: 10,
-        brand_name: "TechGear Co.",
-        template: "Unboxing",
-        created_at: "2026-02-17T10:30:00Z",
-    },
-    {
-        id: "d2",
-        product_link: "https://amazon.in/dp/B0SKINCARE",
-        quantity: 20,
-        brand_name: "GlowUp Beauty",
-        template: "Review",
-        created_at: "2026-02-16T08:15:00Z",
-    },
-    {
-        id: "d3",
-        product_link: "https://amazon.in/dp/B0FITNESS",
-        quantity: 15,
-        brand_name: "FitLife",
-        template: "Tutorial",
-        created_at: "2026-02-14T14:00:00Z",
-    },
-];
+type Drop = {
+    id: string;
+    title: string;
+    description: string | null;
+    product_link: string;
+    quantity: number;
+    campaign_type: string;
+    product_value: number | null;
+    niche: string[] | null;
+    brand: { full_name: string | null } | null;
+    created_at: string;
+};
 
-const mockApplications = [
-    {
-        id: "a1",
-        drop_id: "d1",
-        product_link: "https://amazon.in/dp/B0WIRELESS",
-        brand_name: "TechGear Co.",
-        status: "applied",
-        created_at: "2026-02-17T12:00:00Z",
-    },
-    {
-        id: "a2",
-        drop_id: "d2",
-        product_link: "https://amazon.in/dp/B0SKINCARE",
-        brand_name: "GlowUp Beauty",
-        status: "uploaded",
-        created_at: "2026-02-16T10:00:00Z",
-    },
-    {
-        id: "a3",
-        drop_id: "d3",
-        product_link: "https://amazon.in/dp/B0FITNESS",
-        brand_name: "FitLife",
-        status: "approved",
-        created_at: "2026-02-15T09:00:00Z",
-    },
-];
+type Application = {
+    id: string;
+    status: string;
+    approval_status: string;
+    payout_status: string;
+    created_at: string;
+    drop: {
+        id: string;
+        title: string;
+        product_link: string;
+        campaign_type: string;
+        product_value: number | null;
+        brand: { full_name: string | null } | null;
+    };
+};
 
 const statusConfig: Record<string, { color: string; icon: React.ElementType; label: string }> = {
-    applied: { color: "text-blue-400 bg-blue-500/10 border-blue-500/30", icon: Clock, label: "Applied" },
-    purchased: { color: "text-amber-400 bg-amber-500/10 border-amber-500/30", icon: ShoppingCart, label: "Purchased" },
-    uploaded: { color: "text-purple-400 bg-purple-500/10 border-purple-500/30", icon: Upload, label: "Uploaded" },
-    approved: { color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30", icon: CheckCircle2, label: "Approved" },
-    paid: { color: "text-green-400 bg-green-500/10 border-green-500/30", icon: DollarSign, label: "Paid" },
+    applied: { color: "bg-blue-50 text-blue-700 border-blue-200", icon: Clock, label: "Applied" },
+    purchased: { color: "bg-amber-50 text-amber-700 border-amber-200", icon: ShoppingCart, label: "Purchased" },
+    uploaded: { color: "bg-purple-50 text-purple-700 border-purple-200", icon: Upload, label: "Uploaded" },
+    approved: { color: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: CheckCircle2, label: "Approved" },
+    paid: { color: "bg-green-50 text-green-700 border-green-200", icon: DollarSign, label: "Paid" },
+};
+
+const campaignIcons: Record<string, React.ElementType> = {
+    barter: Package,
+    performance: TrendingUp,
+    boosted: Zap,
 };
 
 export default function CreatorDashboard() {
-    const [activeTab, setActiveTab] = useState("browse");
-    const [message, setMessage] = useState("");
-    const [orderId, setOrderId] = useState("");
-    const [uploadingAppId, setUploadingAppId] = useState<string | null>(null);
+    const [applications, setApplications] = useState<Application[]>([]);
+    const [liveDrops, setLiveDrops] = useState<Drop[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [applyingDropId, setApplyingDropId] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState("");
 
-    const handleApply = (dropId: string) => {
-        setMessage(`Demo: Applied to drop ${dropId} successfully!`);
-        setTimeout(() => setMessage(""), 3000);
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+
+        // Fetch creator profile for niche matching
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("niche")
+            .eq("id", session.user.id)
+            .single();
+
+        const creatorNiches = profile?.niche || [];
+
+        // Fetch applications with drop details
+        const { data: apps } = await supabase
+            .from("applications")
+            .select(`
+                id, status, approval_status, payout_status, created_at,
+                drop:drops(id, title, product_link, campaign_type, product_value, brand:profiles!drops_brand_id_fkey(full_name))
+            `)
+            .eq("creator_id", session.user.id)
+            .order("created_at", { ascending: false });
+
+        // Fetch active drops
+        const { data: drops } = await supabase
+            .from("drops")
+            .select(`
+                id, title, description, product_link, quantity, campaign_type, product_value, niche, created_at,
+                brand:profiles!drops_brand_id_fkey(full_name)
+            `)
+            .eq("status", "active")
+            .order("created_at", { ascending: false });
+
+        // Filter drops by niche overlap
+        const appliedDropIds = (apps || []).map((a: any) => a.drop?.id).filter(Boolean);
+        const filteredDrops = (drops || []).filter((drop: any) => {
+            // Don't show drops the creator already applied to
+            if (appliedDropIds.includes(drop.id)) return false;
+            // If creator has no niches, show all; if drop has no niches, show to all
+            if (creatorNiches.length === 0 || !drop.niche || drop.niche.length === 0) return true;
+            // Check niche overlap
+            return drop.niche.some((n: string) => creatorNiches.includes(n));
+        });
+
+        setApplications((apps || []) as unknown as Application[]);
+        setLiveDrops(filteredDrops as unknown as Drop[]);
+        setLoading(false);
     };
 
-    const handleSubmit = (appId: string) => {
-        setMessage(`Demo: Submitted order ID and video for application ${appId}!`);
-        setUploadingAppId(null);
-        setOrderId("");
-        setTimeout(() => setMessage(""), 3000);
+    const handleApply = async (dropId: string) => {
+        setApplyingDropId(dropId);
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+
+        const { error } = await supabase.from("applications").insert({
+            drop_id: dropId,
+            creator_id: session.user.id,
+        });
+
+        if (!error) {
+            setSuccessMessage("Applied successfully! You'll hear back soon.");
+            setTimeout(() => setSuccessMessage(""), 4000);
+            fetchData(); // Refresh
+        }
+        setApplyingDropId(null);
     };
+
+    // Stats
+    const activeDrops = applications.filter(
+        (a) => a.status === "applied" || a.status === "purchased"
+    ).length;
+    const pendingSubs = applications.filter(
+        (a) => a.status === "uploaded" && a.approval_status === "pending"
+    ).length;
+    const pendingPayout = applications.filter(
+        (a) => a.payout_status === "pending" && a.approval_status === "approved"
+    ).length;
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center py-20">
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-foreground/20 border-t-foreground" />
+            </div>
+        );
+    }
 
     return (
-        <div className="min-h-screen bg-background">
-            {/* Top Nav */}
-            <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-                    <div className="flex items-center gap-3">
-                        <Link href="/" className="flex items-center gap-2">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                                <Rocket className="h-4 w-4 text-primary-foreground" />
-                            </div>
-                            <span className="text-lg font-bold tracking-tight">
-                                Micro<span className="text-gradient">fluencers</span>
-                            </span>
-                        </Link>
-                        <Separator orientation="vertical" className="h-6" />
-                        <Badge variant="secondary" className="bg-primary/10 text-primary">
-                            Creator Dashboard
-                        </Badge>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <span className="text-sm text-muted-foreground">creator@demo.com</span>
-                        <Link href="/">
-                            <Button variant="ghost" size="sm">
-                                <LogOut className="mr-2 h-4 w-4" />
-                                Sign Out
-                            </Button>
-                        </Link>
-                    </div>
+        <div className="space-y-8">
+            {/* Page Header */}
+            <div>
+                <h1 className="text-2xl font-heading font-semibold tracking-tight text-foreground">
+                    Dashboard
+                </h1>
+                <p className="text-sm text-muted-foreground mt-1">
+                    Welcome back! Here&apos;s your overview.
+                </p>
+            </div>
+
+            {/* Success Message */}
+            {successMessage && (
+                <div className="flex items-center gap-2 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-sm text-emerald-700 font-medium animate-fade-in">
+                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    {successMessage}
                 </div>
-            </nav>
+            )}
 
-            <div className="mx-auto max-w-7xl px-6 py-8">
-                {/* Stats Row */}
-                <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    {[
-                        { icon: Send, label: "Applications", value: "3", color: "text-blue-400" },
-                        { icon: Video, label: "Videos Uploaded", value: "1", color: "text-purple-400" },
-                        { icon: CheckCircle2, label: "Approved", value: "1", color: "text-emerald-400" },
-                        { icon: DollarSign, label: "Total Earned", value: "₹2,499", color: "text-amber-400" },
-                    ].map((stat) => (
-                        <Card key={stat.label} className="border-border/50 bg-card/50">
-                            <CardContent className="flex items-center gap-4 p-5">
-                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-muted">
-                                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                                </div>
-                                <div>
-                                    <p className="text-sm text-muted-foreground">{stat.label}</p>
-                                    <p className="text-2xl font-bold">{stat.value}</p>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-
-                {/* Success message */}
-                {message && (
-                    <div className="mb-6 rounded-lg border border-primary/20 bg-primary/5 p-4 text-sm text-primary animate-fade-in">
-                        {message}
+            {/* Stat Widgets */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                    {
+                        label: "Active Drops",
+                        value: activeDrops,
+                        icon: Package,
+                        color: "text-blue-600",
+                        bg: "bg-blue-50",
+                    },
+                    {
+                        label: "Pending Submissions",
+                        value: pendingSubs,
+                        icon: Upload,
+                        color: "text-purple-600",
+                        bg: "bg-purple-50",
+                    },
+                    {
+                        label: "Pending Payout",
+                        value: pendingPayout,
+                        icon: Wallet,
+                        color: "text-amber-600",
+                        bg: "bg-amber-50",
+                    },
+                ].map((stat) => (
+                    <div
+                        key={stat.label}
+                        className="flex items-center gap-4 p-5 rounded-2xl bg-white border border-black/[0.04] shadow-sm"
+                    >
+                        <div
+                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${stat.bg}`}
+                        >
+                            <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                        </div>
+                        <div>
+                            <p className="text-xs text-muted-foreground font-medium">{stat.label}</p>
+                            <p className="text-2xl font-bold tracking-tight text-foreground">
+                                {stat.value}
+                            </p>
+                        </div>
                     </div>
-                )}
+                ))}
+            </div>
 
-                {/* Main Content */}
-                <Tabs value={activeTab} onValueChange={setActiveTab}>
-                    <TabsList className="mb-6">
-                        <TabsTrigger value="browse">
-                            <Package className="mr-2 h-4 w-4" />
-                            Browse Drops
-                        </TabsTrigger>
-                        <TabsTrigger value="applications">
-                            <Send className="mr-2 h-4 w-4" />
-                            My Applications
-                        </TabsTrigger>
-                    </TabsList>
+            {/* Active Drops (user's signed-up drops) */}
+            {applications.length > 0 && (
+                <section>
+                    <h2 className="text-lg font-heading font-semibold text-foreground mb-4">
+                        Your Active Drops
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {applications.map((app) => {
+                            const config = statusConfig[app.status] || statusConfig.applied;
+                            const StatusIcon = config.icon;
+                            const drop = app.drop as any;
+                            const CampaignIcon = campaignIcons[drop?.campaign_type] || Package;
 
-                    {/* Browse Drops */}
-                    <TabsContent value="browse">
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                            {mockAvailableDrops.map((drop) => (
-                                <Card
-                                    key={drop.id}
-                                    className="group border-border/50 bg-card/50 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                            return (
+                                <div
+                                    key={app.id}
+                                    className="p-5 rounded-2xl bg-white border border-black/[0.04] shadow-sm hover:shadow-md transition-shadow"
                                 >
-                                    <CardHeader className="pb-3">
-                                        <div className="flex items-center justify-between">
-                                            <Badge className="bg-primary/10 text-primary">{drop.template}</Badge>
-                                            <span className="text-xs text-muted-foreground">
-                                                {new Date(drop.created_at).toLocaleDateString()}
-                                            </span>
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-black/[0.03]">
+                                                <CampaignIcon className="h-4 w-4 text-foreground/60" />
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-semibold text-foreground">
+                                                    {drop?.title || "Drop"}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {drop?.brand?.full_name || "Brand"}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <CardTitle className="mt-3 text-lg">{drop.brand_name}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
+                                        <Badge
+                                            className={`text-[10px] font-medium border ${config.color}`}
+                                        >
+                                            {config.label}
+                                        </Badge>
+                                    </div>
+
+                                    <div className="flex items-center justify-between text-xs text-muted-foreground">
                                         <a
-                                            href={drop.product_link}
+                                            href={drop?.product_link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mb-4 flex items-center gap-1 text-sm text-primary hover:underline"
+                                            className="flex items-center gap-1 text-foreground/60 hover:text-foreground transition-colors"
                                         >
                                             <ExternalLink className="h-3 w-3" />
                                             View Product
                                         </a>
+                                        <span>
+                                            Applied{" "}
+                                            {new Date(app.created_at).toLocaleDateString("en-IN", {
+                                                day: "numeric",
+                                                month: "short",
+                                            })}
+                                        </span>
+                                    </div>
 
-                                        <div className="mb-4 flex items-center justify-between text-sm">
-                                            <span className="text-muted-foreground">Available slots</span>
-                                            <span className="font-semibold">{drop.quantity}</span>
+                                    {drop?.product_value && (
+                                        <div className="mt-3 pt-3 border-t border-black/[0.04] flex items-center gap-1 text-xs text-muted-foreground">
+                                            <span>Product Value:</span>
+                                            <span className="font-semibold text-foreground">
+                                                ₹{drop.product_value}
+                                            </span>
                                         </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
+            )}
 
+            {/* Live Drops (niche-filtered) */}
+            <section>
+                <div className="flex items-center gap-2 mb-4">
+                    <Sparkles className="h-4 w-4 text-amber-500" />
+                    <h2 className="text-lg font-heading font-semibold text-foreground">
+                        Live Drops For You
+                    </h2>
+                </div>
+
+                {liveDrops.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-16 rounded-2xl bg-white border border-black/[0.04]">
+                        <Package className="h-10 w-10 text-muted-foreground/30 mb-3" />
+                        <p className="text-sm text-muted-foreground">No new drops matching your niche right now.</p>
+                        <p className="text-xs text-muted-foreground/60 mt-1">Check back soon!</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {liveDrops.map((drop) => {
+                            const brand = drop.brand as any;
+                            const CampaignIcon = campaignIcons[drop.campaign_type] || Package;
+
+                            return (
+                                <div
+                                    key={drop.id}
+                                    className="group p-5 rounded-2xl bg-white border border-black/[0.04] shadow-sm hover:shadow-md hover:border-black/[0.08] transition-all"
+                                >
+                                    {/* Header */}
+                                    <div className="flex items-center justify-between mb-3">
+                                        <Badge className="text-[10px] font-medium bg-black/[0.04] text-foreground/60 border-transparent capitalize">
+                                            {drop.campaign_type}
+                                        </Badge>
+                                        {drop.niche && drop.niche.length > 0 && (
+                                            <div className="flex gap-1">
+                                                {drop.niche.slice(0, 2).map((n) => (
+                                                    <span
+                                                        key={n}
+                                                        className="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 font-medium capitalize"
+                                                    >
+                                                        {n}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Title */}
+                                    <h3 className="text-sm font-semibold text-foreground mb-1">
+                                        {drop.title}
+                                    </h3>
+                                    <p className="text-xs text-muted-foreground mb-4 line-clamp-2">
+                                        {drop.description || `by ${brand?.full_name || "Brand"}`}
+                                    </p>
+
+                                    {/* Details */}
+                                    <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
+                                        <span>{drop.quantity} slots available</span>
+                                        {drop.product_value && (
+                                            <span className="font-semibold text-foreground">
+                                                ₹{drop.product_value}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div className="flex gap-2">
                                         <Button
                                             onClick={() => handleApply(drop.id)}
-                                            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                                            disabled={applyingDropId === drop.id}
+                                            className="flex-1 h-9 text-xs bg-foreground text-white hover:bg-foreground/90 rounded-xl"
                                         >
-                                            Apply Now
+                                            {applyingDropId === drop.id
+                                                ? "Applying..."
+                                                : "Apply Now"}
                                         </Button>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    </TabsContent>
-
-                    {/* My Applications */}
-                    <TabsContent value="applications">
-                        <div className="space-y-4">
-                            {mockApplications.map((app) => {
-                                const config = statusConfig[app.status] || statusConfig.applied;
-                                const StatusIcon = config.icon;
-
-                                return (
-                                    <Card key={app.id} className="border-border/50 bg-card/50">
-                                        <CardContent className="p-6">
-                                            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                                                <div className="flex items-start gap-4">
-                                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted">
-                                                        <StatusIcon className={`h-5 w-5 ${config.color.split(" ")[0]}`} />
-                                                    </div>
-                                                    <div>
-                                                        <h3 className="font-semibold">{app.brand_name}</h3>
-                                                        <a
-                                                            href={app.product_link}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-center gap-1 text-sm text-primary hover:underline"
-                                                        >
-                                                            <ExternalLink className="h-3 w-3" />
-                                                            View Product
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-3">
-                                                    <Badge className={config.color}>{config.label}</Badge>
-                                                    <span className="text-xs text-muted-foreground">
-                                                        {new Date(app.created_at).toLocaleDateString()}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {/* Upload section for applied apps */}
-                                            {app.status === "applied" && (
-                                                <div className="mt-4 rounded-xl border border-border/50 bg-muted/30 p-4">
-                                                    {uploadingAppId === app.id ? (
-                                                        <div className="space-y-4 animate-fade-in">
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor={`order-${app.id}`}>Order ID</Label>
-                                                                <Input
-                                                                    id={`order-${app.id}`}
-                                                                    placeholder="Enter your Amazon order ID"
-                                                                    value={orderId}
-                                                                    onChange={(e) => setOrderId(e.target.value)}
-                                                                />
-                                                            </div>
-                                                            <div className="space-y-2">
-                                                                <Label>Upload Video</Label>
-                                                                <div className="flex h-24 items-center justify-center rounded-xl border-2 border-dashed border-border transition hover:border-primary/30">
-                                                                    <div className="text-center">
-                                                                        <Upload className="mx-auto h-6 w-6 text-muted-foreground" />
-                                                                        <span className="mt-1 block text-xs text-muted-foreground">
-                                                                            Click or drag to upload
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="flex gap-2">
-                                                                <Button
-                                                                    onClick={() => handleSubmit(app.id)}
-                                                                    className="bg-primary text-primary-foreground hover:bg-primary/90"
-                                                                    size="sm"
-                                                                >
-                                                                    <CheckCircle2 className="mr-2 h-4 w-4" />
-                                                                    Submit
-                                                                </Button>
-                                                                <Button
-                                                                    onClick={() => setUploadingAppId(null)}
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                >
-                                                                    Cancel
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="flex items-center justify-between">
-                                                            <p className="text-sm text-muted-foreground">
-                                                                Purchase the product and submit your order details + video.
-                                                            </p>
-                                                            <Button
-                                                                onClick={() => setUploadingAppId(app.id)}
-                                                                variant="outline"
-                                                                size="sm"
-                                                                className="border-primary/30 hover:bg-primary/10"
-                                                            >
-                                                                <Upload className="mr-2 h-4 w-4" />
-                                                                Submit
-                                                            </Button>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </CardContent>
-                                    </Card>
-                                );
-                            })}
-                        </div>
-                    </TabsContent>
-                </Tabs>
-            </div>
+                                        <a
+                                            href={drop.product_link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            <Button
+                                                variant="outline"
+                                                className="h-9 text-xs rounded-xl border-black/[0.06]"
+                                            >
+                                                <ExternalLink className="h-3 w-3" />
+                                            </Button>
+                                        </a>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </section>
         </div>
     );
 }

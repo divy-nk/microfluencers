@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
@@ -11,13 +12,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Rocket, ArrowLeft, Mail, Lock, User, Building2, Video } from "lucide-react";
+import { ArrowLeft, Mail, Lock, User, Building2, Video } from "lucide-react";
 
 function AuthContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const defaultTab = searchParams.get("tab") === "signup" ? "signup" : "signin";
     const defaultRole = searchParams.get("role") || "creator";
+
+    // Redirect to home if on production
+    if (process.env.NODE_ENV === "production") {
+        router.push("/");
+        return null;
+    }
 
     // Map raw Supabase errors to user-friendly messages
     const getSafeErrorMessage = (err: any): string => {
@@ -70,10 +77,21 @@ function AuthContent() {
 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (password.length < 8) {
-            setMessage("Password must be at least 8 characters.");
+
+        // 1. Strict Name Validation (Combat XSS / Invalid Input)
+        const nameRegex = /^[a-zA-Z\s\-']+$/;
+        if (!nameRegex.test(name) || name.trim().length < 2) {
+            setMessage("Please enter a valid name (letters, spaces, hyphens only).");
             return;
         }
+
+        // 2. Strict Password Validation
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            setMessage("Password must be ≥8 chars with uppercase, lowercase, number, and special character.");
+            return;
+        }
+
         setLoading(true);
         setMessage("");
         try {
@@ -118,12 +136,15 @@ function AuthContent() {
 
                 {/* Logo */}
                 <div className="mb-8 flex items-center gap-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary animate-glow">
-                        <Rocket className="h-5 w-5 text-primary-foreground" />
-                    </div>
-                    <span className="text-xl font-bold tracking-tight">
-                        Micro<span className="text-gradient">fluencers</span>
-                    </span>
+                    <Link href="/">
+                        <Image
+                            src="/logo-black.png"
+                            alt="BrandKlip"
+                            width={140}
+                            height={32}
+                            className="h-7 w-auto"
+                        />
+                    </Link>
                 </div>
 
                 <Card className="border-border/50 bg-card/80 backdrop-blur-xl">
