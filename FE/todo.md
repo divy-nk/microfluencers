@@ -1,15 +1,17 @@
-# TODO List
+# FE Legacy TODO
 
-- [x] Implement role-based routing using React Router
-- [x] Create Brand and Creator dashboard pages
-- [x] Use Supabase Auth context for user/role
-- [x] Fetch user role from Supabase (profiles table)
-- [x] Add ProtectedRoute for role-based access
-- [x] Integrate AppRouter into App
-- [ ] Add more dashboard features (future)
-- [ ] Add tests for routing and dashboards (future)
+This TODO belongs to the legacy `FE` prototype and is not the active product backlog.
 
-## Notes
-- See `src/AppRouter.tsx`, `src/BrandDashboard.tsx`, `src/CreatorDashboard.tsx`, `src/ProtectedRoute.tsx`, `src/useUserRole.tsx` for implementation.
-- User role is fetched from the `profiles` table in Supabase.
-- Update this list as new features are added.
+## Legacy Status
+
+- Role-based routing prototype completed in this folder.
+- Further feature work should happen in `brandklip/app`.
+
+## Active Backlog Location
+
+Use root/docs + active app code for current planning and implementation:
+
+- `plan.md`
+- `system-design.md`
+- `BE-development.md`
+- `brandklip/app`

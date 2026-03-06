@@ -1,5 +1,49 @@
 # Backend Development Log: Product-for-Content Micro-SaaS
 
+## 2026-03-03: Current Backend Baseline (Authoritative)
+
+### Important Context
+- The active implementation is now centered on **Wasp + Prisma + PostgreSQL**.
+- Earlier sections in this document (Supabase-first exploration) are retained as historical planning notes.
+- For current architecture and workflows, refer to:
+  - `system-design.md` (current system view)
+  - `brandklip/app/src/application/ops.ts` (business logic)
+  - `brandklip/app/schema.prisma` + `brandklip/app/migrations/*` (data model + migrations)
+
+### Implemented Backend Capabilities
+
+1. **Application lifecycle enforcement**
+  - Backend validates role + status before transitions.
+  - Invalid transitions are blocked at operation level.
+
+2. **Order proof governance**
+  - Multi-attempt rejection/verification handling.
+  - Server-side rejection reason validation.
+  - Deadline-aware retry behavior integrated into state transitions.
+
+3. **Video reshoot governance**
+  - Three-attempt cap for reshoots.
+  - Structured rejection reason + min feedback length enforcement.
+  - Resubmit deadlines and final failure (`expired`) transitions.
+  - Queue enrichment with attempt context.
+
+4. **Operational reliability improvements**
+  - Fixes for query/action runtime edge cases (scoping/delegate usage).
+  - Better error surfacing for reject/confirm actions (no silent no-op UX).
+  - Status-driven notification and admin activity updates.
+
+5. **Schema evolution (recent)**
+  - Added application-level fields for video policy tracking:
+    - `videoRejectionReason`
+    - `videoLastRejectedAt`
+    - `videoResubmitDeadline`
+    - `videoFailedAt`
+
+### Next Backend Priorities
+- Add integration tests for high-risk transitions (`rejectOrderDetails`, `adminRequestReshoot`, `submitVideoLink`).
+- Introduce centralized policy constants module to reduce duplication.
+- Add structured audit stream for approval/rejection events.
+
 ## 1. Initialization
 - Date: 2026-02-19
 - Context: Initiating backend development based on the finalized system design.

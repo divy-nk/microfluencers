@@ -1,87 +1,21 @@
-# React + TypeScript + Vite
+# FE (Legacy Prototype)
 
-## Role-Based Routing & Dashboards
+This `FE` folder is an earlier frontend prototype and is **not** the primary production codepath.
 
-This app uses Supabase Auth and role-based routing to show different dashboards for 'brand' and 'creator' users.
+## Current Source of Truth
 
-- User authentication is handled via Supabase (see `src/auth.tsx`).
-- User roles are fetched from the `profiles` table in Supabase (see `src/useUserRole.tsx`).
-- Routing is managed with React Router (see `src/AppRouter.tsx`).
-- Each role has its own dashboard: `src/BrandDashboard.tsx` and `src/CreatorDashboard.tsx`.
-- `ProtectedRoute.tsx` ensures only users with the correct role can access their dashboard.
+Use the BrandKlip Wasp app instead:
 
-To add more roles or dashboards, extend the router and create new dashboard components.
+- `brandklip/app` — active product code
+- `plan.md` — product plan (as-built)
+- `system-design.md` — current architecture
+- `BE-development.md` — backend implementation log
 
-See `todo.md` for the current feature list.
+## Why this folder still exists
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Historical reference for earlier UI experiments.
+- Safe place for isolated prototype work without affecting active app flows.
 
-Currently, two official plugins are available:
+## If you want to run this legacy prototype
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+It is a standalone Vite React app and can be run independently with its own package scripts.

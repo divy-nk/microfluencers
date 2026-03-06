@@ -1,0 +1,213 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
+type PixelColor = "lime" | "bloodred" | "sky";
+type PixelShade = "white" | "black";
+
+interface CyberpunkButtonProps {
+  buttonColor?: PixelColor;
+  pixelColor?: PixelShade;
+  buttonText?: string;
+}
+
+const colorMap: Record<PixelColor, string> = {
+  lime: "#ccff00",
+  bloodred: "#f03030",
+  sky: "#007bff",
+};
+
+const gradientMap: Record<PixelColor, string> = {
+  lime: "linear-gradient(to bottom, #ccff00, #b3e600)",
+  bloodred: "linear-gradient(to bottom, #f03030, #e11d2e)",
+  sky: "linear-gradient(to bottom, #007bff, #0056b3)",
+};
+
+const pixelShadeMap: Record<PixelShade, { active: string; inactive: string }> =
+  {
+    white: {
+      active: "rgba(255,255,255,1)",
+      inactive: "rgba(255,255,255,0.55)",
+    },
+    black: {
+      active: "rgba(15,15,15,1)",
+      inactive: "rgba(15,15,15,0.55)",
+    },
+  };
+
+const CyberpunkButton = ({
+  buttonColor = "lime",
+  pixelColor = "black",
+  buttonText = "Book a demo",
+}: CyberpunkButtonProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [shimmerPhase, setShimmerPhase] = useState(0);
+  const [activeArrow, setActiveArrow] = useState(0);
+
+  const rows = 5;
+  const pixelSize = 3;
+  const gap = 2;
+  const spacing = 5;
+  const centerRow = 2;
+  const colsHovered = 30;
+  const arrowCols = spacing;
+
+  useEffect(() => {
+    if (isHovered) return;
+    const timer = setInterval(() => {
+      setShimmerPhase((prev) => (prev + 1) % (spacing + 3));
+    }, 110);
+    return () => clearInterval(timer);
+  }, [isHovered]);
+
+  useEffect(() => {
+    if (!isHovered) return;
+    const totalArrows = Math.floor(colsHovered / spacing);
+    const timer = setInterval(() => {
+      setActiveArrow((prev) => (prev + 1) % totalArrows);
+    }, 120);
+    return () => clearInterval(timer);
+  }, [isHovered]);
+
+  const isPixelActiveHovered = (r: number, c: number) => {
+    const rowOffset = r - centerRow;
+    const diagonalShift = Math.abs(rowOffset);
+    const arrowIndex = Math.floor(c / spacing);
+    const phase = c % spacing;
+
+    const isHead =
+      r === centerRow && (phase === spacing - 1 || phase === spacing - 2);
+
+    const isDiagonal =
+      r !== centerRow &&
+      (phase === spacing - 1 - diagonalShift ||
+        phase === spacing - 2 - diagonalShift);
+
+    return { active: isHead || isDiagonal, arrowIndex };
+  };
+
+  const pixelColors = pixelShadeMap[pixelColor];
+
+  return (
+    <button
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "#0a0a0a",
+        borderRadius: "12px",
+        padding: "4px",
+        border: "1px solid #262626",
+        height: "64px",
+        cursor: "pointer",
+        transition: "border-color 0.3s",
+        outline: "none",
+        overflow: "hidden",
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* TEXT (now flexible) */}
+      <div
+        style={{
+          paddingLeft: "72px",
+          paddingRight: "24px",
+          whiteSpace: "nowrap",
+          transition: "opacity 0.3s, transform 0.3s",
+          opacity: isHovered ? 0 : 1,
+          transform: isHovered ? "translateX(-8px)" : "translateX(0)",
+        }}
+      >
+        <span
+          style={{
+            color: "white",
+            fontSize: "18px",
+            fontWeight: 500,
+            letterSpacing: "-0.02em",
+            fontFamily: "system-ui",
+          }}
+        >
+          {buttonText}
+        </span>
+      </div>
+
+      {/* COLORED BOX */}
+      <div
+        style={{
+          position: "absolute",
+          left: "4px",
+          top: "4px",
+          bottom: "4px",
+          width: isHovered ? "calc(100% - 8px)" : "56px",
+          transition: "width 0.5s cubic-bezier(0.2,0,0,1)",
+          borderRadius: "8px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          backgroundColor: colorMap[buttonColor],
+          backgroundImage: isHovered ? gradientMap[buttonColor] : "none",
+        }}
+      >
+        {isHovered ? (
+          <div style={{ display: "grid", gap: `${gap}px` }}>
+            {Array.from({ length: rows }).map((_, r) => (
+              <div key={r} style={{ display: "flex", gap: `${gap}px` }}>
+                {Array.from({ length: colsHovered }).map((_, c) => {
+                  const { active, arrowIndex } = isPixelActiveHovered(r, c);
+                  const isHighlighted = arrowIndex === activeArrow;
+                  return (
+                    <div
+                      key={`${r}-${c}`}
+                      style={{
+                        width: `${pixelSize}px`,
+                        height: `${pixelSize}px`,
+                        borderRadius: "1px",
+                        backgroundColor: active
+                          ? isHighlighted
+                            ? pixelColors.active
+                            : pixelColors.inactive
+                          : "transparent",
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ display: "grid", gap: `${gap}px` }}>
+            {Array.from({ length: rows }).map((_, r) => (
+              <div key={r} style={{ display: "flex", gap: `${gap}px` }}>
+                {Array.from({ length: arrowCols }).map((_, c) => {
+                  const { active } = isPixelActiveHovered(r, c);
+                  const shimCol = shimmerPhase % spacing;
+                  const phase = c % spacing;
+                  const isShimmering = active && phase === shimCol;
+
+                  return (
+                    <div
+                      key={`${r}-${c}`}
+                      style={{
+                        width: `${pixelSize}px`,
+                        height: `${pixelSize}px`,
+                        borderRadius: "1px",
+                        backgroundColor: active
+                          ? isShimmering
+                            ? pixelColors.active
+                            : pixelColors.inactive
+                          : "transparent",
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </button>
+  );
+};
+
+export default CyberpunkButton;

@@ -195,6 +195,27 @@ cron.schedule('0 10 * * *', async () => {
                             paused_by_brand: isPaused // System-paused
                         });
                         console.log(`[Payout Calculator] App ${app.id}: ₹${incrementalPayout.toFixed(2)} performance payout queued (Status: ${payoutStatus})`);
+
+                        // Send Brevo email alert to admins if payout is pending
+                        if (payoutStatus === 'pending') {
+                            const { sendEmail } = require('../brandklip/app/src/server/notifications/emailAdapter');
+                            // Example admin list, replace with actual admin fetch if needed
+                            const adminEmails = [
+                                { name: 'Admin', email: 'admin@brandklip.com' }
+                            ];
+                            const payoutData = {
+                                readyCount: 1,
+                                totalAmount: incrementalPayout,
+                                onHoldCount: 0,
+                                dropTitle: app.drops?.title || '',
+                                brandName: app.drops?.brand_name || '',
+                                amountExpected: incrementalPayout,
+                                utr: 'N/A'
+                            };
+                            for (const admin of adminEmails) {
+                                await sendEmail('admin_payout_queue_digest', admin, payoutData);
+                            }
+                        }
                     }
                 }
 

@@ -1,65 +1,80 @@
-# PRD: Creator Onboarding Module – "The Talent Filter"
+# Creator Onboarding Module — Current Implementation
+
+Last updated: 2026-03-03
 
 ## 1. Objective
-To vet creators based on their communication skills (The Intro) and their proven performance (The Top Asset), ensuring brands only work with creators who can actually move the needle.
 
-## 2. Functional Requirements
+Collect enough structured creator profile data to:
 
-### 2.1 The "Elevator Pitch" (Introductory Video)
-- **Requirement**: A 20-30 second video recorded directly in the app or uploaded.
-- **Prompt for Creator**: "Tell us your name, your primary niche, and one brand you’d die to work with. Keep it high energy!"
-- **What this vets**:
-    - **Speaking Clarity**: Can they deliver a script without stumbling?
-    - **Vibe Check**: Does their personality align with premium or "relatable" brands?
-    - **Language Proficiency**: Identifying their comfort level with English, Hindi, or regional languages.
+1. Enable reliable brand-side targeting and filtering.
+2. Improve application quality before first campaign application.
+3. Support payout readiness and profile trust checks.
 
-### 2.2 The "Algorithm Winner" (Top Performing Video)
-- **Requirement**: Upload or link (Instagram/TikTok/YouTube) of their best-performing video.
-- **Metadata Collection**: Creator must provide the View Count and Engagement Rate (estimated) for this video.
-- **What this vets**:
-    - **Hook Mastery**: Did they stop the scroll?
-    - **Editing Quality**: Do they understand pacing, captions, and transitions?
-    - **Social Proof**: Does their content actually resonate with a real audience?
+## 2. Implemented Flow (5 Steps)
 
-### 2.3 Profile Metadata (The "Data Moat")
-- **Niche Tags**: Select up to 2 (e.g., Skincare, Fintech, Pet-care).
-- **Location**: Important for regional brand campaigns.
-- **Device Info**: (e.g., iPhone 15, Sony ZV-1).
+Defined in `CreatorOnboardingPage` as:
 
-## 3. The User Flow (Creator Experience)
+- `About You`
+- `Platforms`
+- `Your Work`
+- `Get Paid`
+- `Your Photo`
 
-1. **Identity**: Signup via Google or Instagram Auth.
-2. **The Intro (Screen 1)**:
-    - UI shows a "Camera Viewfinder" style box.
-    - Text Overlay: "Give us a 20s intro. Show us your personality!"
-    - Action: Record or Upload.
-3. **The Proof (Screen 2)**:
-    - UI asks: "What’s your best work?"
-    - Action: Link or File Upload.
-    - Input: "Why did this video go viral?" (This helps brands see their strategic thinking).
-4. **The "Waiting Room"**:
-    - Message: "Our curators are reviewing your vibe. You’ll be notified on WhatsApp when your first Drop is ready."
+Creators submit onboarding once all step-level validations pass.
 
-## 4. Technical Validation Logic (For Next.js Backend)
+## 3. Data Captured
 
-| Field | Validation Requirement | Failure Trigger |
-| :--- | :--- | :--- |
-| **Intro Video** | Length: 15s - 45s | Reject if < 10s (too short to judge). |
-| **Intro Video** | File Size: < 50MB | Alert user to compress to save Supabase storage costs. |
-| **Top Video** | URL/File presence | Cannot proceed to "Waiting Room" without proof. |
-| **Niche Selection** | Minimum 1 tag | Prevents "Generalist" profiles that brands hate. |
+### 3.1 About You
+- Full name
+- Date of birth (formatted)
+- Gender (`female` / `male` / `other`)
+- City + state
 
-## 5. Edge Cases & Risks
+### 3.2 Platforms
+- Primary platform (`instagram` / `youtube` / `both`)
+- Platform handles (normalized without leading `@`)
+- Audience size inputs (followers/subscribers)
+- Content niche selection (multi-select, capped)
 
-- **The "Fake" Video**: A creator uploads a video that isn't theirs.
-    - *Mitigation*: In the "Intro Video," they must state their name. If the voice/face doesn't match the "Top Performing Video," they are flagged for manual review.
-- **Poor Lighting in Intro**:
-    - *Mitigation*: Use a simple UI nudge: "We noticed your intro is a bit dark. Brands love bright, clear faces!"
-- **Link Privacy**: Instagram links might be private.
-    - *Mitigation*: Encourage File Uploads directly to your Supabase bucket to ensure brands can always view them.
+### 3.3 Work Samples
+- Sample content URLs (primary and optional secondary)
+- Free-text “why BrandKlip” motivation/context
 
-## 6. Success Metrics for this Module
+### 3.4 Payout Readiness
+- Preferred payout method (`upi` or `bank`)
+- Method-specific payment fields with validation
 
-- **Onboarding Friction**: % of creators who start signup but don't finish the Intro Video (if this is >50%, we need to simplify).
-- **Approval Rate**: % of applicants that you actually "Accept" (Lower is better for your MOAT).
-- **Brand Satisfaction**: % of brands that "Favorite" a creator after seeing their Intro Video.
+### 3.5 Profile Photo
+- Optional/required step-level upload UX (based on form completion)
+- Direct upload support through signed upload action
+
+## 4. Validation Rules (Implemented)
+
+- Step-gated progression (`canProceed`) before moving forward.
+- Step 1 requires identity/location + gender fields.
+- Step 2 requires at least one niche and valid platform inputs.
+- Step 4 validates payout details by selected payout mode.
+- Handle and numeric sanitization are applied client-side before submit.
+
+## 5. Backend Submission Contract
+
+On final submit, onboarding sends normalized values through `submitCreatorOnboarding`, including:
+
+- `gender`
+- `niche`
+- `followersCount` (derived from provided platform numbers)
+- platform handles + profile metadata
+
+This enables downstream drop targeting (including gender preference) and creator discovery quality.
+
+## 6. Process Notes
+
+- Rejected creators can reset and reapply via onboarding reset flow.
+- Onboarding state is tied to account approval lifecycle (`pending` / `approved` / `rejected`).
+- Creator dashboard experience changes based on approval status.
+
+## 7. Known Improvements (Planned)
+
+1. Add explicit server-side schema docs for onboarding payload evolution.
+2. Add instrumentation for step drop-off analytics.
+3. Add stronger URL validation/preview checks for sample links.
