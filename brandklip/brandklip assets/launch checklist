@@ -1,0 +1,77 @@
+Plan (your choices locked in)
+
+Host: DigitalOcean App Platform
+Domain: https://www.brandklip.com
+DB: Supabase Postgres
+Enabled: Razorpay, S3 uploads, Email, Google OAuth
+Disabled for now: WhatsApp, Waitlist
+What I still need from you
+
+DigitalOcean access:
+DO_API_TOKEN (or you can do UI steps yourself)
+Supabase DB:
+Project created
+Connection string (DATABASE_URL) with sslmode=require
+Razorpay:
+RAZORPAY_KEY_ID
+RAZORPAY_KEY_SECRET
+RAZORPAY_WEBHOOK_SECRET
+Plan IDs:
+PAYMENTS_STARTER_PLAN_ID
+PAYMENTS_GROWTH_PLAN_ID
+PAYMENTS_SCALE_PLAN_ID
+S3 bucket credentials:
+AWS_S3_IAM_ACCESS_KEY
+AWS_S3_IAM_SECRET_KEY
+AWS_S3_FILES_BUCKET
+AWS_S3_REGION
+AWS_S3_ENDPOINT (only if non-AWS S3-compatible)
+Email provider (pick one):
+Brevo: BREVO_API_KEY (recommended from your current config), or
+SendGrid: SENDGRID_API_KEY
+Google OAuth:
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+In Google Console add:
+Authorized JavaScript origins:
+https://www.brandklip.com
+https://brandklip.com (optional but recommended)
+Authorized redirect URI:
+https://www.brandklip.com/auth/google/callback
+Prod env checklist (copy-paste)
+Use these in DigitalOcean App env vars:
+
+DigitalOcean deployment steps (App Platform)
+
+Push latest code to GitHub branch (usually main).
+DigitalOcean -> Create App -> choose repo app.
+Build/Run setup:
+Build command: npm install && wasp build
+Run command: wasp start
+HTTP port: 3001 (match app runtime)
+Add all env vars above.
+Add domain:
+Attach www.brandklip.com in DO App
+Add DNS records DO gives you
+Optional: redirect apex brandklip.com -> www.brandklip.com
+Razorpay webhook:
+URL: https://www.brandklip.com/payments-webhook
+Event secret must match RAZORPAY_WEBHOOK_SECRET
+Run migrations once against Supabase DB before/after first release:
+wasp db migrate-dev (or production-safe migrate flow you use)
+Smoke test:
+Signup/login (email + Google)
+Create payment order + webhook verification
+Upload asset to S3
+Send one email event
+Important notes
+
+WHATSAPP_PROVIDER=None is not a supported value in code. Use:
+WHATSAPP_ENABLED=false
+WHATSAPP_PROVIDER=mock
+Waitlist is not needed, so you can skip VITE_SUPABASE_URL.
+If you want, next I can give you:
+
+A ready-to-import DigitalOcean App Spec (app.yaml) with these env keys.
+A red/green pre-launch verification checklist you can run in 10 minutes.
+

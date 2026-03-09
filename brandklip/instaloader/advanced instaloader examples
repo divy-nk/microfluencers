@@ -1,0 +1,210 @@
+Advanced Instaloader Examples
+
+Contents
+
+    Advanced Instaloader Examples
+
+        Download Posts in a Specific Period
+
+        Likes of a Profile / Ghost Followers
+
+        Track Deleted Posts
+
+        Only one Post per User
+
+        Top X Posts of User
+
+        Metadata JSON Files
+
+Here we present code examples that use the Python Module instaloader for more advanced Instagram downloading or metadata mining than what is possible with the Instaloader command line interface.
+
+The scripts presented here can be downloaded from our source tree: instaloader/docs/codesnippets/
+Download Posts in a Specific Period
+
+To only download Instagram pictures (and metadata) that are within a specific period, you can simply use dropwhile() and takewhile() from itertools on a generator that returns Posts in exact chronological order, such as Profile.get_posts().
+
+from datetime import datetime
+from itertools import dropwhile, takewhile
+
+import instaloader
+
+L = instaloader.Instaloader()
+
+posts = instaloader.Profile.from_username(L.context, "instagram").get_posts()
+
+SINCE = datetime(2015, 5, 1)
+UNTIL = datetime(2015, 3, 1)
+
+for post in takewhile(lambda p: p.date > UNTIL, dropwhile(lambda p: p.date > SINCE, posts)):
+    print(post.date)
+    L.download_post(post, "instagram")
+
+See also Post, Instaloader.download_post().
+
+Discussed in Issue #121.
+
+The code example with dropwhile() and takewhile() makes the assumption that the post iterator returns posts in exact chronological order. As discussed in Issue #666, the following approach fits for an almost chronological order, where up to k older posts are inserted into an otherwise chronological order, such as a Hashtag feed.
+
+from datetime import datetime
+import instaloader
+
+L = instaloader.Instaloader()
+
+posts = instaloader.Hashtag.from_name(L.context, "urbanphotography").get_posts_resumable()
+
+SINCE = datetime(2020, 5, 10)  # further from today, inclusive
+UNTIL = datetime(2020, 5, 11)  # closer to today, not inclusive
+
+k = 0  # initiate k
+#k_list = []  # uncomment this to tune k
+
+for post in posts:
+    postdate = post.date
+
+    if postdate > UNTIL:
+        continue
+    elif postdate <= SINCE:
+        k += 1
+        if k == 50:
+            break
+        else:
+            continue
+    else:
+        L.download_post(post, "#urbanphotography")
+        # if you want to tune k, uncomment below to get your k max
+        #k_list.append(k)
+        k = 0  # set k to 0
+
+#max(k_list)
+
+Likes of a Profile / Ghost Followers
+
+To obtain a list of your inactive followers, i.e. followers that did not like any of your pictures, you can use this approach.
+
+import instaloader
+
+L = instaloader.Instaloader()
+
+USER = "your_account"
+PROFILE = USER
+
+# Load session previously saved with `instaloader -l USERNAME`:
+L.load_session_from_file(USER)
+
+profile = instaloader.Profile.from_username(L.context, PROFILE)
+
+likes = set()
+print("Fetching likes of all posts of profile {}.".format(profile.username))
+for post in profile.get_posts():
+    print(post)
+    likes = likes | set(post.get_likes())
+
+print("Fetching followers of profile {}.".format(profile.username))
+followers = set(profile.get_followers())
+
+ghosts = followers - likes
+
+print("Storing ghosts into file.")
+with open("inactive-users.txt", 'w') as f:
+    for ghost in ghosts:
+        print(ghost.username, file=f)
+
+See also Profile.get_posts(), Post.get_likes(), Profile.get_followers(), Instaloader.load_session_from_file(), Profile.from_username().
+
+Discussed in Issue #120.
+Track Deleted Posts
+
+This script uses Instaloader to obtain a list of currently-online Instagram and compares it with the set of posts that you already have downloaded. It outputs a list of posts which are online but not offline (i.e. not yet downloaded) and a list of posts which are offline but not online (i.e. deleted in the profile).
+
+from glob import glob
+from sys import argv
+from os import chdir
+
+from instaloader import Instaloader, Post, Profile, load_structure_from_file
+
+# Instaloader instantiation - you may pass additional arguments to the constructor here
+L = Instaloader()
+
+# If desired, load session previously saved with `instaloader -l USERNAME`:
+#L.load_session_from_file(USERNAME)
+
+try:
+    TARGET = argv[1]
+except IndexError:
+    raise SystemExit("Pass profile name as argument!")
+
+# Obtain set of posts that are on hard disk
+chdir(TARGET)
+offline_posts = set(filter(lambda s: isinstance(s, Post),
+                           (load_structure_from_file(L.context, file)
+                            for file in (glob('*.json.xz') + glob('*.json')))))
+
+# Obtain set of posts that are currently online
+post_iterator = Profile.from_username(L.context, TARGET).get_posts()
+online_posts = set(post_iterator)
+
+if online_posts - offline_posts:
+    print("Not yet downloaded posts:")
+    print(" ".join(str(p) for p in (online_posts - offline_posts)))
+
+if offline_posts - online_posts:
+    print("Deleted posts:")
+    print(" ".join(str(p) for p in (offline_posts - online_posts)))
+
+See also load_structure_from_file(), Profile.from_username(), Profile.get_posts(), Post.
+
+Discussed in Issue #56.
+Only one Post per User
+
+To download only the single most recent post per user within a hashtag feed, this snippet uses a set that contains the users of whom a post has already been downloaded. For each post, it checks whether the post’s creator is already contained in that set. If not, the post is downloaded from Instagram and the user is added to that set.
+
+import instaloader
+
+L = instaloader.Instaloader()
+
+posts = instaloader.Hashtag.from_name(L.context, 'urbanphotography').get_posts_resumable()
+
+users = set()
+
+for post in posts:
+    if not post.owner_profile in users:
+        L.download_post(post, '#urbanphotography')
+        users.add(post.owner_profile)
+    else:
+        print("{} from {} skipped.".format(post, post.owner_profile))
+
+See also Post, Instaloader.download_post(), Post.owner_profile, Profile.
+
+Discussed in Issue #113.
+Top X Posts of User
+
+With Instaloader, it is easy to download the few most-liked pictures of a user.
+
+from itertools import islice
+from math import ceil
+
+from instaloader import Instaloader, Profile
+
+PROFILE = ...        # profile to download from
+X_percentage = 10    # percentage of posts that should be downloaded
+
+L = Instaloader()
+
+profile = Profile.from_username(L.context, PROFILE)
+posts_sorted_by_likes = sorted(profile.get_posts(),
+                               key=lambda p: p.likes + p.comments,
+                               reverse=True)
+
+for post in islice(posts_sorted_by_likes, ceil(profile.mediacount * X_percentage / 100)):
+    L.download_post(post, PROFILE)
+
+Discussed in Issue #194.
+Metadata JSON Files
+
+The JSON files Instaloader saves along with each Post contain all the metadata that has been retrieved from Instagram while downloading the picture and associated required information.
+
+With jq, a command-line JSON processor, the metadata can be easily post-processed. For example, Instaloader’s JSON files can be pretty-formatted with:
+
+xzcat 2018-05-13_11-18-45_UTC.json.xz | jq .node
+
+However, Instaloader tries to do as few metadata requests as possible, so, depending on how Instaloader has been invoked, it may occur that these files do not contain the complete available metadata structure. Nevertheless, the file can be loaded into Instaloader with load_structure_from_file() and the required metadata then be accessed via the Post or Profile attributes, which trigger an Instagram request if that particular information is not present in the JSON file.

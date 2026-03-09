@@ -1,0 +1,274 @@
+Download Pictures from Instagram
+
+Here we describe how to use Instaloader to download pictures from Instagram. If you do not have Instaloader installed yet, see Install Instaloader.
+Basic Usage
+
+To download all pictures and videos of a profile, as well as the profile picture, do
+
+instaloader profile [profile ...]
+
+where profile is the name of a profile you want to download. Instead of only one profile, you may also specify a list of profiles.
+
+To later update your local copy of that profiles, you may run
+
+instaloader --fast-update profile [profile ...]
+
+If --fast-update is given, Instaloader stops when arriving at the first already-downloaded picture.
+
+Alternatively, you can use --latest-stamps to have Instaloader store the time each profile was last downloaded and only download newer media:
+
+instaloader --latest-stamps -- profile [profile ...]
+
+With this option it’s possible to move or delete downloaded media and still keep the archive updated.
+
+When updating profiles, Instaloader automatically detects profile name changes and renames the target directory accordingly.
+
+Instaloader can also be used to download private profiles. To do so, invoke it with
+
+instaloader --login=your_username profile [profile ...]
+
+When logging in, Instaloader stores the session cookies in a file in your home directory, which will be reused later the next time --login is given. So you can download private profiles non-interactively when you already have a valid session cookie file.
+What to Download
+
+Instaloader supports the following targets:
+
+    profile
+
+        Public profile, or private profile with login.
+
+        If an already-downloaded profile has been renamed, Instaloader automatically finds it by its unique ID and renames the folder accordingly.
+
+        Besides the profile’s posts, its current profile picture is downloaded. For each profile you download,
+
+            --stories
+
+                instructs Instaloader to also download the user’s stories,
+
+            --highlights
+
+                to download the highlights of that profile,
+
+            --tagged
+
+                to download posts where the user is tagged, and
+
+            --reels
+
+                to download Reels videos.
+
+            --igtv
+
+                to download IGTV videos.
+
+    "#hashtag"
+
+        Posts with a certain hashtag (the quotes are usually necessary). Requires login.
+
+    %location id
+
+        Posts tagged with a given location; the location ID is the numerical ID Instagram labels a location with (e.g. https://www.instagram.com/explore/locations/362629379/plymouth-naval-memorial/). Requires login.
+
+        Added in version 4.2.
+
+    :stories
+
+        The currently-visible stories of your followees (requires login).
+
+    :feed
+
+        Your feed (requires login).
+
+    :saved
+
+        Posts which are marked as saved (requires login).
+
+    @profile
+
+        All profiles that are followed by profile, i.e. the followees of profile (requires login).
+
+    -post
+
+        Replace post with the post’s shortcode to download single post. Must be preceded by -- in the argument list to not be mistaken as an option flag. For example, to download the post https://www.instagram.com/p/B_K4CykAOtf, run the command:
+
+        instaloader -- -B_K4CykAOtf
+
+        Added in version 4.1.
+
+Instaloader goes through all media matching the specified targets and downloads the pictures and videos and their captions. You can specify
+
+    --comments
+
+        also download comments of each post,
+
+    --geotags
+
+        download geotags of each post and save them as Google Maps link (requires login),
+
+For a reference of all supported command line options, see Command Line Options.
+Filename Specification
+
+For each target, Instaloader creates a directory named after the target, i.e. profile, #hashtag, %location id, :feed, etc. and therein saves the posts in files named after the post’s timestamp.
+
+--dirname-pattern allows to configure the directory name of each target. The default is --dirname-pattern={target}. In the dirname pattern, the token {target} is replaced by the target name, and {profile} is replaced by the owner of the post which is downloaded.
+
+--filename-pattern configures the path of the post and story’s files relative to the target directory that is specified with --dirname-pattern. The default is --filename-pattern={date_utc}_UTC. The tokens {target} and {profile} are replaced like in the dirname pattern.
+
+--title-pattern is similar to --filename-pattern, but for profile pics, hashtag profile pics, and highlight covers. The default is {date_utc}_UTC_{typename} if --dirname-pattern contains {target} or {profile}, or {target}_{date_utc}_UTC_{typename} if it does not. Some tokens are not supported for this option, see below for details.
+
+The following tokens are defined for usage with --filename-pattern and --title-pattern:
+
+    {target}
+
+        Target name (as given in Instaloader command line)
+
+    {profile} (same as {owner_username})
+
+        Owner of the Post / StoryItem / ProfilePic. For hashtag profile pics and highlight covers, equivalent to {target}.
+
+    {owner_id}
+
+        Unique integer ID of owner profile. For hashtag profile pics, equivalent to {target}.
+
+    {shortcode}
+
+        Shortcode (identifier string). Not available for --title-pattern.
+
+    {mediaid}
+
+        Integer representation of shortcode. Not available for --title-pattern.
+
+    {filename}
+
+        Instagram’s internal filename.
+
+    {date_utc} (same as {date})
+
+        Creation time in UTC timezone. strftime()-style formatting options are supported as format specifier. The default date format specifier used by Instaloader is:
+
+        {date_utc:%Y-%m-%d_%H-%M-%S}
+
+    {typename}
+
+        Type of media being saved, such as GraphImage, GraphStoryVideo, profile_pic, etc.
+
+For example, encode the poster’s profile name in the filenames with:
+
+instaloader --filename-pattern={date_utc}_UTC_{profile} "#hashtag"
+
+As another example, you may instruct Instaloader to store posts in a PROFILE/YEAR/SHORTCODE.jpg directory structure:
+
+instaloader --dirname-pattern={profile} --filename-pattern={date_utc:%Y}/{shortcode} <target> ...
+
+Filter Posts
+
+The options --post-filter and --storyitem-filter allow to specify criteria that posts or story items have to meet to be downloaded. If not given, all posts are downloaded.
+
+The filter string must be a Python boolean expression where the attributes from Post or StoryItem respectively are defined.
+
+The following attributes can be used with both --post-filter and --storyitem-filter:
+
+    owner_username (str), owner_id (int)
+
+        Owner profile username / user ID.
+
+    date_utc (datetime), date_local (datetime)
+
+        Creation timestamp. Since datetime objects can be created inside filter strings, this easily allows filtering by creation date. E.g.:
+
+        instaloader --post-filter="date_utc <= datetime(2018, 5, 31)" target
+
+    is_video (bool)
+
+        Whether Post/StoryItem is a video. For example, you may skip videos:
+
+        instaloader --post-filter="not is_video" target
+
+        This is not the same as --no-videos and --no-video-thumbnails, since sidecar posts (posts that contain multiple pictures/videos in one post) have this attribute set to False.
+
+As --post-filter, the following attributes can be used additionally:
+
+    viewer_has_liked (bool)
+
+        Whether user (with login) has liked given post. To download the pictures from your feed that you have liked:
+
+        instaloader --login=your_username --post-filter=viewer_has_liked :feed
+
+    likes (int), comments (int)
+
+        Likes count / comments count. You might only want to download posts that were either liked by yourself or by many others:
+
+        instaloader --login=your_username --post-filter="likes>100 or viewer_has_liked" profile
+
+    caption_hashtags (list of str) / caption_mentions (list of str)
+
+        #hashtags or @mentions (lowercased) in the Post’s caption. For example, to download posts of kittens that are cute:
+
+        instaloader --post-filter="'cute' in caption_hashtags" "#kitten"
+
+    tagged_users (list of str)
+
+        Lowercased usernames that are tagged in the Post.
+
+For --storyitem-filter, the following additional attributes are defined:
+
+    expiring_utc (datetime) / expiring_local (datetime)
+
+        Timestamp when StoryItem will get unavailable.
+
+Metadata Text Files
+
+Unless --no-captions is given, Instaloader creates a .txt file along with each post where the Post’s caption is saved.
+
+You can customize what metadata to save for each Post or StoryItem with --post-metadata-txt and --storyitem-metadata-txt. The default is --post-metadata-txt={caption} and no storyitem metadata txt. These strings are formatted similar as the path patterns described in Filename Specification and the result is saved in text files, unless it is empty.
+
+Specifying these options multiple times results in output having multiple lines, in the order they were given to Instaloader.
+
+The field names are evaluated to Post or StoryItem attributes, and as such, the same fields are supported as in Filename Specification and Filter Posts.
+
+For example, to save the current number of likes for each post, rather than the post’s caption:
+
+instaloader --post-metadata-txt="{likes} likes." <target>
+
+Note that with this feature, it is possible to easily and quickly extract additional metadata of already-downloaded posts, by reimporting their JSON files. Say, you now also want to export the number of comments the Posts had when they were downloaded:
+
+instaloader --post-metadata-txt="{likes} likes, {comments} comments." <target>/*.json.xz
+
+Exit codes
+
+Different exit codes are used to indicate different kinds of error:
+
+0
+
+    No error, all downloads were successful.
+1
+
+    A non-fatal error happened. One or more posts, or even one or more profiles could not be downloaded, but execution was not stopped. The errors are repeated at the end of the log for easy access.
+2
+
+    Command-line error. An unrecognized option was passed, or an invalid combination of options, for example. No interaction with Instagram was made.
+3
+
+    Login error. It was not possible to login. Downloads were not attempted.
+4
+
+    Fatal download error. Downloads were interrupted and no further attempts were made. Happens when a response with one of the status codes in the --abort-on option were passed, or when Instagram logs the user out during downloads.
+5
+
+    Interrupted by the user. Happens when the user presses Control-C or sends SIGINT to the process.
+
+Instaloader as Cronjob
+
+Instaloader is suitable for running as a cronjob to periodically update your personal Instagram archive. The --quiet option disables user interactions and logging of non-error messages. To non-interactively use Instaloader logged-in, create a session file:
+
+instaloader --login=your_username
+
+Then use the same username in your cronjob to load the session and download the given targets:
+
+instaloader --login=your_username --quiet target [...]
+
+Instaloader saves the session file to ~/.config/instaloader/session-YOUR-USERNAME. See --sessionfile option for how to override this path.
+Programming Instaloader
+
+If your task cannot be done with the command line interface of Instaloader, consider taking a look at the Python Module instaloader. Instaloader exposes its internally used methods and structures, making it a powerful and intuitive Python API for Instagram, allowing to further customize obtaining media and metadata.
+
+Also see Advanced Instaloader Examples, where we collect a few example scripts that use Instaloader for simple tasks that cannot be done with the command line interface

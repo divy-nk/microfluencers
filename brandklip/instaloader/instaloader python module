@@ -1,0 +1,124 @@
+Python Module instaloader
+
+Instaloader exposes its internally used methods and structures as a Python module, making it a powerful and intuitive Python API for Instagram, allowing to further customize obtaining media and metadata.
+
+Start with getting an instance of Instaloader:
+
+import instaloader
+
+# Get instance
+L = instaloader.Instaloader()
+
+# Optionally, login or load session
+L.login(USER, PASSWORD)        # (login)
+L.interactive_login(USER)      # (ask password on terminal)
+L.load_session_from_file(USER) # (load session created w/
+                               #  `instaloader -l USERNAME`)
+
+instaloader provides the Post structure, which represents a picture, video or sidecar (set of multiple pictures/videos) posted in a user’s profile. Instaloader provides methods to iterate over Posts from a certain source:
+
+for post in instaloader.Hashtag.from_name(L.context, 'cat').get_posts():
+    # post is an instance of instaloader.Post
+    L.download_post(post, target='#cat')
+
+Post instances can be created with:
+
+    Post.from_shortcode()
+
+        Use a Post shortcode (part of the Post URL, https://www.instagram.com/p/SHORTCODE/) to create a Post object:
+
+        post = Post.from_shortcode(L.context, SHORTCODE)
+
+    Profile.get_posts()
+
+        All media of a Profile.
+
+    Profile.get_saved_posts()
+
+        Media that the user marked as saved (Profile must be own profile for this to work)
+
+    Instaloader.get_feed_posts()
+
+        Media in the user’s feed.
+
+    Instaloader.get_explore_posts()
+
+        Media that is suggested by Instagram to explore.
+
+    Hashtag.get_posts()
+
+        Media associated with given hashtag.
+
+With the Profile class, Instaloader also makes it easy to access metadata of a Profile. Profile instances can be created with:
+
+    Profile.from_username():
+
+    profile = Profile.from_username(L.context, USERNAME)
+
+    Profile.from_id()
+
+        given its User ID. This allows to easily lookup a Profile’s username given its ID:
+
+        Profile.from_id(L.context, USERID).username
+
+    Profile.get_followees()
+
+        Profiles that are followed by given user.
+
+    Profile.get_followers()
+
+        Profiles that follow given user.
+
+    Post.owner_profile, Story.owner_profile, StoryItem.owner_profile
+
+        Owner profile of particular object.
+
+    Post.get_likes()
+
+        Profiles that liked a given Post
+
+    PostComment.owner
+
+        Profile of a Post comment.
+
+For a list of a few code examples that use the Instaloader module, see Advanced Instaloader Examples.
+
+The reference of the classes and functions provided by the instaloader module is divided into the following subsections:
+
+    Instaloader (Main Class)
+        Instaloader
+    Instagram Structures
+        Posts
+        User Stories
+        Highlights
+        Profiles
+        Hashtags
+        TopSearchResults
+        TitlePic
+        Loading and Saving
+        LatestStamps
+    Resumable Iterations
+        NodeIterator
+        resumable_iteration
+    InstaloaderContext (Low-level functions)
+        InstaloaderContext
+        RateController
+    Exceptions
+        InstaloaderException
+        ConnectionException
+        QueryReturnedBadRequestException
+        QueryReturnedForbiddenException
+        ProfileNotExistsException
+        ProfileHasNoPicsException
+        PrivateProfileNotFollowedException
+        LoginRequiredException
+        LoginException
+        TwoFactorAuthRequiredException
+        InvalidArgumentException
+        BadResponseException
+        BadCredentialsException
+        PostChangedException
+        QueryReturnedNotFoundException
+        TooManyRequestsException
+        AbortDownloadException
+

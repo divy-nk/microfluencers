@@ -1,0 +1,28 @@
+Install Instaloader
+
+To install Instaloader,
+
+    Ensure that you have Python, at least version 3.8, and pip installed.
+
+    Then, install Instaloader using:
+
+    pip3 install instaloader
+
+To upgrade Instaloader to its current version, do:
+
+pip3 install --upgrade instaloader
+
+Alternative methods for installing Instaloader:
+
+    If you do not want to use pip, even though it is highly recommended, and prefer to install Instaloader manually, Download the Source, extract the Zip or Tarball and run setup.py from there.
+
+    On Arch Linux, you may install Instaloader using the Instaloader AUR package.
+
+    On Windows 10, you may download the standalone executable from the current release page.
+
+    On Android, you can use Instaloader with Termux after typing pkg install python and pip3 install instaloader.
+
+    To test the most current pre-release version of Instaloader:
+
+    pip3 install --pre instaloader
+
