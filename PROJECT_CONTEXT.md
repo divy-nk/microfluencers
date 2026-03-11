@@ -815,12 +815,14 @@ Read pages and details:
 - Wasp operation declarations in `main.wasp` must stay in sync with client imports from `wasp/client/operations`.
 - Confirmed pitfall: `makeMeAdminByEmail` was removed from `brandklip/app/main.wasp`, but `brandklip/app/src/client/BrandklipLandingPage.tsx` still imported it, causing SDK TypeScript build failure (`TS2305`).
 - Quick check when this happens: search for removed operation name across `brandklip/app/src/**` and remove stale imports/usages.
+- DigitalOcean static build pitfall: temporary Vite config must include Tailwind plugin. If `.wasp-static-vite.config.mjs` only uses `wasp()` plugin, Tailwind utility classes are missing in output CSS and the site appears "broken"/unstyled (for example `fixed`, `text-6xl`, spacing classes not applied).
 
 ## Known UI Pitfalls
 - License modal print styles must be narrowly scoped. Broad print selectors (for example forcing all `.fixed`/`.absolute` to `position: static`) can break print layout and produce blank/incorrect print previews.
 - For long modal content (like license text), keep the inner content container scrollable with `min-h-0`, `overflow-y-auto`, `overscroll-contain`, and touch momentum scrolling so wheel/touch scrolling stays inside the dialog.
 - License printing in this app is in-page (`window.print()`), with a dedicated print-only container `.license-print-shell` shown only when `body.printing-license` is active.
 - Shared bottom overlays use `SheetContent`, `DialogContent`, and `DrawerContent` from `src/client/components/ui/*`. For constrained-width mobile bottom variants, keep horizontal centering in shared primitives (`left-1/2`, `-translate-x-1/2`, `w-full`) to avoid global left-aligned drift.
+- Landing route visual effects must fail safely when WebGL is unavailable. `cobe` globe initialization can throw (`Cannot read properties of null (reading 'enable')`) on some browsers/devices and break route render unless guarded.
 
 ### Mobile Navigation Notes
 - iOS cannot provide a custom native/system back button for web apps; back UX must be implemented in-app.
@@ -839,6 +841,8 @@ Read pages and details:
 - Admin creators list (`/admin/creators-list`) surfaces engagement rate in each creator card and supports inline editing via `adminUpdateCreatorProfile`, alongside follower count edits.
 
 ## Update Log
+- 2026-03-10: Identified production layout-break root cause in static deploy pipeline: `.wasp-static-vite.config.mjs` used only `wasp()` plugin, which skipped Tailwind utility generation in static output. Verified fix by adding `@tailwindcss/vite` plugin (`plugins: [tailwindcss(), wasp()]`) and confirming utility selectors exist in built CSS.
+- 2026-03-10: Fixed production landing-route crash on browsers/devices with unavailable WebGL by making `src/client/components/ui/globe.tsx` tolerant of `cobe` init failures (catch + graceful no-globe fallback instead of route-level crash).
 - 2026-03-09: Added temporary subscription-hide switch in active client app via `brandklip/app/src/client/featureFlags.ts` (`SUBSCRIPTIONS_ENABLED = false`). When disabled, `App.tsx` redirects `/pricing`, `/brand/subscription`, and `/checkout` to role home (or `/` if logged out), escrow upgrade UI/CTA is suppressed in `EscrowPaymentPage.tsx`, and marketing Hero "Learn More" avoids pricing route.
 - 2026-03-09: Security hardening in active wallet/payout paths (`brandklip/app`): (1) `applyWalletToEscrow` now locks escrow row (`SELECT ... FOR UPDATE`) before applying wallet to block concurrent double-apply races, (2) `adminProcessWithdrawal` now uses compare-and-set style status transitions (`pending_admin` only) to prevent complete/reject race drift, (3) `requestWalletWithdrawal` encrypts destination fields (`destinationUpiId`, bank account, IFSC, name) at rest using shared AES-256-GCM helper in `src/server/security/encryption.ts`, with backward-compatible decrypt-and-mask in `getAdminWithdrawalQueue`, and (4) `saveCreatorBankDetails` now rejects client-supplied `razorpayFundAccountId` writes unless set by trusted server-side Razorpay tokenization flows.
 - 2026-03-09: Payout setup now supports dual creator destinations after approval: (1) UPI stored with AES-256-GCM encryption at rest via `src/server/security/encryption.ts` and saved through `saveCreatorBankDetails(preferredMethod="upi")`, and (2) bank account tokenized through Razorpay (`createCreatorRazorpayFundAccount`). Creator Settings payout section now offers both options; creator-facing UIs show masked UPI/token only. Discovery/apply gating and payout snapshot creation treat either encrypted UPI or Razorpay fund-account token as valid payout readiness.

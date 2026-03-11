@@ -5,3 +5,7 @@ build/
 .env
 .DS_Store
 *.log
+# .wasp is ignored by default, but we want to include .wasp/out for production build
+!.wasp
+!.wasp/out
+!.wasp/out/**

@@ -1,0 +1,644 @@
+# BrandKlip Privacy Policy
+
+**Last Updated:** March 2025
+**Status:** Final
+**Jurisdiction:** India
+**Compliance:** Digital Personal Data Protection Act, 2023
+
+---
+
+## 1. INTRODUCTION
+
+BrandKlip ("we," "us," "our," or "Platform") is committed to protecting your privacy and ensuring transparency about how we collect, use, and protect your personal data.
+
+This Privacy Policy explains our data practices in full compliance with:
+- Information Technology Act, 2000
+- Information Technology Rules, 2011
+- Digital Personal Data Protection Act, 2023 (DPDP Act)
+
+**Current Status:** Operated as sole proprietorship
+**Future:** Will transition to company after PMF validation
+
+**Contact Information:**
+- Privacy inquiries: hello@brandklip.com
+- Support: hello@brandklip.com
+
+---
+
+## 2. PERSONAL DATA WE COLLECT
+
+### 2.1 Information You Provide Directly
+
+**For All Users (Creators & Brands):**
+- Full name
+- Email address
+- Phone number
+- Password (stored as hashed, never plain text)
+- Profile picture (optional)
+
+**For Creators:**
+- Instagram handle
+- Follower count (self-reported)
+- Content niches/categories
+- Video submission links (Google Drive)
+- Order proof screenshots (product purchase verification)
+
+**For Brands:**
+- Company name
+- Business category
+- Website URL (optional)
+- Brand logo (optional)
+- Campaign briefs and descriptions
+- Product links
+
+### 2.2 Information Automatically Collected
+
+**Usage Data:**
+- Pages visited and time spent
+- Clicks and interactions on Platform
+- Search queries
+- Campaign browsing history
+- Video submission timestamps
+- Payment transaction dates (not amounts for security)
+- Device type and operating system
+- Approximate location (via IP, not precise)
+- Browser type and version
+
+**Cookies & Tracking:**
+- Session cookies (required for login)
+- Authentication tokens (for security)
+- Analytics cookies (optional, privacy-respecting)
+- No tracking pixels
+- No cross-site tracking
+
+### 2.3 What We Do NOT Collect
+
+❌ We do NOT collect:
+- Your actual bank account numbers
+- Your UPI IDs
+- Your credit card details
+- Biometric data
+- Health information
+- Caste or religion
+- Government ID numbers (except as required by payment processor)
+- Location tracking data
+
+---
+
+## 3. SENSITIVE PERSONAL DATA HANDLING
+
+### 3.1 Classification of Sensitive Data
+
+Under DPDP Act, we classify the following as "Sensitive Personal Data":
+- Email address
+- Phone number
+- Password (hashed)
+- Identity information (name)
+
+**Non-sensitive data:**
+- Instagram handle
+- Campaign descriptions
+- Follower counts
+
+**Data we do NOT store:**
+- Bank details
+- UPI IDs
+- Payment card numbers
+- Biometric data
+
+### 3.2 How We Handle Sensitive Data
+
+**Email:**
+- **Collection:** Required at signup
+- **Use:** Account communication, notifications, password reset
+- **Storage:** Encrypted in database
+- **Retention:** While account is active; deleted upon request
+- **Sharing:** Never shared with third parties
+- **Your rights:** Opt-out of marketing emails anytime
+
+**Phone Number:**
+- **Collection:** Required at signup
+- **Use:** Account verification, creator identification, Razorpay contact creation
+- **Storage:** Encrypted in database
+- **Retention:** While account is active; deleted upon request
+- **Sharing:** Only with Razorpay (for payment processing)
+- **Your rights:** Update or delete anytime
+
+**Password:**
+- **Collection:** Created during signup
+- **Hashing:** BCrypt hashing (industry standard)
+- **Storage:** Hashed password only (not reversible)
+- **Retention:** While account is active
+- **Your rights:** Reset or change anytime
+
+**Identity (Name):**
+- **Collection:** Required at signup
+- **Use:** Account identification, creator verification, payment processing
+- **Storage:** Plain text in database (required for verification)
+- **Retention:** While account is active; anonymized after deletion
+- **Sharing:** Only with Razorpay (for contact creation)
+
+---
+
+## 4. HOW WE USE YOUR PERSONAL DATA
+
+### 4.1 Core Platform Functions
+
+We use your data to:
+- Create and manage your account
+- Process Creator applications
+- Facilitate video submissions and approvals
+- Process payments via Razorpay
+- Send transactional emails (approvals, payments, deadlines)
+- Send WhatsApp notifications (if you opt-in)
+- Generate invoices and tax documents
+- Enforce Terms of Service
+
+### 4.2 Platform Improvement & Analytics
+
+- Analyze usage patterns (anonymized)
+- Identify bugs and performance issues
+- Test new features (A/B testing)
+- Create anonymized usage reports
+- Understand how Platform is used
+- Improve user experience
+
+### 4.3 Communication & Support
+
+- Respond to your support inquiries (email)
+- Send service announcements (maintenance, updates)
+- Send campaign notifications (relevant to you)
+- Send marketing emails (if opted-in)
+- Conduct surveys for feedback (optional)
+
+### 4.4 Legal & Security
+
+- Comply with legal obligations (tax, law enforcement)
+- Enforce Terms of Service
+- Investigate fraud (plagiarism detection, fake proofs)
+- Detect and prevent abuse (harassment, spam)
+- Maintain platform security and integrity
+- Respond to legal requests (if required)
+
+### 4.5 Data NOT Used For
+
+❌ We do NOT use your data for:
+- Selling to third parties
+- Unauthorized marketing
+- Profiling or automated decision-making
+- Credit scoring or risk assessment
+- Sharing with competitors
+- Building shadow profiles
+- Creating detailed behavioral profiles
+
+---
+
+## 5. LEGAL BASIS FOR PROCESSING
+
+We process your personal data based on:
+
+**1. Contract:**
+- We need your data to fulfill our agreement with you
+- Process campaigns, make payments, provide service
+
+**2. Consent:**
+- You explicitly agree (e.g., marketing emails)
+- Checkbox at signup for optional processing
+
+**3. Legal Obligation:**
+- Tax law requires 7-year record retention
+- RBI regulations for payment processing
+- Court orders or law enforcement requests
+
+**4. Legitimate Business Interest:**
+- Prevention of fraud
+- Platform improvement
+- User experience
+- These interests don't override your rights
+
+**Your right to withdraw:** You can withdraw consent anytime by contacting privacy@brandklip.com
+
+---
+
+## 6. WHO WE SHARE YOUR DATA WITH
+
+### 6.1 Within BrandKlip
+
+**Visible to other users:**
+- Creator profiles (name, Instagram handle, follower count) visible to Brands
+- Brand profiles (company name, website) visible to Creators
+- Campaign briefs visible to applying Creators
+
+**BrandKlip admin:**
+- Full database access for moderation and support
+- Can view disputes and resolve conflicts
+- Cannot access passwords (hashed)
+
+### 6.2 Third-Party Service Providers
+
+**Razorpay (Payment Processor)**
+- **Data shared:** Email, phone, name, Razorpay contact ID
+- **Purpose:** Process payments and create payment links
+- **Where:** India (Razorpay operates from India)
+- **Duration:** Active while you use Platform
+- **Agreement:** Razorpay bound by confidentiality and DPDP Act
+- **Your rights:** Razorpay Privacy Policy applies separately
+
+**Brevo (Email Service)**
+- **Data shared:** Email address, name
+- **Purpose:** Send transactional and marketing emails
+- **Where:** EU (GDPR compliant)
+- **Duration:** Until you unsubscribe
+- **Agreement:** Brevo has Data Processing Agreement with us
+- **Your rights:** Unsubscribe link in every email
+
+**Google Cloud (Hosting)**
+- **Data shared:** All Platform data (encrypted)
+- **Purpose:** Host the Platform securely
+- **Where:** AWS Mumbai (India)
+- **Duration:** While you use Platform
+- **Agreement:** Google Cloud bound by security terms
+- **Your rights:** We control your data, not Google
+
+**Google Analytics (Analytics)**
+- **Data shared:** Anonymized browsing behavior
+- **Purpose:** Understand how Platform is used
+- **Where:** Google (US)
+- **Duration:** 26 months (Google default)
+- **Note:** Not linked to your identity
+- **Your rights:** Disable in Privacy Settings
+
+### 6.3 What We DO NOT Share
+
+❌ We do NOT:
+- Sell your data to marketers
+- Rent your data to third parties
+- Share email lists
+- Share phone numbers for marketing
+- Share payment information
+- Share Creator earnings with Brands
+- Share Brand budgets with Creators
+- Share data without consent (except legal requirement)
+
+### 6.4 Legal Requirements
+
+We may disclose data if:
+- Required by law (court order)
+- Required by government authority
+- Required by law enforcement
+- Required for legal proceedings
+- Required for tax compliance
+
+**We will notify you** unless legally prohibited from doing so.
+
+---
+
+## 7. DATA RETENTION SCHEDULE
+
+### 7.1 By Data Type
+
+**Account Information (Name, Email, Phone, Password Hash)**
+- **Retention:** While account is active
+- **After deletion:** 30 days (recovery period if accidental deletion)
+- **Then:** Permanently deleted
+- **Exception:** Anonymized data kept for analytics (cannot identify you)
+
+**Payment & Transaction Data**
+- **Retention:** 7 years from transaction date
+- **Why:** Indian income tax law requires 7-year record retention
+- **Format:** Anonymized (no personal identifiers except reference ID)
+- **After 7 years:** Completely deleted
+
+**Video Content & Campaign Data**
+- **Retention:** While campaign is active + 30 days after
+- **Why:** Dispute resolution and quality assurance
+- **Creator option:** Can download videos during 30-day window
+- **After 30 days:** Deleted from Platform (Creator retains ownership)
+- **Note:** Brand retains license to use video (perpetual)
+
+**Email Communications**
+- **Retention:** 1 year or until support ticket closed (whichever longer)
+- **Why:** Audit trail for disputes
+- **Then:** Deleted
+- **Exception:** Dispute records kept 7 years
+
+**Order Proof Screenshots**
+- **Retention:** 30 days after campaign completion
+- **Why:** Proof in case of disputes
+- **Then:** Deleted
+
+**Marketing & Newsletter Preferences**
+- **Retention:** Until you unsubscribe
+- **Unsubscribe:** Click link in email or email support@brandklip.com
+- **Then:** Email deleted from marketing list
+
+**Analytics & Usage Data (Anonymized)**
+- **Retention:** 26 months (Google Analytics)
+- **Then:** Auto-deleted by Google
+
+**Cookies**
+- **Session cookies:** Deleted when you log out
+- **Analytics cookies:** 1 year
+- **Clear cookies:** Browser settings → Clear cache
+
+---
+
+## 8. YOUR RIGHTS UNDER DPDP ACT, 2023
+
+### 8.1 Right to Access
+
+You can request a copy of all personal data we hold about you.
+
+**How:** Email privacy@brandklip.com
+**Format:** We'll provide as downloadable file (CSV, PDF, JSON)
+**Response time:** 30 days
+**Cost:** Free
+
+---
+
+### 8.2 Right to Correction
+
+You can correct inaccurate or incomplete data.
+
+**How:** 
+- Update directly in Settings (name, email, phone, Instagram)
+- Or email support@brandklip.com for help
+**Response time:** Immediate (self-service) or 7 days (support)
+**Examples:** Fix typo in name, update email, change phone
+
+---
+
+### 8.3 Right to Erasure ("Right to be Forgotten")
+
+You can request deletion of your data, with exceptions.
+
+**We can delete:**
+- ✅ Your personal details (name, email, phone)
+- ✅ Your profile information
+- ✅ Your settings and preferences
+- ✅ Your campaign history (after retention period)
+
+**We must keep:**
+- ⚠️ Tax records (7 years - legal requirement)
+- ⚠️ Dispute data (until resolved)
+- ⚠️ Anonymized analytics (cannot identify you)
+
+**How:** Email privacy@brandklip.com or Settings → Delete Account
+
+---
+
+### 8.4 Right to Restrict Processing
+
+You can limit how we use your data.
+
+**Examples:**
+- "Analytics only, no marketing"
+- "Don't store usage data"
+- "Email only, no WhatsApp"
+
+**How:** Email privacy@brandklip.com or Settings → Privacy
+
+---
+
+### 8.5 Right to Data Portability
+
+You can receive your data in machine-readable format.
+
+**How:** Email privacy@brandklip.com
+**Format:** CSV, JSON, or other structured format
+**Response time:** 30 days
+**Cost:** Free
+
+---
+
+### 8.6 Right to Object
+
+You can opt-out of:
+- Marketing emails: Click unsubscribe or Settings → Marketing
+- Analytics tracking: Settings → Privacy → Opt out of analytics
+- Personalized ads: Settings → Privacy → Disable personalization
+- WhatsApp notifications: Settings → Notifications
+
+---
+
+### 8.7 Automated Decision-Making
+
+BrandKlip does NOT use automated decisions for:
+- ✅ Approving/rejecting Creators (humans review)
+- ✅ Approving/rejecting videos (humans review)
+- ✅ Determining payment amounts (contract-based)
+
+Humans make all significant decisions affecting you.
+
+---
+
+## 9. DATA SECURITY
+
+### 9.1 Technical Safeguards
+
+- **HTTPS/SSL:** All data in transit encrypted (https://)
+- **Database encryption:** AES-256 at rest
+- **Password hashing:** BCrypt (industry standard)
+- **No plain text:** Sensitive data never stored plainly
+- **Regular updates:** Security patches applied regularly
+
+### 9.2 Access Controls
+
+- **Employee access:** Limited to authorized personnel only
+- **Confidentiality agreements:** All team members sign
+- **Role-based access:** Finance sees payment data only, etc.
+- **Activity logging:** Track who accesses what, when
+- **No admin override:** Even admin can't see passwords
+
+### 9.3 Security Testing
+
+- **Regular audits:** Security review every quarter
+- **Penetration testing:** External security experts test
+- **Vulnerability scanning:** Automated scanning weekly
+- **Bug bounty:** We reward security researchers who find issues
+
+### 9.4 Data Breach Response
+
+**If your data is breached:**
+
+1. **Immediate:** We investigate and contain
+2. **24 hours:** We notify you via email
+3. **48 hours:** We notify authorities if required
+4. **7 days:** We provide detailed breach report
+5. **Guidance:** We help you protect your account
+
+---
+
+## 10. COOKIES & TRACKING
+
+### 10.1 Types of Cookies
+
+**Essential Cookies** (Cannot disable):
+- Login and authentication
+- Session management
+- Security tokens (CSRF protection)
+- Platform functionality
+- Remember login information
+
+**Analytics Cookies** (Can disable):
+- Google Analytics
+- Understand how Platform is used
+- Anonymized, not linked to identity
+- Disable in Settings → Privacy
+
+**Marketing Cookies** (Can disable):
+- Facebook Pixel (if used)
+- Google Ads (if used)
+- Linked to your identity for personalized ads
+- Disable in Settings → Privacy → Disable marketing cookies
+
+### 10.2 Disabling Cookies
+
+**Browser settings:** Manage in browser preferences
+**Platform settings:** Settings → Privacy → Cookie preferences
+**Note:** Disabling essential cookies may break functionality
+
+---
+
+## 11. CHILDREN'S PRIVACY
+
+The Platform is NOT intended for children under 18.
+
+- We do not knowingly collect data from anyone under 18
+- If we become aware of a child using the Platform, we delete their account and data immediately
+- Parents/guardians: Contact us if concerned about a child's use
+
+---
+
+## 12. INTERNATIONAL DATA TRANSFERS
+
+Your data is primarily stored in India (AWS Mumbai region).
+
+- If you access from outside India, your data is still processed in India
+- By using the Platform, you consent to this transfer
+- We comply with data protection standards across jurisdictions
+
+---
+
+## 13. THIRD-PARTY LINKS
+
+The Platform may contain links to external websites (Razorpay, Google, etc.).
+
+- We are NOT responsible for third-party privacy practices
+- Review their privacy policies before using their services
+- This Privacy Policy applies only to BrandKlip
+
+---
+
+## 14. CHANGES TO THIS POLICY
+
+We may update this Privacy Policy anytime.
+
+- **Material changes:** We'll email you 30 days in advance
+- **Continued use:** Accepting new policy
+- **Previous versions:** Available upon request
+
+**Last update:** March 2025
+
+---
+
+## 15. GRIEVANCE & COMPLAINT
+
+**For privacy concerns:**
+
+**Within 48 hours response (fast-track):**
+- Email: privacy@brandklip.com
+- Include: What happened, when, what data affected
+
+**Within 7 days response (standard):**
+- Grievance Officer: [Your name]
+- Email: grievance@brandklip.com
+- Phone: [Your phone]
+
+**Your rights:**
+- File complaint with regulatory authority
+- Request dispute resolution
+- Take legal action if needed
+
+---
+
+## 16. COMPLIANCE STATEMENT
+
+BrandKlip complies fully with:
+- **Information Technology Act, 2000** (ITA 2000)
+- **Information Technology Rules, 2011** (IT Rules 2011)
+- **Digital Personal Data Protection Act, 2023** (DPDP Act)
+- **RBI guidelines** on payment processing
+- **Industry best practices** for data security
+
+---
+
+## 17. SPECIAL NOTICES
+
+### 17.1 For Creators
+
+**Your data is safe:**
+- We don't share your earnings or payment information with Brands
+- We don't share your personal details unless authorized
+- Your UPI is NOT stored by BrandKlip (stored by Razorpay only)
+- Your privacy is protected
+
+**Your video rights:**
+- You keep ownership of video footage
+- Brand gets license to use (perpetual)
+- You can share video on your own channel after 30 days
+- You control video in your portfolio
+
+### 17.2 For Brands
+
+**Your data is safe:**
+- We don't share your budget or campaign details with Creators
+- We don't share your brand strategy
+- We don't sell your contact list
+- Creators don't see your business information
+
+**Payment security:**
+- We don't store your card details
+- Razorpay handles payment security
+- Your wallet is secure and auditable
+- No unauthorized access to funds
+
+---
+
+## 18. CONTACT INFORMATION
+
+**For all privacy questions:**
+- Email: hello@brandklip.com
+- Response time: Within 7 days
+
+**For urgent support:**
+- Email: hello@brandklip.com
+- Response time: Within 24 hours
+
+**For grievances (formal):**
+- Grievance Officer: Divyank
+- Email: hello@brandklip.com
+- Phone: +918287416041
+- Response time: Within 7 days as per IT Rules 2011
+
+---
+
+## 19. FUTURE COMPANY REGISTRATION
+
+**Important:** When BrandKlip registers as a company, this Privacy Policy will be updated to reflect:
+- New company details (CIN, GST, registered address)
+- Updated grievance officer information
+- Enhanced legal protections
+- More formal governance
+
+We will notify all users 30 days before any changes.
+
+---
+
+**© 2025 BrandKlip. All rights reserved.**
+
+**These policies are effective immediately upon signup.**
+
+**By signing up for BrandKlip, you acknowledge that you have read, understood, and agree to this Privacy Policy.**
+
+**Last updated: March 2025**
