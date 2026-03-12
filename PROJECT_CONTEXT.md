@@ -21,6 +21,7 @@ Scope: Full `/microfluencers` workspace, with deep detail for active product pat
 - Keep updates durable and high-signal (architecture, flows, route/operation mapping, model details, recurring pitfalls).
 - Avoid low-value churn; do not log trivial one-off edits.
 - Instruction file enforcing this behavior: `.github/instructions/project-context-first.instructions.md`.
+- **CRITICAL DEPLOYMENT POLICY**: Never push changes to the `main` branch or trigger production deployments without the user's explicit, word-for-word approval for the push. Even if a feature is complete and verified locally, always stop and ask: "Ready to push these changes to main?"
 
 ## Workspace Overview
 Top-level directories in this workspace:

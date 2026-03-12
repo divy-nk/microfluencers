@@ -14,3 +14,4 @@ alwaysApply: true
   - Avoid noisy churn or logging trivial one-off edits.
 - When implementation reality conflicts with existing documentation, keep both notes temporarily and clearly mark what appears current.
 - While reporting work to the user, reference `PROJECT_CONTEXT.md` when a decision came from documented context.
+- **DEPLOYMENT GUARDRAIL**: Never perform a `git push` to `main` without explicit, separate approval for the push from the user.
