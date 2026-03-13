@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: "/",
             disallow: ["/auth", "/onboarding/", "/brand", "/creator"],
         },
-        sitemap: "https://brandklip.com/sitemap.xml",
+        sitemap: "https://www.brandklip.com/sitemap.xml",
     };
 }

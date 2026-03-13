@@ -6,23 +6,23 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://your-site.com",
+  site: "https://www.brandklip.com",
   trailingSlash: "always",
   integrations: [
     starlight({
-      title: "Your SaaS",
+      title: "BrandKlip",
       customCss: ["./src/styles/tailwind.css"],
-      description: "Documentation for your SaaS.",
+      description: "BrandKlip guides and blogs on zero-risk UGC, creator workflows, and D2C growth.",
       logo: {
-        src: "/src/assets/logo.webp",
-        alt: "Your SaaS",
+        src: "./src/assets/logo.webp",
+        alt: "BrandKlip",
       },
       head: [
-        // Add your script tags here. Below is an example for Google analytics, etc.
         {
           tag: "script",
           attrs: {
-            src: "https://www.googletagmanager.com/gtag/js?id=<YOUR-GOOGLE-ANALYTICS-ID>",
+            src: "https://www.googletagmanager.com/gtag/js?id=G-SKBZLTYCVJ",
+            async: true,
           },
         },
         {
@@ -32,12 +32,12 @@ export default defineConfig({
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
         
-          gtag('config', '<YOUR-GOOGLE-ANALYTICS-ID>');
+          gtag('config', 'G-SKBZLTYCVJ');
           `,
         },
       ],
       editLink: {
-        baseUrl: "https://github.com/<your-repo>",
+        baseUrl: "https://github.com/divyanknagpal/microfluencers/edit/main/brandklip/blog/src/content/docs/",
       },
       components: {
         SiteTitle: "./src/components/MyHeader.astro",
@@ -46,9 +46,8 @@ export default defineConfig({
         PageTitle: "./src/components/TitleWithBannerImage.astro",
       },
       social: {
-        github: "https://github.com/wasp-lang/open-saas",
-        twitter: "https://twitter.com/wasplang",
-        discord: "https://discord.gg/aCamt5wCpS",
+        github: "https://github.com/divyanknagpal/microfluencers",
+        twitter: "https://x.com/brandklip",
       },
       sidebar: [
         {
@@ -72,14 +71,14 @@ export default defineConfig({
       ],
       plugins: [
         starlightBlog({
-          title: "Blog",
+          title: "Blogs",
           customCss: ["./src/styles/tailwind.css"],
           authors: {
-            Dev: {
-              name: "Dev",
-              title: "Dev @ Your SaaS",
-              picture: "/CRAIG_ROCK.png", // Images in the `public` directory are supported.
-              url: "https://your-site.com",
+            BrandKlip: {
+              name: "BrandKlip Team",
+              title: "BrandKlip",
+              picture: "/favicon.svg",
+              url: "https://www.brandklip.com",
             },
           },
         }),

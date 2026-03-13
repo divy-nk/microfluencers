@@ -370,6 +370,7 @@ Notes:
 - `/` - Landing page with hero, features, CTAs (LandingPage)
 - `/brands` - Brand-focused marketing page (ForBrandsPage)
 - `/creators` - Creator-focused marketing page (ForCreatorsPage)
+- `/contact` - Contact form page for support and inquiries (ContactPage)
 - `/login` - Email/Google login (LoginPage)
 - `/signup` - User registration (SignupPage)
 - `/pricing` - Pricing plans and features (PricingPage)
@@ -825,6 +826,10 @@ Read pages and details:
 - Shared bottom overlays use `SheetContent`, `DialogContent`, and `DrawerContent` from `src/client/components/ui/*`. For constrained-width mobile bottom variants, keep horizontal centering in shared primitives (`left-1/2`, `-translate-x-1/2`, `w-full`) to avoid global left-aligned drift.
 - Landing route visual effects must fail safely when WebGL is unavailable. `cobe` globe initialization can throw (`Cannot read properties of null (reading 'enable')`) on some browsers/devices and break route render unless guarded.
 
+## Known Build And Bundling Pitfalls
+- Dynamic imports do not isolate a module if any static import remains. Example: `src/client/CreatorOnboardingPage.tsx` stayed in the main bundle until all `LANGUAGES` static imports were moved to `src/client/constants/languages.ts`.
+- The largest app chunk has recently been driven by UI utility dependencies (`tailwind-merge`, Radix UI primitives, `lucide-react`) after splitting major vendors. Further reduction requires import-level optimization in shared UI layers, not only route-level lazy loading.
+
 ### Mobile Navigation Notes
 - iOS cannot provide a custom native/system back button for web apps; back UX must be implemented in-app.
 - The app sets `apple-mobile-web-app-capable` in `brandklip/app/main.wasp`, so Home Screen standalone mode can hide Safari's browser chrome/back controls.
@@ -842,6 +847,11 @@ Read pages and details:
 - Admin creators list (`/admin/creators-list`) surfaces engagement rate in each creator card and supports inline editing via `adminUpdateCreatorProfile`, alongside follower count edits.
 
 ## Update Log
+- 2026-03-13: Performance split pass in `brandklip/app`: removed static `CreatorOnboardingPage` dependencies by extracting `LANGUAGES` to `src/client/constants/languages.ts`, updated all consumers (`BrandDashboardPage`, `AvailableDropsPage`, `DropCard`, `AccountPage`), and added `manualChunks` groups in `vite.config.ts` for heavy vendors (`react`, `react-router`, `framer-motion`, `gsap`, `zod`, `axios`, `@tanstack/*`). Post-change bundle output now emits separate `vendor-*` chunks and no longer reports the prior dynamic+static import conflict for onboarding.
+- 2026-03-13: Integrated blogs directly into the Wasp marketing app (no separate blog host requirement) by adding public routes `/blog` and `/blog/:slug` in `brandklip/app/main.wasp`, with React pages `src/client/BlogsPage.tsx` and `src/client/BlogPostPage.tsx`. Post content is served from `brandklip/app/public/blog/*.md` and rendered in-app via `react-markdown` + `remark-gfm`; `App.tsx` treats blog paths as marketing routes.
+- 2026-03-13: Finalized production-oriented Astro blog config under `brandklip/blog/astro.config.mjs`: set canonical site to `https://www.brandklip.com`, replaced placeholder title/description/social/edit-link values with BrandKlip values, wired GA tag to `G-SKBZLTYCVJ`, and aligned blog authors with configured key (`BrandKlip`). Verified static generation succeeds (`astro check && astro build`) producing `/blog/*` routes + sitemap.
+- 2026-03-13: Hardened auth and contact anti-leakage behavior in `brandklip/app`: `resendVerificationOnLoginFailure` now returns a uniform non-enumerating response (no `not_found` / `already_verified` signals), login/signup UIs updated to avoid account-existence messaging, and contact submission guardrails strengthened with additional per-IP throttling plus single-line subject sanitization before email dispatch.
+- 2026-03-13: Added public `/contact` route and `submitContactMessage` action in `brandklip/app` to support Contact Us form submissions; action sends email to admin addresses (`ADMIN_EMAILS` or fallback support email), applies anti-spam rate limiting, and stores message payload in `ContactFormMessage` when sender is authenticated.
 - 2026-03-10: Identified production layout-break root cause in static deploy pipeline: `.wasp-static-vite.config.mjs` used only `wasp()` plugin, which skipped Tailwind utility generation in static output. Verified fix by adding `@tailwindcss/vite` plugin (`plugins: [tailwindcss(), wasp()]`) and confirming utility selectors exist in built CSS.
 - 2026-03-10: Fixed production landing-route crash on browsers/devices with unavailable WebGL by making `src/client/components/ui/globe.tsx` tolerant of `cobe` init failures (catch + graceful no-globe fallback instead of route-level crash).
 - 2026-03-09: Added temporary subscription-hide switch in active client app via `brandklip/app/src/client/featureFlags.ts` (`SUBSCRIPTIONS_ENABLED = false`). When disabled, `App.tsx` redirects `/pricing`, `/brand/subscription`, and `/checkout` to role home (or `/` if logged out), escrow upgrade UI/CTA is suppressed in `EscrowPaymentPage.tsx`, and marketing Hero "Learn More" avoids pricing route.

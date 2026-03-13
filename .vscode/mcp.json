@@ -1,8 +1,0 @@
-{
-  "servers": {
-    "pharaoh": {
-      "type": "http",
-      "url": "https://mcp.pharaoh.so/sse"
-    }
-  }
-}
