@@ -1,6 +1,6 @@
 # Project Context (Living Reference)
 
-Last updated: 2026-03-09
+Last updated: 2026-03-15
 Scope: Full `/microfluencers` workspace, with deep detail for active product paths.
 
 ## Purpose
@@ -249,14 +249,15 @@ Detected models (23):
 - Relations: `creator` (CreatorProfile), `application` (Application)
 
 **`BrandWallet`** - Brand wallet balance
-- **Balance:** `balance` (current available)
-- **Tracking:** `totalCredited`, `totalUsed`
+- **Balance:** `balance` (current available), `withdrawableBalance` (refund-eligible), `nonWithdrawableBalance` (promo/BrandKlip credits)
+- **Tracking:** `totalCredited`, `totalUsed`, `totalWithdrawn`
 - Relations: `brand` (BrandProfile), `transactions[]` (WalletTransaction[]), `withdrawalRequests[]` (WalletWithdrawalRequest[])
 
 **`WalletTransaction`** - Wallet transaction log
 - **Type:** `type` (`credit`, `debit`, `escrow_lock`, `escrow_release`, `withdrawal`)
 - **Amount:** `amount`
 - **Balance:** `balanceBefore`, `balanceAfter`
+- **Source Split:** `sourceBucket` plus `withdrawableAmount` / `nonWithdrawableAmount` for persistent fund provenance
 - **Reference:** `reference` (description), `metadata` (JSON)
 - Relations: `wallet` (BrandWallet)
 
@@ -847,6 +848,7 @@ Read pages and details:
 - Admin creators list (`/admin/creators-list`) surfaces engagement rate in each creator card and supports inline editing via `adminUpdateCreatorProfile`, alongside follower count edits.
 
 ## Update Log
+- 2026-03-15: Implemented source-aware wallet accounting in `brandklip/app` to prevent withdrawal of BrandKlip-issued credits. Added dual wallet buckets (`withdrawableBalance`, `nonWithdrawableBalance`), source split metadata on `WalletTransaction`, escrow source fields on `DropEscrow` (`walletAmountAppliedWithdrawable`, `walletAmountAppliedNonWithdrawable`, `fundedFromCash`, `fundedFromWallet*`), source-preserving debit/credit logic in `src/server/walletUtils.ts`, source-aware flows in `src/server/walletActions.ts` + `src/server/payments/razorpay.ts`, and wallet UI/query updates so withdrawals are constrained to refundable balance only.
 - 2026-03-13: Performance split pass in `brandklip/app`: removed static `CreatorOnboardingPage` dependencies by extracting `LANGUAGES` to `src/client/constants/languages.ts`, updated all consumers (`BrandDashboardPage`, `AvailableDropsPage`, `DropCard`, `AccountPage`), and added `manualChunks` groups in `vite.config.ts` for heavy vendors (`react`, `react-router`, `framer-motion`, `gsap`, `zod`, `axios`, `@tanstack/*`). Post-change bundle output now emits separate `vendor-*` chunks and no longer reports the prior dynamic+static import conflict for onboarding.
 - 2026-03-13: Integrated blogs directly into the Wasp marketing app (no separate blog host requirement) by adding public routes `/blog` and `/blog/:slug` in `brandklip/app/main.wasp`, with React pages `src/client/BlogsPage.tsx` and `src/client/BlogPostPage.tsx`. Post content is served from `brandklip/app/public/blog/*.md` and rendered in-app via `react-markdown` + `remark-gfm`; `App.tsx` treats blog paths as marketing routes.
 - 2026-03-13: Finalized production-oriented Astro blog config under `brandklip/blog/astro.config.mjs`: set canonical site to `https://www.brandklip.com`, replaced placeholder title/description/social/edit-link values with BrandKlip values, wired GA tag to `G-SKBZLTYCVJ`, and aligned blog authors with configured key (`BrandKlip`). Verified static generation succeeds (`astro check && astro build`) producing `/blog/*` routes + sitemap.
