@@ -13,6 +13,10 @@ This document defines Phase 5 ownership split for production routing.
   - `/404`
   - `/blog`
   - `/blog/*`
+  - `/robots.txt`
+  - `/sitemap.xml`
+  - `/sitemap-index.xml`
+  - `/sitemap-*.xml`
 - Wasp app owns:
   - `/signup`
   - `/login`
@@ -40,7 +44,8 @@ Wasp public blog routes were removed from `brandklip/app/main.wasp` during parit
 Remaining operational requirement:
 
 1. Ensure Cloudflare still routes `/blog` and `/blog/*` to `ASTRO_ORIGIN`.
-2. Keep `/signup` and other auth/app paths pinned to `WASP_ORIGIN`.
+2. Ensure `/robots.txt`, `/sitemap.xml`, `/sitemap-index.xml`, and `/sitemap-*.xml` route to `ASTRO_ORIGIN`.
+3. Keep `/signup` and other auth/app paths pinned to `WASP_ORIGIN`.
 
 ## Verification checklist
 
@@ -49,6 +54,8 @@ Run these checks after route switch:
 1. `curl -I https://www.brandklip.com/` returns Astro response.
 2. `curl -I https://www.brandklip.com/blog/` returns Astro response.
 3. `curl -I https://www.brandklip.com/branddashboard` returns Wasp response.
-4. Confirm canonical tags on Astro pages point to `https://www.brandklip.com/[path]`.
-5. Confirm JSON-LD is present on Astro marketing pages and blog pages.
-6. Re-run GSC URL Inspection for `/`, `/creators`, `/contact`, `/privacypolicy`, `/terms`, `/blog`, and one `/blog/[slug]`.
+4. `curl -I https://www.brandklip.com/robots.txt` returns Astro response.
+5. `curl -I https://www.brandklip.com/sitemap.xml` returns Astro response.
+6. Confirm canonical tags on Astro pages point to `https://www.brandklip.com/[path]`.
+7. Confirm JSON-LD is present on Astro marketing pages and blog pages.
+8. Re-run GSC URL Inspection for `/`, `/creators`, `/contact`, `/privacypolicy`, `/terms`, `/blog`, and one `/blog/[slug]`.

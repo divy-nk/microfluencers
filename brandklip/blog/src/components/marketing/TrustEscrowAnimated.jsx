@@ -369,7 +369,7 @@ export default function TrustEscrowAnimated() {
             </div>
             <div className="bk-trust-razorpay" ref={razorpayRef}>
               <div className="bk-trust-razorpay-shimmer" ref={shimmerRef} />
-              <img src="/Razorpay-logo.png" alt="Razorpay" className="bk-trust-razorpay-logo-img" loading="lazy" decoding="async" />
+              <img src="/razorpay-logo.png" alt="Razorpay" className="bk-trust-razorpay-logo-img" loading="lazy" decoding="async" />
               <span className="bk-trust-razorpay-label">Trusted payment partner</span>
             </div>
           </div>

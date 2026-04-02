@@ -9,6 +9,8 @@ type Props = {
   canonicalPath: string;
   ogType?: "website" | "article";
   articleDate?: string;
+  robots?: string;
+  jsonLd?: Record<string, unknown>[];
 };
 
 const {
@@ -17,6 +19,8 @@ const {
   canonicalPath,
   ogType = "website",
   articleDate,
+  robots = "index,follow",
+  jsonLd = [],
 } = Astro.props;
 
 const siteName = "BrandKlip";
@@ -52,10 +56,10 @@ const websiteJsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="index,follow" />
+    <meta name="robots" content={robots} />
     <meta name="author" content="BrandKlip" />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="BrandKlip" />
@@ -83,16 +87,15 @@ const websiteJsonLd = {
       gtag('config', 'G-SKBZLTYCVJ');
     </script>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={pageTitle} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/logo-black.png" />
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+    {jsonLd.map((entry) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(entry)} />
+    ))}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -107,19 +110,28 @@ const websiteJsonLd = {
     <script>
       import Lenis from "lenis";
 
-      const lenis = new Lenis({
-        smoothWheel: true,
-        syncTouch: true,
-        infinite: false,
-        wheelMultiplier: 1,
-        touchMultiplier: 1,
-      });
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const isTouchDevice =
+        window.matchMedia("(pointer: coarse)").matches ||
+        navigator.maxTouchPoints > 0;
 
-      const raf = (time: number) => {
-        lenis.raf(time);
+      // Keep native momentum scrolling on mobile/touch to avoid jerky interpolation.
+      if (!prefersReducedMotion && !isTouchDevice) {
+        const lenis = new Lenis({
+          smoothWheel: true,
+          syncTouch: false,
+          infinite: false,
+          wheelMultiplier: 1,
+          touchMultiplier: 1,
+        });
+
+        const raf = (time: number) => {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        };
+
         requestAnimationFrame(raf);
-      };
-      requestAnimationFrame(raf);
+      }
     </script>
     <script>
       import gsap from "gsap";
@@ -127,48 +139,55 @@ const websiteJsonLd = {
 
       gsap.registerPlugin(ScrollTrigger);
 
-      // Enhanced scroll reveals with GSAP
-      const revealNodes = document.querySelectorAll('[data-reveal]');
-      
-      revealNodes.forEach((node) => {
-        // Skip if it's in a page that handles its own animations
-        if (node.closest('.home-hero')) return;
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const isTouchDevice =
+        window.matchMedia("(pointer: coarse)").matches ||
+        navigator.maxTouchPoints > 0;
 
-        const variant = node.getAttribute('data-reveal-variant') || 'fadeUp';
-        const delay = parseFloat(node.getAttribute('data-reveal-delay') || '0');
-        
-        let animation = {};
-        
-        switch(variant) {
-          case 'fadeLeft':
-            animation = { x: -60, opacity: 0 };
-            break;
-          case 'fadeRight':
-            animation = { x: 60, opacity: 0 };
-            break;
-          case 'scale':
-            animation = { scale: 0.9, opacity: 0 };
-            break;
-          case 'blur':
-            animation = { filter: "blur(10px)", opacity: 0 };
-            break;
-          default: // fadeUp
-            animation = { y: 40, opacity: 0 };
-        }
+      if (!(prefersReducedMotion || isTouchDevice)) {
+        // Enhanced scroll reveals (desktop only)
+        const revealNodes = document.querySelectorAll('[data-reveal]');
 
-        gsap.from(node, {
-          ...animation,
-          duration: 0.8,
-          delay: delay,
-          immediateRender: false,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: node,
-            start: "top 85%",
-            toggleActions: "play none none none"
+        revealNodes.forEach((node) => {
+          // Skip if it's in a page that handles its own animations
+          if (node.closest('.home-hero')) return;
+
+          const variant = node.getAttribute('data-reveal-variant') || 'fadeUp';
+          const delay = parseFloat(node.getAttribute('data-reveal-delay') || '0');
+
+          let animation = {};
+
+          switch(variant) {
+            case 'fadeLeft':
+              animation = { x: -60, opacity: 0 };
+              break;
+            case 'fadeRight':
+              animation = { x: 60, opacity: 0 };
+              break;
+            case 'scale':
+              animation = { scale: 0.9, opacity: 0 };
+              break;
+            case 'blur':
+              animation = { filter: "blur(10px)", opacity: 0 };
+              break;
+            default: // fadeUp
+              animation = { y: 40, opacity: 0 };
           }
+
+          gsap.from(node, {
+            ...animation,
+            duration: 0.8,
+            delay: delay,
+            immediateRender: false,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: node,
+              start: "top 85%",
+              toggleActions: "play none none none"
+            }
+          });
         });
-      });
+      }
     </script>
 
     <script is:inline>
