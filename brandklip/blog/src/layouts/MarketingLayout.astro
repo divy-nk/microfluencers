@@ -120,6 +120,28 @@ const websiteJsonLd = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/styles/marketing.css" />
+
+    <script>
+      const normalizedPath = window.location.pathname.replace(/\/+$/, "") || "/";
+      const knownRoutes = new Set([
+        "/",
+        "/404",
+        "/blog",
+        "/contact",
+        "/creators",
+        "/pricing",
+        "/privacypolicy",
+        "/terms",
+      ]);
+
+      const isKnownRoute =
+        knownRoutes.has(normalizedPath) || normalizedPath.startsWith("/blog/");
+
+      // App Platform fallback serves index.html on unknown paths; redirect those to the real 404 page.
+      if (!isKnownRoute) {
+        window.location.replace("/404");
+      }
+    </script>
   </head>
   <body>
     <Nav />
