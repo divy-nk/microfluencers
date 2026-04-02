@@ -1,0 +1,57 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import Footer from "../components/marketing/Footer.astro";
+
+const brandPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "About BrandKlip",
+  url: "https://www.brandklip.com/about",
+  isPartOf: {
+    "@type": "WebSite",
+    name: "BrandKlip",
+    url: "https://www.brandklip.com",
+  },
+};
+---
+
+<MarketingLayout
+  title="About BrandKlip"
+  description="BrandKlip is an approval-first UGC platform for D2C brands in India, with escrow-backed creator payouts."
+  canonicalPath="/about"
+  jsonLd={[brandPageJsonLd]}
+>
+  <section class="relative z-10 min-h-[70vh] px-6 py-24">
+    <div class="mx-auto w-full max-w-4xl" data-reveal>
+      <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--ink-45)] mb-5">About</p>
+      <h1 class="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--brand-black)] mb-6 leading-tight">
+        BrandKlip
+      </h1>
+      <p class="text-lg text-[var(--ink-60)] leading-relaxed mb-8 max-w-3xl">
+        BrandKlip is a creator-commerce platform built for D2C brands in India. We help brands run UGC campaigns with approval-first payouts, so spend is tied to usable outcomes.
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-2 mb-10">
+        <div class="rounded-2xl border border-[var(--line-soft)] bg-white p-5">
+          <h2 class="text-base font-semibold text-[var(--brand-black)] mb-2">What We Do</h2>
+          <p class="text-[var(--ink-60)] leading-relaxed">
+            We coordinate creator applications, submission review, and escrow-backed payout release after brief compliance.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-[var(--line-soft)] bg-white p-5">
+          <h2 class="text-base font-semibold text-[var(--brand-black)] mb-2">Who It Is For</h2>
+          <p class="text-[var(--ink-60)] leading-relaxed">
+            Growth-stage and scaled D2C teams that need repeatable content production without agency retainers or inventory-loss risk.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center gap-3">
+        <a href="/contact" class="hero-cta hero-cta-static">Contact BrandKlip</a>
+        <a href="/blog" class="hero-cta" style="background: transparent; color: var(--brand-black); border: 1px solid var(--line-soft);">Read Insights</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</MarketingLayout>
