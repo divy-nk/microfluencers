@@ -36,7 +36,7 @@ export default defineConfig({
       title: "BrandKlip",
       disable404Route: true,
       customCss: ["./src/styles/tailwind.css", "./src/styles/starlight-brandklip.css"],
-      description: "BrandKlip guides and blogs on zero-risk UGC, creator workflows, and D2C growth.",
+      description: "BrandKlip blogs on zero-risk UGC, creator workflows, and D2C growth.",
       logo: {
         src: "./src/assets/logo.webp",
         alt: "BrandKlip",
@@ -79,15 +79,6 @@ export default defineConfig({
             {
               label: "Introduction",
               link: "/",
-            },
-          ],
-        },
-        {
-          label: "Guides",
-          items: [
-            {
-              label: "Example Guide",
-              link: "/guides/example/",
             },
           ],
         },
