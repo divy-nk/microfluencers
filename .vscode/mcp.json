@@ -1,0 +1,24 @@
+{
+  "inputs": [
+    {
+      "id": "digitalocean-token",
+      "type": "promptString",
+      "description": "DigitalOcean personal access token (dop_v1_...)",
+      "password": true
+    }
+  ],
+  "servers": {
+    "digitalocean-apps": {
+      "url": "https://apps.mcp.digitalocean.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${input:digitalocean-token}"
+      }
+    },
+    "digitalocean-databases": {
+      "url": "https://databases.mcp.digitalocean.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${input:digitalocean-token}"
+      }
+    }
+  }
+}

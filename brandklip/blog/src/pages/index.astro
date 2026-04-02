@@ -1,0 +1,128 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import Footer from "../components/marketing/Footer.astro";
+import ScrollFeatures from "../components/marketing/ScrollFeatures.astro";
+import TrustEscrowAnimated from "../components/marketing/TrustEscrowAnimated.jsx";
+import HowItWorksSection from "../components/marketing/HowItWorksSection.astro";
+import ComparisonTable from "../components/marketing/ComparisonTable.astro";
+import BrandRiskCards from "../components/marketing/BrandRiskCards.astro";
+import FinalCTAAnimated from "../components/marketing/FinalCTAAnimated.jsx";
+
+const brandComparisonColumns = [
+  { label: "BrandKlip", highlighted: true, helper: "Escrow-backed" },
+  { label: "Traditional seeding" },
+  { label: "Agency model" },
+];
+
+const brandComparisonRows = [
+  { feature: "Pay before content?", values: [false, true, true] },
+  { feature: "Approval fairness", values: ["BrandKlip verifies", "No structure", "Agency dependent"] },
+  { feature: "Inventory risk", values: ["None", "High", "High"] },
+  { feature: "Creator accountability", values: ["High", "Low", "Medium"] },
+  { feature: "Per-video economics", values: ["Transparent", "Unpredictable", "Retainer heavy"] },
+];
+---
+
+<MarketingLayout
+  title="Automated UGC & UPI Escrow"
+  description="BrandKlip helps D2C brands run zero-risk UGC campaigns with escrow-backed creator workflows and approval-first payouts."
+  canonicalPath="/"
+>
+  <section class="home-hero relative z-10 flex flex-col items-center justify-center min-h-[100svh] overflow-hidden px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-16 sm:pb-20 md:pb-24 border-none">
+    <div class="site-aurora" aria-hidden="true"></div>
+    <div class="relative z-10 w-full max-w-5xl mx-auto lg:px-8">
+      <div class="text-center max-w-4xl mx-auto">
+      <div class="pill-animated brand-benefits-pill mb-6" style="opacity: 1 !important;">
+        <span class="brand-benefits-pill__icon" aria-hidden="true">✦</span>
+        <span class="brand-benefits-pill__label">Zero-risk UGC - live in India</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl md:text-[4.1rem] lg:text-[4.25rem] font-semibold tracking-tight mb-6 leading-[1.08]" style="opacity: 1 !important; text-wrap: balance;">
+        <span class="flex flex-col items-center gap-1 md:gap-0.5">
+          <span class="inline flex-wrap justify-center min-h-[1.05em]" style="color: var(--brand-black); opacity: 1 !important;">Stop Chasing Creators.</span>
+          <span class="inline flex-wrap justify-center min-h-[1.05em]" style="color: var(--ink-60); opacity: 1 !important;">Start Running Campaigns That Pay For Themselves.</span>
+        </span>
+      </h1>
+
+      <p class="text-base sm:text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-10" style="color: var(--ink-60); opacity: 1 !important; text-wrap: pretty;">
+        India's first UGC platform where payout releases only after BrandKlip verifies the video against your brief.
+        No inventory shipped blind. No creators ghosting you. No agency taking a cut.
+      </p>
+
+      <a href="/signup" class="micro-cta no-underline" data-hero-cta style="opacity: 1 !important;">
+        <span>Get Started - No Credit Card</span>
+        <span class="micro-cta__icon" aria-hidden="true">→</span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-band section-band-white">
+    <HowItWorksSection />
+  </div>
+
+  <div class="section-band section-band-mint">
+    <ScrollFeatures />
+  </div>
+
+  <div class="section-band section-band-mint-deep">
+    <TrustEscrowAnimated client:visible />
+  </div>
+
+  <div class="section-band section-band-white">
+    <ComparisonTable
+      badge="Comparison"
+      title="BrandKlip vs Traditional UGC Workflows"
+      subtitle="When every campaign rupee needs accountability, the workflow matters as much as the creative output."
+      columns={brandComparisonColumns}
+      rows={brandComparisonRows}
+      ctaLabel="Create your first drop"
+      ctaHref="/signup"
+    />
+  </div>
+
+  <div class="section-band section-band-mint-deep" id="faq">
+    <BrandRiskCards heading="Frequently asked questions" />
+  </div>
+
+  <section id="cta" class="cta-island relative z-10 w-full overflow-hidden">
+    <FinalCTAAnimated client:visible />
+  </section>
+
+  <Footer />
+</MarketingLayout>
+
+<script>
+  // Force hero elements to stay visible - disable any animations
+  document.addEventListener('DOMContentLoaded', () => {
+    const heroSection = document.querySelector('.home-hero');
+    if (heroSection) {
+      // Force opacity on all text elements in hero
+      const heroElements = heroSection.querySelectorAll('h1, p, div, span, a');
+      heroElements.forEach(el => {
+        if (el instanceof HTMLElement) {
+          el.style.setProperty('opacity', '1', 'important');
+        }
+      });
+    }
+  });
+</script>
+<style>
+  /* Force hero text visibility - override any animations */
+  .home-hero h1,
+  .home-hero h1 *,
+  .home-hero p,
+  .home-hero .pill-animated,
+  .home-hero [data-hero-cta] {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+
+  @media (max-width: 640px) {
+    .home-hero [data-hero-cta] {
+      width: 100%;
+      max-width: 340px;
+      justify-content: center;
+    }
+  }
+</style>

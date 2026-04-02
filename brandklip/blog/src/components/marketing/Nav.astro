@@ -1,0 +1,110 @@
+---
+import { MobileNavExpand } from "./MobileNavExpand.jsx";
+
+const authBaseUrl =
+  import.meta.env.PUBLIC_WASP_ORIGIN ||
+  (import.meta.env.DEV ? "http://localhost:3000" : "https://www.brandklip.com");
+
+const loginHref = new URL("/login", authBaseUrl).toString();
+const signupHref = new URL("/signup", authBaseUrl).toString();
+const dashboardHref = new URL("/dashboard", authBaseUrl).toString();
+---
+
+<header class="nav-wrap" data-reveal>
+  <div class="nav-shell">
+    <div class="nav-main-row">
+      <a href="/" class="brand">
+        <img src="/logo-black.png" alt="BrandKlip" class="brand-logo" />
+        <span class="brand-text">BrandKlip</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="/creators" data-nav-link="/creators">For Creators</a>
+        <a href="/pricing" data-nav-link="/pricing">Pricing</a>
+        <a href="/blog" data-nav-link="/blog">Docs</a>
+        <a href={loginHref} data-nav-login data-no-external-icon>Login</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href={signupHref} class="cta nav-cta nav-cta-scroll" data-nav-signup data-no-external-icon>Join for Free</a>
+        <a href={dashboardHref} class="cta nav-cta nav-hidden" data-nav-dashboard data-no-external-icon>Dashboard</a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav-expand" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <MobileNavExpand loginHref={loginHref} signupHref={signupHref} client:load />
+  </div>
+</header>
+
+<script is:inline>
+  // Wait for DOM to be ready
+  function initNavCta() {
+    const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+
+    document.querySelectorAll('[data-nav-link]').forEach((link) => {
+      const target = (link.getAttribute('data-nav-link') || '').replace(/\/$/, '');
+      if (target && currentPath === target) {
+        link.classList.add('is-active');
+      }
+    });
+
+    const authToken = document.cookie.includes('waspAuth');
+    const navWrap = document.querySelector('.nav-wrap');
+    const dashboardCta = document.querySelector('[data-nav-dashboard]');
+    const signupCta = document.querySelector('[data-nav-signup]');
+    const loginCta = document.querySelector('[data-nav-login]');
+
+    if (authToken && dashboardCta && signupCta) {
+      dashboardCta.classList.remove('nav-hidden');
+      signupCta.classList.add('nav-hidden');
+      if (loginCta) loginCta.classList.add('nav-hidden');
+    } else if (loginCta) {
+      loginCta.classList.remove('nav-hidden');
+    }
+
+    if (!authToken && navWrap && signupCta) {
+      const heroSection = document.querySelector('.home-hero');
+      const heroCta = document.querySelector('[data-hero-cta]');
+      const revealTarget = heroCta || heroSection;
+
+      // If no hero CTA exists (non-homepage/non-creators pages), show button by default
+      if (!revealTarget) {
+        navWrap.classList.add('show-scroll-cta');
+      } else if (typeof IntersectionObserver === 'undefined') {
+        // Fallback: show button if IntersectionObserver not supported
+        navWrap.classList.add('show-scroll-cta');
+      } else {
+        // Homepage & Creators page: use scroll-triggered behavior
+        navWrap.classList.remove('show-scroll-cta');
+        
+        const heroObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) {
+                navWrap.classList.add('show-scroll-cta');
+              } else {
+                navWrap.classList.remove('show-scroll-cta');
+              }
+            });
+          },
+          { 
+            threshold: 0,
+            rootMargin: '-80px 0px 0px 0px'
+          }
+        );
+
+        heroObserver.observe(revealTarget);
+      }
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNavCta);
+  } else {
+    initNavCta();
+  }
+</script>

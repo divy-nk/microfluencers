@@ -1,8 +1,12 @@
 ---
 import { logos } from 'virtual:starlight/user-images';
 import config from 'virtual:starlight/user-config';
-import blogConfig from 'virtual:starlight-blog-config'
-import type { Props } from '@astrojs/starlight/props';
+
+const authBaseUrl =
+	import.meta.env.PUBLIC_WASP_ORIGIN ||
+	(import.meta.env.DEV ? 'http://localhost:3000' : 'https://www.brandklip.com');
+
+const dashboardHref = new URL('/dashboard', authBaseUrl).toString();
 
 const href = Astro.site
 const { siteTitle } = Astro.props;
@@ -18,7 +22,6 @@ const { siteTitle } = Astro.props;
 					width={logos.dark.width}
 					height={logos.dark.height}
 				/>
-				{/* Show light alternate if a user configure both light and dark logos. */}
 				{!('src' in config.logo) && (
 					<img
 						class="dark:sl-hidden"
@@ -31,16 +34,18 @@ const { siteTitle } = Astro.props;
 			</>
 		)
 	}
-	<span class:list={{ 'sr-only': config.logo?.replacesTitle }} class="dark:text-white hover:text-yellow-500">
+	<span class:list={{ 'sr-only': config.logo?.replacesTitle }}>
 		{siteTitle}
 	</span>
 </a>
-<div>
-  <a href="/" class="text-gray-900 hover:text-yellow-500 dark:text-white">Docs</a>
-</div>
-<div>
-  <a href="/blog/" class="text-gray-900 hover:text-yellow-500 dark:text-white">{blogConfig.title}</a>
-</div>
+
+<nav class="site-links" aria-label="Primary">
+	<a href="/creators">For Creators</a>
+	<a href="/contact">Contact</a>
+	<a href="/blog">Blogs</a>
+</nav>
+
+<a href={dashboardHref} class="dashboard-link">Dashboard</a>
 
 <style>
 	.site-title {
@@ -48,43 +53,71 @@ const { siteTitle } = Astro.props;
 		max-width: 100%;
 		overflow: hidden;
 		align-items: center;
-		color: var(--sl-color-gray-9);
-		gap: var(--sl-nav-gap);
-		font-size: var(--sl-text-h4);
+		color: rgba(13, 13, 13, 0.92);
+		gap: 0.5rem;
+		font-size: 1.1rem;
 		font-weight: 600;
 		text-decoration: none;
 		white-space: nowrap;
-    padding-inline-end: 1rem;
-    border-inline-end: 1px solid var(--sl-color-gray-5);
 	}
 	img {
-		height: calc(var(--sl-nav-height) - 2 * var(--sl-nav-pad-y));
+		height: 1.75rem;
 		width: auto;
 		max-width: 100%;
 		object-fit: contain;
 		object-position: 0 50%;
 	}
-  div {
-    border-inline-end: 1px solid var(--sl-color-gray-5);
-    margin-left: 1rem;
-    align-self: center;
-    gap: 1rem;
-    height: 100%;
-    padding-inline-end: 1rem;
+
+	.site-links {
+		align-items: center;
+		display: none;
+		gap: 1.25rem;
+		margin-left: 2rem;
   }
 
   @media (min-width: 50rem) {
-    div {
-      align-items: center;
+		.site-links {
       display: flex;
     }
+
+		.dashboard-link {
+			display: inline-flex;
+		}
   }
-  a {
-    color: var(--sl-color-text-accent);
+
+	.site-links a {
+		color: rgba(13, 13, 13, 0.76);
+		font-size: 0.95rem;
     font-weight: 600;
     text-decoration: none;
   }
-  a:hover {
-		opacity: 0.66;
+
+	.site-links a:hover {
+		color: rgba(13, 13, 13, 0.92);
+	}
+
+	.dashboard-link {
+		display: none;
+		margin-left: auto;
+		align-items: center;
+		justify-content: center;
+		height: 2.1rem;
+		padding: 0 0.95rem;
+		border-radius: 999px;
+		background: #0d0d0d;
+		color: #ffffff;
+		font-size: 0.84rem;
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.dashboard-link:hover {
+		background: #000000;
+	}
+
+	@media (max-width: 50rem) {
+		.site-title span {
+			display: none;
+		}
 	}
 </style>

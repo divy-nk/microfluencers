@@ -1,0 +1,73 @@
+---
+const waspOrigin =
+  import.meta.env.PUBLIC_WASP_ORIGIN ||
+  (import.meta.env.DEV ? "http://localhost:3000" : "");
+
+if (waspOrigin) {
+  return Astro.redirect(new URL("/signup", waspOrigin).toString(), 302);
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup | BrandKlip</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <style>
+      :root {
+        --brand-black: #0d0d0d;
+        --white: #ffffff;
+        --surface-muted: #f4f4f6;
+        --text-secondary: #6b7280;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: var(--surface-muted);
+        color: var(--brand-black);
+        font-family: "DM Sans", sans-serif;
+      }
+      .card {
+        max-width: 680px;
+        background: var(--white);
+        border: 1px solid rgba(16, 16, 16, 0.08);
+        border-radius: 16px;
+        padding: 28px;
+      }
+      h1 {
+        margin: 0 0 10px;
+        font-family: "DM Sans", sans-serif;
+      }
+      p {
+        margin: 0;
+        line-height: 1.6;
+        color: var(--text-secondary);
+      }
+      a {
+        margin-top: 16px;
+        display: inline-block;
+        text-decoration: none;
+        border-radius: 999px;
+        background: var(--brand-black);
+        color: var(--white);
+        padding: 10px 16px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Signup is handled by the app server.</h1>
+      <p>
+        This route should be proxied to Wasp in production. Set
+        <strong>PUBLIC_WASP_ORIGIN</strong> in Astro for local forwarding.
+      </p>
+      <a href="/">Back to homepage</a>
+    </main>
+  </body>
+</html>

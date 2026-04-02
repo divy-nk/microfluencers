@@ -1,0 +1,134 @@
+---
+type Props = {
+  variant: "brands" | "creators";
+};
+
+const { variant } = Astro.props;
+
+const content =
+  variant === "brands"
+    ? {
+        badge: "Brand Benefits",
+        title: "Why brands choose BrandKlip",
+        subtitle: "No blind inventory shipping, no upfront payout risk, and reusable UGC built for performance teams.",
+        cards: [
+          {
+            title: "Pay After Delivery",
+            description:
+              "Creators buy from your chosen platform and you reimburse only after approved content submission.",
+          },
+          {
+            title: "UGC at Scale",
+            description:
+              "Collect multiple creator angles per SKU and build reusable ad-ready assets faster.",
+          },
+          {
+            title: "Usage Confidence",
+            description:
+              "Use approved videos across ads, PDPs, and social with clear rights baked into the flow.",
+          },
+        ],
+      }
+    : {
+        badge: "Creator Benefits",
+        title: "Why creators choose BrandKlip",
+        subtitle: "No guessing. No chasing. Just clear campaigns and protected payouts.",
+        cards: [
+          {
+            title: "No more working for free on hope.",
+            description:
+              "Every campaign has a confirmed budget in escrow before you see it. You know what you're making before you buy anything.",
+          },
+          {
+            title: "Know exactly what the brand wants.",
+            description:
+              "Clear briefs with product context, creative direction, and non-negotiables. No revision loops because the brief was vague.",
+          },
+          {
+            title: "Your earnings are locked in before you spend a rupee.",
+            description:
+              "Escrow means the money exists and is protected before you ever touch your wallet. Get approved and it transfers automatically.",
+          },
+        ],
+      };
+---
+
+<section class="relative w-full py-16 md:py-20 bg-transparent">
+  <div class="mx-auto max-w-6xl px-6 lg:px-8">
+    <div class="text-center mb-8 md:mb-10">
+      <div class="pill-animated brand-benefits-pill mb-4">
+        <span class="brand-benefits-pill__icon" aria-hidden="true">✦</span>
+        <span class="brand-benefits-pill__label brand-benefits-pill__label--caps">{content.badge}</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-semibold tracking-tight text-foreground">{content.title}</h2>
+      <p class="text-foreground/55 text-sm md:text-base mt-3 max-w-2xl mx-auto">{content.subtitle}</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+      {content.cards.map((card, index) => (
+        <article class="benefit-card rounded-[1.5rem] border border-[color:var(--line-soft)] bg-[var(--white)] p-5 md:p-6">
+          <div class="benefit-card__number h-10 w-10 rounded-xl border border-[color:var(--line-soft)] bg-[color:rgba(200,240,224,0.28)] flex items-center justify-center mb-4 text-[var(--ink-70)] text-sm font-semibold transition-colors duration-250">
+            {index + 1}
+          </div>
+          <h3 class="text-lg font-semibold tracking-tight text-foreground">{card.title}</h3>
+          <p class="text-sm text-foreground/60 mt-2 leading-relaxed">{card.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Apple-inspired refined animations - subtle and premium */
+  .benefit-card {
+    position: relative;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    transform: translateY(0) scale(1);
+    transition-property: transform, box-shadow, border-color;
+    transition-duration: 320ms, 320ms, 220ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1), cubic-bezier(0.22, 1, 0.36, 1), ease;
+    will-change: transform, box-shadow;
+    transform-origin: center center;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .benefit-card:hover {
+      transform: translateY(-2px) scale(1.006);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.11);
+      border-color: rgba(13, 13, 13, 0.12);
+    }
+
+    .benefit-card:hover .benefit-card__number {
+      background: rgba(200, 240, 224, 0.5);
+      border-color: rgba(34, 197, 94, 0.2);
+      color: var(--brand-black);
+    }
+  }
+
+  /* Subtle scroll-triggered animation */
+  @media (prefers-reduced-motion: no-preference) {
+    .benefit-card {
+      opacity: 0;
+      animation: subtleFadeUp 0.5s ease-out forwards;
+    }
+
+    .benefit-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .benefit-card:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+  }
+
+  @keyframes subtleFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

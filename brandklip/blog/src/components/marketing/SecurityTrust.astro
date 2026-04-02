@@ -1,0 +1,97 @@
+<section class="relative z-10 w-full px-6 py-14 md:py-16 bg-transparent">
+  <div class="mx-auto max-w-6xl">
+    <div class="rounded-[2rem] border border-[color:var(--line-soft)] bg-[var(--white)] p-6 md:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.06)]">
+      <div class="flex flex-col gap-6 md:gap-7">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6">
+          <div class="max-w-2xl">
+            <div class="pill-animated brand-benefits-pill mb-2">
+              <span class="brand-benefits-pill__icon" aria-hidden="true">✦</span>
+              <span class="brand-benefits-pill__label brand-benefits-pill__label--caps">Trust &amp; Security</span>
+            </div>
+            <h2 class="text-2xl md:text-4xl font-semibold tracking-tight text-foreground leading-tight">
+              Your Money Is Protected Until BrandKlip Verifies Delivery.
+            </h2>
+            <p class="text-sm md:text-base text-foreground/55 mt-2 max-w-2xl">
+              Every campaign runs on Razorpay escrow. Funds are locked the moment a campaign goes live. They only release after BrandKlip verifies the submission meets your brief - not a second before.
+            </p>
+          </div>
+
+          <div class="inline-flex items-center gap-3 self-start md:self-center rounded-2xl border border-[color:var(--line-soft)] bg-[var(--white)] px-4 py-3 md:px-5 shadow-[0_8px_22px_rgba(15,23,42,0.05)]">
+            <img src="/Razorpay-logo.png" alt="Razorpay" class="h-6 w-auto object-contain" loading="lazy" decoding="async" />
+            <span class="text-xs font-semibold text-[var(--ink-70)] whitespace-nowrap">Trusted payment partner</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+          <article class="security-card rounded-2xl border border-[color:var(--line-soft)] bg-[color:rgba(255,255,255,0.9)] px-4 py-4 md:px-5 md:py-5 transition-all duration-300 ease-out">
+            <div class="security-card__number h-9 w-9 rounded-xl border border-[color:var(--line-soft)] bg-[color:rgba(200,240,224,0.28)] flex items-center justify-center mb-3 text-[var(--ink-70)] text-sm font-semibold transition-colors duration-250">1</div>
+            <p class="text-sm font-bold text-[var(--brand-black)] tracking-tight">Deposit via Razorpay</p>
+            <p class="text-xs md:text-sm text-[var(--ink-55)] mt-1.5 leading-relaxed">Fund your campaign through Razorpay and lock the money before creators start.</p>
+          </article>
+
+          <article class="security-card rounded-2xl border border-[color:var(--line-soft)] bg-[color:rgba(255,255,255,0.9)] px-4 py-4 md:px-5 md:py-5 transition-all duration-300 ease-out">
+            <div class="security-card__number h-9 w-9 rounded-xl border border-[color:var(--line-soft)] bg-[color:rgba(200,240,224,0.28)] flex items-center justify-center mb-3 text-[var(--ink-70)] text-sm font-semibold transition-colors duration-250">2</div>
+            <p class="text-sm font-bold text-[var(--brand-black)] tracking-tight">Locked Until BrandKlip Verifies</p>
+            <p class="text-xs md:text-sm text-[var(--ink-55)] mt-1.5 leading-relaxed">Funds stay in escrow and only release after BrandKlip verifies the video against your brief.</p>
+          </article>
+
+          <article class="security-card rounded-2xl border border-[color:var(--line-soft)] bg-[color:rgba(255,255,255,0.9)] px-4 py-4 md:px-5 md:py-5 transition-all duration-300 ease-out">
+            <div class="security-card__number h-9 w-9 rounded-xl border border-[color:var(--line-soft)] bg-[color:rgba(200,240,224,0.28)] flex items-center justify-center mb-3 text-[var(--ink-70)] text-sm font-semibold transition-colors duration-250">3</div>
+            <p class="text-sm font-bold text-[var(--brand-black)] tracking-tight">Every Payment Tracked</p>
+            <p class="text-xs md:text-sm text-[var(--ink-55)] mt-1.5 leading-relaxed">Every deposit and release is recorded so your team can verify each transaction.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Apple-inspired refined animations - subtle and premium */
+  .security-card {
+    position: relative;
+    cursor: default;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .security-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      border-color: rgba(13, 13, 13, 0.12);
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .security-card:hover .security-card__number {
+      background: rgba(200, 240, 224, 0.5);
+      border-color: rgba(34, 197, 94, 0.2);
+      color: var(--brand-black);
+    }
+  }
+
+  /* Subtle scroll-triggered animation */
+  @media (prefers-reduced-motion: no-preference) {
+    .security-card {
+      opacity: 0;
+      animation: subtleFadeUp 0.5s ease-out forwards;
+    }
+
+    .security-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .security-card:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+  }
+
+  @keyframes subtleFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

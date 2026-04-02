@@ -1,0 +1,170 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+
+/* ─────────────────────────────────────────────────────────
+   MobileNavExpand
+   
+   HOW IT WORKS:
+   - Your existing navbar stays exactly where it is
+   - On burger tap, the navbar container animates its height
+     open, revealing the links inside it
+   - No floating panel, no overlay, no position:fixed drawer
+   - Links stagger in as the height expands
+   - Desktop (md+): completely invisible, zero effect
+───────────────────────────────────────────────────────── */
+
+const NAV_LINKS = [
+  { label: "For Creators", href: "/creators" },
+  { label: "Docs",         href: "/docs"     },
+  { label: "Contact",      href: "/contact"  },
+  { label: "Join for Free",href: "/join"     },
+];
+
+export function MobileNavExpand({ isOpen, onClose }) {
+  const linksWrapRef = useRef(null);
+  const rowsRef      = useRef([]);
+  const dividerRef   = useRef(null);
+  const tlRef        = useRef(null);
+
+  useEffect(() => {
+    const wrap     = linksWrapRef.current;
+    const rows     = rowsRef.current.filter(Boolean);
+    const divider  = dividerRef.current;
+    if (!wrap || !rows.length) return;
+
+    if (tlRef.current) tlRef.current.kill();
+
+    // Measure the natural height so GSAP can animate to it
+    gsap.set(wrap, { height: "auto", opacity: 1 });
+    const fullHeight = wrap.scrollHeight;
+    gsap.set(wrap, { height: 0, opacity: 0 });
+    gsap.set(rows, { opacity: 0, y: 10 });
+    gsap.set(divider, { scaleX: 0, transformOrigin: "left center" });
+
+    const tl = gsap.timeline({ paused: true });
+
+    tl
+      // Expand height
+      .to(wrap, {
+        height: fullHeight,
+        opacity: 1,
+        duration: 0.38,
+        ease: "expo.out",
+      })
+      // Divider line draws in
+      .to(divider, {
+        scaleX: 1,
+        duration: 0.22,
+        ease: "power2.out",
+      }, "-=0.28")
+      // Links stagger up
+      .to(rows, {
+        opacity: 1,
+        y: 0,
+        duration: 0.24,
+        stagger: 0.06,
+        ease: "power3.out",
+      }, "-=0.22");
+
+    tlRef.current = tl;
+  }, []);
+
+  useEffect(() => {
+    const tl = tlRef.current;
+    if (!tl) return;
+    if (isOpen) {
+      tl.play();
+    } else {
+      tl.reverse();
+    }
+  }, [isOpen]);
+
+  // GSAP hover — row slides right, chevron brightens
+  const handleEnter = (i) => {
+    const row = rowsRef.current[i];
+    if (!row) return;
+    gsap.to(row, { x: 4, duration: 0.16, ease: "power2.out" });
+    gsap.to(row.querySelector(".chev"), {
+      color: "rgba(255,255,255,0.85)",
+      duration: 0.16,
+      ease: "power2.out",
+    });
+  };
+  const handleLeave = (i) => {
+    const row = rowsRef.current[i];
+    if (!row) return;
+    gsap.to(row, { x: 0, duration: 0.2, ease: "power2.inOut" });
+    gsap.to(row.querySelector(".chev"), {
+      color: "rgba(255,255,255,0.28)",
+      duration: 0.2,
+      ease: "power2.inOut",
+    });
+  };
+
+  return (
+    <div className="md:hidden">
+      {/* Thin divider line that draws in */}
+      <div
+        ref={dividerRef}
+        style={{
+          height: 1,
+          background: "rgba(255,255,255,0.08)",
+          margin: "0 20px",
+        }}
+      />
+
+      {/* Collapsible links wrapper — height animates 0 → auto */}
+      <div
+        ref={linksWrapRef}
+        style={{
+          height: 0,
+          opacity: 0,
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ padding: "4px 20px 20px" }}>
+          {NAV_LINKS.map((link, i) => (
+            <a
+              key={link.href}
+              ref={(el) => (rowsRef.current[i] = el)}
+              href={link.href}
+              onClick={onClose}
+              onMouseEnter={() => handleEnter(i)}
+              onMouseLeave={() => handleLeave(i)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "16px 0",
+                fontSize: 22,
+                fontWeight: 400,
+                color: "rgba(255,255,255,0.88)",
+                textDecoration: "none",
+                borderBottom:
+                  i < NAV_LINKS.length - 1
+                    ? "1px solid rgba(255,255,255,0.07)"
+                    : "none",
+                fontFamily: "inherit",
+                letterSpacing: "-0.01em",
+                willChange: "transform, opacity",
+              }}
+            >
+              {link.label}
+              <span
+                className="chev"
+                style={{
+                  fontSize: 20,
+                  color: "rgba(255,255,255,0.28)",
+                  lineHeight: 1,
+                }}
+              >
+                ›
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

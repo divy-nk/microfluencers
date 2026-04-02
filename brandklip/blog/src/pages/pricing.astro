@@ -1,0 +1,478 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import Footer from "../components/marketing/Footer.astro";
+---
+
+<MarketingLayout
+  title="Pricing"
+  description="BrandKlip beta pricing: ₹499 intro fee per successful video (regular ₹799), charged only after verification."
+  canonicalPath="/pricing"
+>
+  <section class="pricing-page relative isolate overflow-hidden px-4 sm:px-6 pt-[7.4rem] md:pt-32 pb-16 md:pb-24" data-pricing-root>
+    <div class="pricing-shell relative z-10 mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr]">
+      <section class="pricing-copy p-6 md:p-10" data-reveal>
+        <p class="inline-flex items-center rounded-full border border-black/10 bg-white/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ink-55)]">
+          Beta Pricing
+        </p>
+
+        <h1 class="mt-4 text-[2rem] leading-[1.03] font-semibold tracking-tight text-[var(--brand-black)] sm:text-[2.75rem] md:text-[3.2rem]" style="text-wrap: balance;">
+          One flat fee. Zero pricing confusion.
+        </h1>
+        <h2 class="mt-1 text-[1.9rem] leading-[1.03] font-semibold tracking-tight text-[var(--ink-45)] sm:text-[2.35rem] md:text-[2.85rem]" style="text-wrap: balance;">
+          Pay only for successful videos.
+        </h2>
+
+        <p class="mt-5 max-w-[38rem] text-[15px] leading-relaxed text-[var(--ink-60)] md:text-[1.04rem]" style="text-wrap: pretty;">
+          Beta intro pricing is <strong>₹499</strong> per approved video <span class="pricing-inline-strike">(regular ₹799)</span>. No retainers, no hidden management cut, and no payout unless content is verified against your brief.
+        </p>
+
+        <div class="mt-7 flex flex-col sm:flex-row gap-3">
+          <a href="/signup" class="micro-cta no-underline">
+            <span>Start Campaign</span>
+            <span class="micro-cta__icon" aria-hidden="true">&rarr;</span>
+          </a>
+          <a href="/contact" class="pricing-secondary-link no-underline">Talk to team</a>
+        </div>
+      </section>
+
+      <section class="pricing-plan-card" data-reveal data-reveal-delay="0.08">
+        <div class="pricing-plan-head">
+          <p class="pricing-plan-tag">Single plan (beta intro)</p>
+          <p class="pricing-plan-title">Successful video fee</p>
+        </div>
+
+        <div class="pricing-price-row">
+          <div class="pricing-price-stack">
+            <span class="pricing-price-old" aria-label="₹799 regular">₹799</span>
+            <span class="pricing-price" data-base-price="499" aria-label="₹499 beta">₹499</span>
+          </div>
+          <span class="pricing-price-unit">beta intro per approved video</span>
+        </div>
+
+        <ul class="pricing-list" aria-label="Plan features">
+          <li>Escrow-backed flow from application to payout</li>
+          <li>BrandKlip verification before release</li>
+          <li>No prepayment for unapproved output</li>
+          <li>Creator reimbursement handled in workflow</li>
+          <li>Clear per-video economics at scale</li>
+        </ul>
+
+        <div class="pricing-estimator" aria-label="Monthly estimate">
+          <div class="pricing-estimator-head">
+            <p class="pricing-estimator-label">Monthly approved videos</p>
+            <p class="pricing-estimator-value"><span id="pricing-video-count" class="slot-number" aria-live="polite">12</span> videos</p>
+          </div>
+          <input id="pricing-video-range" type="range" min="1" max="60" value="12" step="1" aria-label="Monthly approved videos" />
+          <div class="pricing-total-row">
+            <p>Estimated platform fee (beta)</p>
+            <p id="pricing-total" class="slot-number slot-number--total" aria-live="polite">₹5,988</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <Footer />
+
+  <script is:inline>
+    const pricingRoot = document.querySelector('[data-pricing-root]');
+
+    if (pricingRoot) {
+      const priceNode = pricingRoot.querySelector('.pricing-price');
+      const parsedPriceFromData = Number(priceNode?.dataset.basePrice || '');
+      const parsedPriceFromText = Number((priceNode?.textContent || '').replace(/[^\d]/g, ''));
+      const basePrice = Number.isFinite(parsedPriceFromData) && parsedPriceFromData > 0
+        ? parsedPriceFromData
+        : (Number.isFinite(parsedPriceFromText) && parsedPriceFromText > 0 ? parsedPriceFromText : 499);
+      const slider = document.getElementById('pricing-video-range');
+      const countEl = document.getElementById('pricing-video-count');
+      const totalEl = document.getElementById('pricing-total');
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const activeAnimations = new WeakMap();
+
+      const formatCurrency = (value) => {
+        return `₹${new Intl.NumberFormat('en-IN').format(Math.round(value))}`;
+      };
+
+      const setSliderProgress = (videos) => {
+        if (!slider) return;
+        const min = Number(slider.min || '1');
+        const max = Number(slider.max || '60');
+        const progress = ((videos - min) / Math.max(1, max - min)) * 100;
+        slider.style.setProperty('--range-progress', `${progress}%`);
+      };
+
+      const animateValueChange = (element, valueText) => {
+        if (!element) return;
+
+        const previousText = element.textContent ?? '';
+
+        if (prefersReducedMotion || previousText === valueText) {
+          element.textContent = valueText;
+          return;
+        }
+
+        const running = activeAnimations.get(element);
+        if (running) {
+          running.cancel();
+          activeAnimations.delete(element);
+        }
+
+        element.textContent = valueText;
+
+        const animation = element.animate(
+          [
+            { transform: 'translateY(42%)', opacity: 0.22, filter: 'blur(2px)' },
+            { transform: 'translateY(0)', opacity: 1, filter: 'blur(0)' },
+          ],
+          {
+            duration: 230,
+            easing: 'cubic-bezier(0.24, 0.84, 0.22, 1)',
+          }
+        );
+
+        activeAnimations.set(element, animation);
+        animation.onfinish = () => {
+          if (activeAnimations.get(element) === animation) {
+            activeAnimations.delete(element);
+          }
+        };
+      };
+
+      const getSafeVideos = () => {
+        if (!slider) return 1;
+        const min = Number(slider.min || '1');
+        const max = Number(slider.max || '60');
+        const raw = Number(slider.value);
+
+        if (!Number.isFinite(raw)) return min;
+        return Math.min(max, Math.max(min, Math.round(raw)));
+      };
+
+      const updateEstimate = () => {
+        if (!slider || !countEl || !totalEl) return;
+        const videos = getSafeVideos();
+        const targetTotal = videos * basePrice;
+
+        slider.value = String(videos);
+
+        animateValueChange(countEl, String(videos));
+        animateValueChange(totalEl, formatCurrency(targetTotal));
+        setSliderProgress(videos);
+      };
+
+      if (slider) {
+        slider.addEventListener('input', updateEstimate);
+        slider.addEventListener('change', updateEstimate);
+      }
+
+      updateEstimate();
+    }
+  </script>
+
+  <style>
+    .pricing-page {
+      min-height: calc(100svh - 2rem);
+    }
+
+    .pricing-shell {
+      overflow: hidden;
+      border-radius: 2rem;
+      border: 1px solid rgba(13, 13, 13, 0.12);
+      background:
+        linear-gradient(165deg, rgba(255, 255, 255, 0.98) 0%, rgba(246, 248, 247, 0.96) 52%, rgba(242, 246, 244, 0.96) 100%);
+      box-shadow: 0 22px 58px rgba(10, 10, 10, 0.1);
+    }
+
+    .pricing-copy {
+      backdrop-filter: blur(1.5px);
+      border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+    }
+
+    @media (min-width: 1024px) {
+      .pricing-copy {
+        border-bottom: 0;
+        border-right: 1px solid rgba(13, 13, 13, 0.1);
+      }
+    }
+
+    .pricing-secondary-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid rgba(13, 13, 13, 0.14);
+      color: var(--brand-black);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.88rem 1.35rem;
+      transition: transform 160ms ease, border-color 200ms ease, background-color 200ms ease;
+    }
+
+    .pricing-secondary-link:hover {
+      transform: translateY(-1px);
+      border-color: rgba(13, 13, 13, 0.28);
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .pricing-plan-card {
+      position: relative;
+      overflow: clip;
+      border-radius: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: 1.5rem;
+      min-height: 100%;
+    }
+
+    .pricing-plan-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.65rem;
+      border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+      padding-bottom: 0.8rem;
+    }
+
+    .pricing-plan-tag {
+      margin: 0;
+      border-radius: 999px;
+      border: 1px solid rgba(13, 13, 13, 0.1);
+      background: rgba(255, 255, 255, 0.86);
+      font-size: 0.66rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--ink-55);
+      padding: 0.3rem 0.56rem;
+    }
+
+    .pricing-plan-title {
+      margin: 0;
+      color: var(--ink-55);
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .pricing-price-row {
+      margin-top: 1.1rem;
+      display: grid;
+      gap: 0.2rem;
+    }
+
+    .pricing-price-stack {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pricing-price-old {
+      color: var(--ink-45);
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-decoration: line-through;
+      text-decoration-thickness: 1.8px;
+      text-decoration-color: color-mix(in srgb, var(--brand-black) 55%, transparent);
+      letter-spacing: -0.02em;
+    }
+
+    .pricing-price {
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: clamp(2.15rem, 4vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+      color: var(--brand-black);
+    }
+
+    .pricing-price-unit {
+      font-size: 0.92rem;
+      color: var(--ink-55);
+      font-weight: 500;
+    }
+
+    .pricing-inline-strike {
+      color: var(--ink-50);
+      font-weight: 500;
+      text-decoration: line-through;
+      text-decoration-thickness: 1.3px;
+      text-decoration-color: color-mix(in srgb, var(--brand-black) 55%, transparent);
+    }
+
+    .pricing-list {
+      margin: 1rem 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .pricing-list li {
+      position: relative;
+      margin: 0;
+      padding-left: 1.15rem;
+      color: var(--ink-65);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .pricing-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.53rem;
+      width: 0.42rem;
+      height: 0.42rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--brand-green) 78%, white);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+    }
+
+    .pricing-estimator {
+      margin-top: 1.2rem;
+      border-radius: 1.35rem;
+      border: 1px solid rgba(13, 13, 13, 0.08);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(248, 249, 250, 0.96) 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+      padding: 1rem;
+    }
+
+    .pricing-estimator-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      margin-bottom: 0.78rem;
+    }
+
+    .pricing-estimator-label {
+      margin: 0;
+      color: var(--ink-50);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 700;
+    }
+
+    .pricing-estimator-value {
+      margin: 0;
+      color: var(--brand-black);
+      font-size: 1.08rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28rem;
+    }
+
+    #pricing-video-range {
+      --range-progress: 18%;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      height: 0.36rem;
+      border-radius: 999px;
+      background: linear-gradient(to right, #0f1114 var(--range-progress), rgba(15, 17, 20, 0.16) var(--range-progress));
+      cursor: pointer;
+    }
+
+    #pricing-video-range:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15, 17, 20, 0.12);
+    }
+
+    #pricing-video-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 0.98rem;
+      height: 0.98rem;
+      border-radius: 999px;
+      border: 2px solid #fff;
+      background: #0f1114;
+      box-shadow: 0 0 0 1px rgba(15, 17, 20, 0.2), 0 5px 12px rgba(15, 17, 20, 0.2);
+    }
+
+    #pricing-video-range::-moz-range-track {
+      height: 0.35rem;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(15, 17, 20, 0.12);
+    }
+
+    #pricing-video-range::-moz-range-progress {
+      height: 0.35rem;
+      border-radius: 999px;
+      background: #0f1114;
+    }
+
+    #pricing-video-range::-moz-range-thumb {
+      width: 0.98rem;
+      height: 0.98rem;
+      border-radius: 999px;
+      border: 2px solid #fff;
+      background: #0f1114;
+      box-shadow: 0 0 0 1px rgba(15, 17, 20, 0.2), 0 5px 12px rgba(15, 17, 20, 0.2);
+    }
+
+    .pricing-total-row {
+      margin-top: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      border-top: 1px solid rgba(13, 13, 13, 0.1);
+      padding-top: 0.82rem;
+    }
+
+    .pricing-total-row p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--ink-60);
+      font-weight: 600;
+    }
+
+    .pricing-total-row p:last-child {
+      color: var(--brand-black);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .slot-number {
+      display: inline-block;
+      font-variant-numeric: tabular-nums;
+      min-height: 1.2em;
+    }
+
+    .slot-number--total {
+      min-width: 7ch;
+      text-align: right;
+    }
+
+    .pricing-estimator-value .slot-number {
+      min-width: 1.4ch;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .pricing-shell {
+        border-radius: 1.55rem;
+      }
+
+      .pricing-copy .micro-cta,
+      .pricing-secondary-link {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pricing-secondary-link {
+        transition: none;
+      }
+
+    }
+  </style>
+</MarketingLayout>

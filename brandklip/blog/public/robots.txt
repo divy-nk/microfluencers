@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Exclude signed-in/app routes in case they ever leak to Astro
+Disallow: /signup
+Disallow: /login
+Disallow: /dashboard
+Disallow: /branddashboard
+Disallow: /creatordashboard
+Disallow: /account
+
+Sitemap: https://www.brandklip.com/sitemap-index.xml

@@ -1,0 +1,237 @@
+---
+import "../styles/tailwind.css";
+import "../styles/animations.css";
+import Nav from "../components/marketing/Nav.astro";
+
+type Props = {
+  title: string;
+  description: string;
+  canonicalPath: string;
+  ogType?: "website" | "article";
+  articleDate?: string;
+};
+
+const {
+  title,
+  description,
+  canonicalPath,
+  ogType = "website",
+  articleDate,
+} = Astro.props;
+
+const siteName = "BrandKlip";
+const siteUrl = "https://www.brandklip.com";
+const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
+const pageTitle = `${siteName} | ${title}`;
+const ogImage = `${siteUrl}/BrandKlip%20OG%20Image.png`;
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "BrandKlip",
+  alternateName: ["Brand Klip", "BrandKlip UGC"],
+  url: siteUrl,
+  sameAs: [
+    "https://www.linkedin.com/company/brandklip/",
+    "https://www.instagram.com/usebrandklip",
+  ],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "BrandKlip",
+  alternateName: ["Brand Klip", "BrandKlip UGC"],
+  url: siteUrl,
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="BrandKlip" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="BrandKlip" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="BrandKlip - Zero Risk UGC" />
+    {articleDate && <meta property="article:published_time" content={articleDate} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@brandklip" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Google tag (gtag.js) -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-SKBZLTYCVJ"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-SKBZLTYCVJ');
+    </script>
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/logo-black.png" />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles/marketing.css" />
+  </head>
+  <body>
+    <Nav />
+    <main class="relative z-10">
+      <slot />
+    </main>
+    <script>
+      import Lenis from "lenis";
+
+      const lenis = new Lenis({
+        smoothWheel: true,
+        syncTouch: true,
+        infinite: false,
+        wheelMultiplier: 1,
+        touchMultiplier: 1,
+      });
+
+      const raf = (time: number) => {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
+    </script>
+    <script>
+      import gsap from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Enhanced scroll reveals with GSAP
+      const revealNodes = document.querySelectorAll('[data-reveal]');
+      
+      revealNodes.forEach((node) => {
+        // Skip if it's in a page that handles its own animations
+        if (node.closest('.home-hero')) return;
+
+        const variant = node.getAttribute('data-reveal-variant') || 'fadeUp';
+        const delay = parseFloat(node.getAttribute('data-reveal-delay') || '0');
+        
+        let animation = {};
+        
+        switch(variant) {
+          case 'fadeLeft':
+            animation = { x: -60, opacity: 0 };
+            break;
+          case 'fadeRight':
+            animation = { x: 60, opacity: 0 };
+            break;
+          case 'scale':
+            animation = { scale: 0.9, opacity: 0 };
+            break;
+          case 'blur':
+            animation = { filter: "blur(10px)", opacity: 0 };
+            break;
+          default: // fadeUp
+            animation = { y: 40, opacity: 0 };
+        }
+
+        gsap.from(node, {
+          ...animation,
+          duration: 0.8,
+          delay: delay,
+          immediateRender: false,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: node,
+            start: "top 85%",
+            toggleActions: "play none none none"
+          }
+        });
+      });
+    </script>
+
+    <script is:inline>
+      const EXTERNAL_ICON = `
+        <span class="bk-external-link__icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 5H11V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M10.9 5.1L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+      `;
+
+      const shouldEnhanceExternalLink = (anchor) => {
+        if (anchor.hasAttribute("data-no-external-icon")) {
+          return false;
+        }
+
+        const href = anchor.getAttribute("href");
+        if (!href) return false;
+
+        if (
+          href.startsWith("#") ||
+          href.startsWith("mailto:") ||
+          href.startsWith("tel:") ||
+          href.startsWith("javascript:")
+        ) {
+          return false;
+        }
+
+        try {
+          const url = new URL(href, window.location.origin);
+          return url.origin !== window.location.origin;
+        } catch {
+          return false;
+        }
+      };
+
+      const enhanceExternalLinks = () => {
+        const anchors = document.querySelectorAll("a[href]");
+
+        anchors.forEach((anchor) => {
+          if (!shouldEnhanceExternalLink(anchor)) return;
+
+          anchor.classList.add("bk-external-link");
+
+          if (!anchor.querySelector(".bk-external-link__icon")) {
+            anchor.insertAdjacentHTML("beforeend", EXTERNAL_ICON);
+          }
+
+          if (anchor.getAttribute("target") === "_blank") {
+            const rel = (anchor.getAttribute("rel") || "").split(/\s+/).filter(Boolean);
+            if (!rel.includes("noopener")) rel.push("noopener");
+            if (!rel.includes("noreferrer")) rel.push("noreferrer");
+            anchor.setAttribute("rel", rel.join(" "));
+          }
+        });
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", enhanceExternalLinks);
+      } else {
+        enhanceExternalLinks();
+      }
+    </script>
+  </body>
+</html>

@@ -1,11 +1,11 @@
 ---
-import StarlightThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
+import StarlightBlogThemeSelect from 'starlight-blog/overrides/ThemeSelect.astro'
 import type { Props } from '@astrojs/starlight/props'
 ---
 
-<StarlightThemeSelect {...Astro.props}>
+<StarlightBlogThemeSelect {...Astro.props}>
   <slot />
-</StarlightThemeSelect>
+</StarlightBlogThemeSelect>
 
 <style>
   div {

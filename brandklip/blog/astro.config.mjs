@@ -1,17 +1,28 @@
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
-import starlightBlog from "starlight-blog";
 
 import tailwind from "@astrojs/tailwind";
+import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.brandklip.com",
-  trailingSlash: "always",
+  trailingSlash: "ignore",
+  vite: {
+    resolve: {
+      dedupe: ["react", "react-dom"],
+    },
+  },
+  redirects: {
+    "/brands": "/",
+  },
   integrations: [
+    sitemap(),
     starlight({
       title: "BrandKlip",
-      customCss: ["./src/styles/tailwind.css"],
+      disable404Route: true,
+      customCss: ["./src/styles/tailwind.css", "./src/styles/starlight-brandklip.css"],
       description: "BrandKlip guides and blogs on zero-risk UGC, creator workflows, and D2C growth.",
       logo: {
         src: "./src/assets/logo.webp",
@@ -41,13 +52,12 @@ export default defineConfig({
       },
       components: {
         SiteTitle: "./src/components/MyHeader.astro",
-        ThemeSelect: "./src/components/MyThemeSelect.astro",
         Head: "./src/components/HeadWithOGImage.astro",
         PageTitle: "./src/components/TitleWithBannerImage.astro",
       },
       social: {
         github: "https://github.com/divyanknagpal/microfluencers",
-        twitter: "https://x.com/brandklip",
+        "x.com": "https://x.com/brandklip",
       },
       sidebar: [
         {
@@ -69,21 +79,8 @@ export default defineConfig({
           ],
         },
       ],
-      plugins: [
-        starlightBlog({
-          title: "Blogs",
-          customCss: ["./src/styles/tailwind.css"],
-          authors: {
-            BrandKlip: {
-              name: "BrandKlip Team",
-              title: "BrandKlip",
-              picture: "/favicon.svg",
-              url: "https://www.brandklip.com",
-            },
-          },
-        }),
-      ],
     }),
     tailwind({ applyBaseStyles: false }),
+    react(),
   ],
 });

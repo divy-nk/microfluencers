@@ -1,0 +1,138 @@
+# Task: Mobile Navbar Vertical Expand (GSAP)
+
+## What to do
+
+Replace the current floating mobile menu with an **in-place vertical expand** of the navbar itself.
+When the burger is tapped, the navbar container stretches downward to reveal the links.
+No drawer, no overlay, no fixed panel.
+
+**Do not touch desktop navbar layout, styles, or behaviour at all.**
+
+---
+
+## Behaviour spec
+
+- Burger tap → navbar grows downward, links stagger up into view
+- Burger/close tap → navbar collapses back to original height
+- Links animate: opacity 0→1, y 10→0, staggered 60ms apart
+- A subtle 1px divider line draws in (scaleX 0→1) above the links
+- Hover on each link: slides right 4px, chevron brightens — driven by GSAP, not CSS
+- Body scroll is NOT locked (the navbar is in-flow, not an overlay)
+- `md:hidden` on the component — zero effect on desktop
+
+---
+
+## Files
+
+- **`MobileNavExpand.jsx`** — attached, place alongside your Navbar component
+- Your existing **Navbar component** — 3 small changes below
+
+---
+
+## Step 1 — Place the component file
+
+Copy `MobileNavExpand.jsx` into the same folder as your Navbar component.
+
+---
+
+## Step 2 — Update NAV_LINKS
+
+At the top of `MobileNavExpand.jsx`, edit the array to match your actual routes exactly:
+
+```js
+const NAV_LINKS = [
+  { label: "For Creators", href: "/creators" },
+  { label: "Docs",         href: "/docs"     },
+  { label: "Contact",      href: "/contact"  },
+  { label: "Join for Free",href: "/join"     },
+];
+```
+
+---
+
+## Step 3 — Wire into your Navbar component
+
+### 3a — Import
+```jsx
+import { MobileNavExpand } from "./MobileNavExpand";
+```
+
+### 3b — Add state (inside Navbar function)
+```jsx
+const [mobileOpen, setMobileOpen] = useState(false);
+```
+
+### 3c — Connect your burger button
+Find your existing hamburger/menu toggle button and update it:
+```jsx
+<button
+  onClick={() => setMobileOpen(prev => !prev)}
+  className="md:hidden"
+  aria-label={mobileOpen ? "Close menu" : "Open menu"}
+>
+  {/* your existing icon — or swap for X when open: */}
+  {mobileOpen ? <XIcon /> : <MenuIcon />}
+</button>
+```
+
+### 3d — Mount the expand component INSIDE your navbar container
+
+This is the key difference from the previous implementation.
+Place `<MobileNavExpand>` **inside** your existing `<nav>` or navbar wrapper div,
+**after** the top bar row (logo + burger row), so it expands the navbar downward:
+
+```jsx
+<nav style={{ /* your existing navbar styles */ }}>
+
+  {/* Your existing top bar: logo left, links center (desktop), burger right */}
+  <div className="flex items-center justify-between px-5 py-4">
+    <Logo />
+    <DesktopLinks />   {/* already md:flex hidden on mobile */}
+    <button onClick={() => setMobileOpen(p => !p)} className="md:hidden">
+      {mobileOpen ? <XIcon /> : <MenuIcon />}
+    </button>
+  </div>
+
+  {/* ↓ ADD THIS — expands the navbar vertically on mobile */}
+  <MobileNavExpand
+    isOpen={mobileOpen}
+    onClose={() => setMobileOpen(false)}
+  />
+
+</nav>
+```
+
+### 3e — Remove / comment out your old mobile menu
+Find the existing mobile menu JSX (likely a div with `md:hidden` that shows links)
+and remove it or comment it out:
+
+```jsx
+{/* Removed — replaced by MobileNavExpand */}
+{/* <div className="md:hidden absolute top-full ..."> ... </div> */}
+```
+
+---
+
+## Critical: navbar container must NOT have overflow:hidden
+
+If your `<nav>` or its wrapper has `overflow: hidden` in its styles or Tailwind classes,
+remove it — otherwise the expanding links will be clipped.
+
+If you need to keep a border-radius on the navbar, add `overflow: visible` explicitly
+and handle the radius on inner elements instead.
+
+---
+
+## Dependencies
+
+- `gsap` — already installed. No new packages.
+- No framer-motion. No new CSS files.
+
+---
+
+## What NOT to change
+
+- Desktop layout, links, spacing, logo, or any desktop styles
+- Any other components
+- Tailwind config or global CSS
+- Any existing GSAP animations elsewhere on the page

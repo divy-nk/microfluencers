@@ -1,0 +1,220 @@
+---
+type FaqItem = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
+type Props = {
+  heading?: string;
+  items?: FaqItem[];
+};
+
+const {
+  heading = "Frequently asked questions",
+  items = [
+    {
+      id: "faq-1",
+      question: "What if the creator takes the product and disappears?",
+      answer: "They buy it themselves with their own money. No product is ever sent by you, because creators purchase directly from your store.",
+    },
+    {
+      id: "faq-2",
+      question: "What if the content is unusable?",
+      answer: "You do not pay until BrandKlip verifies the content meets your brief. Submissions are reviewed against one clear standard.",
+    },
+    {
+      id: "faq-3",
+      question: "What about rights and licensing?",
+      answer: "Every approved video includes perpetual usage rights, so you can run it on ads, PDPs, and social without renewal stress.",
+    },
+    {
+      id: "faq-4",
+      question: "How fast do creators usually submit content?",
+      answer: "Most campaigns see first submissions within a few days, depending on product delivery timelines and your brief complexity.",
+    },
+    {
+      id: "faq-5",
+      question: "Can I request revisions before payout is released?",
+      answer: "Yes. If a submission misses the brief, BrandKlip can route a revision before any payout is released from escrow.",
+    },
+    {
+      id: "faq-6",
+      question: "Do I need to commit to retainers or long contracts?",
+      answer: "No retainers. You run campaign by campaign and pay only for approved outcomes inside the platform workflow.",
+    },
+  ],
+} = Astro.props;
+---
+
+<section class="py-24 md:py-28">
+  <div class="mx-auto max-w-3xl px-6 lg:px-8">
+    <h2 class="mb-4 text-3xl font-semibold tracking-tight text-[var(--brand-black)] md:mb-10 md:text-4xl">{heading}</h2>
+
+    <div class="rounded-2xl border border-[color:var(--line-soft)] bg-[var(--white)] divide-y divide-[color:var(--line-faint)]" data-faq-accordion>
+      {
+        items.map((item, index) => (
+          <details class="group px-5 py-1" id={item.id} data-faq-item data-open={index === 0 ? "true" : "false"} open={index === 0}>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-semibold text-[var(--brand-black)]" data-faq-trigger>
+              <span>{item.question}</span>
+              <span class="faq-icon" data-faq-icon aria-hidden="true">
+                <span class="faq-icon__bar faq-icon__bar--h"></span>
+                <span class="faq-icon__bar faq-icon__bar--v"></span>
+              </span>
+            </summary>
+
+            <div class="faq-answer-wrap" data-faq-content-wrap>
+              <p class="pb-4 text-sm leading-relaxed text-[var(--ink-60)]">{item.answer}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-answer-wrap {
+    overflow: hidden;
+    will-change: height, opacity;
+  }
+
+  .faq-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.92rem;
+    height: 0.92rem;
+    color: var(--ink-55);
+    flex-shrink: 0;
+    user-select: none;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+  }
+
+  .faq-icon__bar {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 1.8px;
+    border-radius: 999px;
+    background: currentColor;
+    transform-origin: 50% 50%;
+    transition: transform 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    .faq-icon {
+      width: 1.02rem;
+      height: 1.02rem;
+    }
+
+    .faq-icon__bar {
+      height: 2px;
+    }
+  }
+
+  .faq-icon__bar--v {
+    transform: rotate(90deg);
+  }
+
+  details[open] .faq-icon {
+    transform: rotate(45deg) scale(1.06);
+    color: var(--brand-black);
+  }
+
+  details {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    border-radius: 0.5rem;
+  }
+
+  details[open] {
+    background: rgba(200, 240, 224, 0.08);
+  }
+
+  details:not([open]) .faq-answer-wrap {
+    height: 0;
+    opacity: 0;
+  }
+</style>
+
+<script>
+  import gsap from "gsap";
+
+  // FAQ Accordion with GSAP
+  const faqItems = document.querySelectorAll('[data-faq-item]');
+  
+  faqItems.forEach((item) => {
+    const trigger = item.querySelector('[data-faq-trigger]');
+    const content = item.querySelector('[data-faq-content-wrap]');
+    
+    if (!trigger || !content) return;
+    
+    // Set initial state for closed items
+    if (!item.hasAttribute('open')) {
+      gsap.set(content, { height: 0, opacity: 0 });
+    }
+    
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = item.hasAttribute('open');
+      
+      if (isOpen) {
+        // Closing
+        gsap.to(content, {
+          height: 0,
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.inOut",
+          onComplete: () => {
+            item.removeAttribute('open');
+          }
+        });
+      } else {
+        // Opening - close others first
+        faqItems.forEach((otherItem) => {
+          if (otherItem !== item && otherItem.hasAttribute('open')) {
+            const otherContent = otherItem.querySelector('[data-faq-content-wrap]');
+            gsap.to(otherContent, {
+              height: 0,
+              opacity: 0,
+              duration: 0.3,
+              ease: "power2.in",
+              onComplete: () => {
+                otherItem.removeAttribute('open');
+              }
+            });
+          }
+        });
+        
+        // Open this one
+        item.setAttribute('open', '');
+        const targetHeight = content.scrollHeight;
+        
+        gsap.fromTo(content, 
+          { height: 0, opacity: 0 },
+          { 
+            height: targetHeight,
+            opacity: 1,
+            duration: 0.5,
+            ease: "power2.out",
+            onComplete: () => {
+              gsap.set(content, { height: 'auto' });
+            }
+          }
+        );
+        
+        // Animate text content
+        const textElements = content.querySelectorAll('p');
+        gsap.from(textElements, {
+          y: -10,
+          opacity: 0,
+          duration: 0.4,
+          delay: 0.2,
+          ease: "power2.out"
+        });
+      }
+    });
+  });
+</script>
+</script>

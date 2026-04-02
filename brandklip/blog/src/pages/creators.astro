@@ -1,0 +1,116 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import Footer from "../components/marketing/Footer.astro";
+import HowItWorksCreatorsSection from "../components/marketing/HowItWorksCreatorsSection.astro";
+import ComparisonTable from "../components/marketing/ComparisonTable.astro";
+import PersonaBenefitsBento from "../components/marketing/PersonaBenefitsBento.astro";
+
+const creatorComparisonColumns = [
+  { label: "BrandKlip", highlighted: true, helper: "Escrow + review" },
+  { label: "Cold DMs" },
+  { label: "Random barter" },
+];
+
+const creatorComparisonRows = [
+  { feature: "Guaranteed reimbursement", values: [true, false, false] },
+  { feature: "Clear brief before work", values: ["Always clear", "Often unclear", "Varies"] },
+  { feature: "Payment timeline", values: ["Fast post-verification", "Uncertain", "Delayed"] },
+  { feature: "Revision fairness", values: ["Policy-driven", "Ad hoc", "Ad hoc"] },
+  { feature: "Long-term credibility", values: ["Portfolio + history", "Hard to prove", "Hard to prove"] },
+];
+
+---
+
+<MarketingLayout
+  title="For Creators | BrandKlip"
+  description="Stop chasing payments. BrandKlip secures creator payouts in escrow so approved content gets paid fast and fairly."
+  canonicalPath="/creators"
+>
+  <section class="home-hero relative z-10 flex flex-col items-center justify-center min-h-[100svh] overflow-hidden px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-16 sm:pb-20 md:pb-24 border-none">
+    <div class="site-aurora" aria-hidden="true"></div>
+    <div class="relative z-10 w-full max-w-6xl mx-auto lg:px-8">
+      <div class="text-center max-w-[1100px] mx-auto">
+        <div class="pill-animated brand-benefits-pill mb-6">
+          <span class="brand-benefits-pill__icon" aria-hidden="true">✦</span>
+          <span class="brand-benefits-pill__label">For Creators (200+ Followers)</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl md:text-[3.9rem] lg:text-[4.25rem] font-semibold tracking-tight mb-6 leading-[1.08]" style="text-wrap: balance;">
+          <span class="flex flex-col items-center gap-1 md:gap-0.5">
+            <span class="block min-h-[1.05em] lg:whitespace-nowrap">Stop Begging Brands for Collabs.</span>
+            <span class="block min-h-[1.05em] text-[var(--ink-60)] lg:whitespace-nowrap">Let Them Come to You.</span>
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg md:text-xl text-foreground/50 font-light leading-relaxed max-w-2xl mx-auto mb-10" style="text-wrap: pretty;">
+          If you have 200+ followers, BrandKlip is your shortcut to real brand collabs. You buy the product, shoot the video, and get 100% reimbursed after BrandKlip verifies your content meets the brief - usually within 48 hours.
+        </p>
+        <a href="/signup" class="micro-cta no-underline" data-hero-cta>
+          <span>Get Started as a Creator</span>
+          <span class="micro-cta__icon" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-band section-band-white">
+    <HowItWorksCreatorsSection />
+  </div>
+
+  <div class="section-band section-band-mint">
+    <ComparisonTable
+      badge="Comparison"
+      title="Why Creators Pick BrandKlip"
+      subtitle="No guesswork on payments, no hidden rules on approvals, and no chasing brands for reimbursement."
+      columns={creatorComparisonColumns}
+      rows={creatorComparisonRows}
+      ctaLabel="Create your first drop"
+      ctaHref="/signup"
+    />
+  </div>
+
+  <section class="section-band section-band-white relative w-full py-8 md:py-12 bg-transparent">
+    <div class="mx-auto max-w-4xl px-6 lg:px-8">
+      <div class="rounded-[1.75rem] border border-[color:var(--line-soft)] bg-[var(--white)] p-6 md:p-8 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
+        <h2 class="text-2xl md:text-4xl font-semibold tracking-tight text-[var(--brand-black)]">
+          Brands don't decide if your content is good enough. We do.
+        </h2>
+        <p class="mt-4 text-sm md:text-base text-[var(--ink-65)] leading-relaxed">
+          Every submission is reviewed by BrandKlip against the brief you were given - not by the brand. This means a brand cannot reject perfectly good content just to avoid reimbursing you. If your video meets the brief, you get paid. Full stop. Brands control the brief. BrandKlip controls the verdict.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-band section-band-mint-deep">
+    <PersonaBenefitsBento variant="creators" />
+  </div>
+
+  <section id="cta" class="cta-island relative z-10 w-full px-4 sm:px-6 py-20 md:py-28 flex flex-col items-center justify-center overflow-hidden">
+    <div class="cta-island-copy relative z-20 flex flex-col items-center text-center px-4 max-w-3xl">
+      <div class="pill-animated brand-benefits-pill cta-island-badge mb-6">
+        <span class="brand-benefits-pill__icon" aria-hidden="true">✦</span>
+        <span class="brand-benefits-pill__label">Creator Launch Access</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl md:text-6xl font-semibold tracking-tight text-[var(--brand-black)] mb-6 max-w-3xl leading-tight" style="text-wrap: balance;">Your next paid collab can start this week.</h2>
+      <p class="text-base sm:text-lg text-[var(--ink-60)] mb-10 max-w-2xl mx-auto font-light" style="text-wrap: pretty;">Join BrandKlip as a creator, apply to campaigns that match your niche, and get reimbursed after your content is verified against the brief. No payment chasing. No random ghosting.</p>
+      <div class="flex w-full sm:w-auto">
+        <a href="/signup" class="micro-cta no-underline">
+          <span>Join as a Creator</span>
+          <span class="micro-cta__icon" aria-hidden="true">→</span>
+        </a>
+      </div>
+      <p class="mt-4 text-xs text-[var(--ink-45)] font-medium">Open to Indian creators with 200+ followers.</p>
+    </div>
+  </section>
+
+  <Footer />
+</MarketingLayout>
+
+<style>
+  @media (max-width: 640px) {
+    .home-hero [data-hero-cta] {
+      width: 100%;
+      max-width: 340px;
+      justify-content: center;
+    }
+  }
+</style>

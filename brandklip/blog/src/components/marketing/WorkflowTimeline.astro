@@ -1,0 +1,111 @@
+---
+type Step = {
+  title?: string;
+  description: string;
+};
+
+type Props = {
+  label: string;
+  heading: string;
+  steps: Step[];
+  statement?: string;
+};
+
+const { label, heading, steps, statement } = Astro.props;
+---
+
+<section class="relative w-full py-20 md:py-24 bg-transparent" data-timeline>
+  <div class="mx-auto max-w-6xl px-6 lg:px-8">
+    <div class="text-center mb-10 md:mb-12">
+      <div class="pill-animated brand-benefits-pill mb-3">
+        <span class="brand-benefits-pill__icon" aria-hidden="true">✦</span>
+        <span class="brand-benefits-pill__label brand-benefits-pill__label--caps">{label}</span>
+      </div>
+      <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-foreground">{heading}</h2>
+    </div>
+
+    <div class="relative max-w-5xl mx-auto">
+      <div class="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 hidden lg:block z-0 timeline-track">
+        <div class="timeline-track-base"></div>
+        <div class="timeline-track-progress" data-timeline-progress></div>
+      </div>
+
+      <div class="space-y-16 lg:space-y-20 relative z-10">
+        {steps.map((step, index) => (
+          <div class="relative flex flex-col lg:flex-row items-center justify-between">
+            <div class="hidden lg:flex absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 h-4 w-4 rounded-full bg-[var(--white)] border-4 border-[var(--border)] z-20 shadow-sm"></div>
+
+            {index % 2 === 0 ? (
+              <>
+                <article class="w-full lg:w-[45%] rounded-2xl border border-[var(--border)] bg-[var(--white)] p-6 lg:p-7 shadow-[0_10px_28px_rgba(15,23,42,0.06)]">
+                  <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--ink-40)] mb-2">Step {index + 1}</p>
+                  {step.title && <h3 class="text-lg lg:text-xl font-semibold text-[var(--brand-black)] tracking-tight">{step.title}</h3>}
+                  <p class={`${step.title ? "mt-2" : "mt-0"} text-sm lg:text-[15px] leading-relaxed text-[var(--ink-65)]`}>{step.description}</p>
+                </article>
+                <div class="hidden lg:block w-[45%]"></div>
+              </>
+            ) : (
+              <>
+                <div class="hidden lg:block w-[45%]"></div>
+                <article class="w-full lg:w-[45%] rounded-2xl border border-[var(--border)] bg-[var(--white)] p-6 lg:p-7 shadow-[0_10px_28px_rgba(15,23,42,0.06)]">
+                  <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--ink-40)] mb-2">Step {index + 1}</p>
+                  {step.title && <h3 class="text-lg lg:text-xl font-semibold text-[var(--brand-black)] tracking-tight">{step.title}</h3>}
+                  <p class={`${step.title ? "mt-2" : "mt-0"} text-sm lg:text-[15px] leading-relaxed text-[var(--ink-65)]`}>{step.description}</p>
+                </article>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {statement && <p class="mt-10 text-center text-[28px] leading-tight font-semibold text-[var(--brand-black)]">{statement}</p>}
+  </div>
+</section>
+
+<style>
+  .timeline-track-base {
+    position: absolute;
+    inset: 0;
+    background: rgba(34, 197, 94, 0.3);
+    border-left: 1px dashed rgba(34, 197, 94, 0.4);
+  }
+
+  .timeline-track-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--timeline-progress, 0%);
+    background: var(--brand-green);
+    border-left: 1px dashed var(--brand-green);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.35);
+    transition: height 140ms linear;
+  }
+
+  @media (max-width: 767px) {
+    [data-timeline] article {
+      border-left: 4px solid var(--brand-green);
+    }
+  }
+</style>
+
+<script is:inline>
+  const timelines = document.querySelectorAll('[data-timeline]');
+  const updateTimeline = (section) => {
+    const progressEl = section.querySelector('[data-timeline-progress]');
+    if (!progressEl) return;
+    const rect = section.getBoundingClientRect();
+    const viewport = window.innerHeight;
+    const start = viewport * 0.5;
+    const end = rect.height + viewport * 0.2;
+    const traveled = start - rect.top;
+    const raw = Math.max(0, Math.min(1, traveled / end));
+    progressEl.style.setProperty('--timeline-progress', `${raw * 100}%`);
+  };
+
+  const onScroll = () => timelines.forEach((section) => updateTimeline(section));
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+</script>

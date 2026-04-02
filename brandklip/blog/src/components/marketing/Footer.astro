@@ -1,0 +1,324 @@
+---
+const currentYear = new Date().getFullYear();
+const waspOrigin =
+  import.meta.env.PUBLIC_WASP_ORIGIN ||
+  (import.meta.env.DEV ? "http://localhost:3000" : "");
+const signupHref = waspOrigin ? new URL("/signup", waspOrigin).toString() : "/signup";
+---
+
+<footer class="footer-surface footer-premium relative text-[var(--white)] overflow-hidden rounded-t-[1.6rem] md:rounded-t-[2rem]">
+  <div class="footer-premium__inner mx-auto max-w-6xl px-5 md:px-8 pt-20 md:pt-24 pb-5 md:pb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.7fr_0.7fr_1fr] gap-8 md:gap-10">
+      <section class="space-y-4">
+        <a href="/" class="footer-brand inline-flex items-center no-underline" aria-label="BrandKlip home">
+          <img src="/brandklip%20white%20logo.png" alt="BrandKlip" class="h-10 w-auto rounded-md" />
+        </a>
+        <p class="footer-copy max-w-sm">
+          Premium creator-led UGC workflow for D2C brands. You pay only after approved delivery.
+        </p>
+        <a href={signupHref} class="footer-pill-link no-underline">
+          <span>Join for Free</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </section>
+
+      <section class="space-y-3">
+        <h4 class="footer-heading">Platform</h4>
+        <nav class="footer-link-list" aria-label="Platform links">
+          <a href="/pricing">Pricing</a>
+          <a href="/blog/">Blogs</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </section>
+
+      <section class="space-y-3">
+        <h4 class="footer-heading">Social</h4>
+        <nav class="footer-link-list" aria-label="Social links">
+          <a href="https://www.instagram.com/usebrandklip" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://www.linkedin.com/company/brandklip/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://x.com/brandklip" target="_blank" rel="noopener noreferrer">X</a>
+        </nav>
+      </section>
+
+      <section class="space-y-3">
+        <h4 class="footer-heading">Newsletter</h4>
+        <p class="footer-copy">One signal-rich email a week on Indian D2C content performance.</p>
+        <div class="footer-newsletter-row">
+          <input
+            type="email"
+            placeholder="Email Address"
+            class="footer-newsletter-input"
+          />
+          <button class="footer-newsletter-button" type="button" aria-label="Submit email">
+            →
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer-bottom mt-8 md:mt-10 pt-4 md:pt-5">
+      <div class="footer-bottom__left">© {currentYear} BrandKlip. All rights reserved.</div>
+      <div class="footer-bottom__right">
+        <a href="/privacypolicy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="mailto:hello@brandklip.com">hello@brandklip.com</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-premium {
+    background: var(--black, #0a0a0a);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+  }
+
+  .footer-premium::before,
+  .footer-premium::after {
+    content: "";
+    position: absolute;
+    top: -7.5rem;
+    width: 42rem;
+    height: 28rem;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    filter: blur(2px);
+    transform: translateY(-0.6rem) scale(0.985);
+    animation: footerSpotlightAppear 1.35s cubic-bezier(0.22, 1, 0.36, 1) 0.24s forwards;
+  }
+
+  .footer-premium::before {
+    left: -8.5rem;
+    --spotlight-opacity: 0.5;
+    background: radial-gradient(74% 68% at 30% 28%, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.17) 30%, rgba(255, 255, 255, 0.07) 54%, rgba(255, 255, 255, 0) 78%);
+  }
+
+  .footer-premium::after {
+    right: -8.5rem;
+    --spotlight-opacity: 0.5;
+    background: radial-gradient(74% 68% at 70% 28%, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.17) 30%, rgba(255, 255, 255, 0.07) 54%, rgba(255, 255, 255, 0) 78%);
+  }
+
+  @keyframes footerSpotlightAppear {
+    from {
+      opacity: 0;
+      transform: translateY(-0.6rem) scale(0.985);
+    }
+
+    to {
+      opacity: var(--spotlight-opacity, 0.5);
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .footer-premium__inner {
+    position: relative;
+    z-index: 2;
+  }
+
+  .footer-heading {
+    margin: 0;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.46);
+    font-weight: 700;
+  }
+
+  .footer-copy {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .footer-link-list {
+    display: grid;
+    gap: 0.58rem;
+  }
+
+  .footer-link-list a,
+  .footer-bottom__right a {
+    position: relative;
+    width: fit-content;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.97rem;
+    line-height: 1.35;
+    text-decoration: none;
+    transition: color 180ms ease, transform 180ms ease;
+  }
+
+  .footer-link-list a::after,
+  .footer-bottom__right a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.08rem;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.36);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 220ms ease;
+  }
+
+  .footer-link-list a:hover,
+  .footer-bottom__right a:hover {
+    color: #ffffff;
+    transform: translateX(1px);
+  }
+
+  .footer-link-list a:hover::after,
+  .footer-bottom__right a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .footer-pill-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.17);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.06) 100%);
+    padding: 0.54rem 0.94rem;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.96);
+    transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+  }
+
+  .footer-pill-link:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.08) 100%);
+  }
+
+  .footer-newsletter-row {
+    display: flex;
+    align-items: center;
+    gap: 0.38rem;
+    padding: 0.32rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    background: rgba(255, 255, 255, 0.03);
+    transition: border-color 200ms ease, background-color 200ms ease;
+  }
+
+  .footer-newsletter-row:focus-within {
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .footer-newsletter-input {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.86rem;
+    padding: 0.46rem 0.7rem;
+    outline: none;
+  }
+
+  .footer-newsletter-input::placeholder {
+    color: rgba(255, 255, 255, 0.32);
+  }
+
+  .footer-newsletter-button {
+    flex-shrink: 0;
+    width: 1.95rem;
+    height: 1.95rem;
+    border-radius: 999px;
+    border: 0;
+    background: rgba(255, 255, 255, 0.9);
+    color: #101114;
+    font-size: 0.86rem;
+    font-weight: 700;
+    transition: transform 180ms ease, background-color 180ms ease;
+  }
+
+  .footer-newsletter-button:hover {
+    transform: translateX(1px);
+    background: #ffffff;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-bottom__left {
+    color: rgba(255, 255, 255, 0.42);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .footer-bottom__right {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    row-gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-bottom__right a {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 650;
+  }
+
+  @media (max-width: 720px) {
+    .footer-premium::before,
+    .footer-premium::after {
+      width: 28rem;
+      height: 18rem;
+      top: -5.5rem;
+      --spotlight-opacity: 0.42;
+    }
+
+    .footer-premium::before {
+      left: -8.8rem;
+    }
+
+    .footer-premium::after {
+      right: -8.8rem;
+    }
+
+    .footer-premium__inner {
+      padding-inline: 1rem;
+      padding-top: 3.1rem;
+      padding-bottom: 1rem;
+    }
+
+    .footer-bottom__right {
+      gap: 0.95rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-premium::before,
+    .footer-premium::after {
+      animation: none;
+      opacity: 0.34;
+      transform: none;
+    }
+
+    .footer-link-list a,
+    .footer-bottom__right a,
+    .footer-pill-link,
+    .footer-newsletter-button,
+    .footer-newsletter-row {
+      transition: none;
+    }
+  }
+</style>
