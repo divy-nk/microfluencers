@@ -25,27 +25,47 @@ const {
 
 const siteName = "BrandKlip";
 const siteUrl = "https://www.brandklip.com";
+const organizationId = `${siteUrl}/#organization`;
+const websiteId = `${siteUrl}/#website`;
 const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
 const pageTitle = `${siteName} | ${title}`;
 const ogImage = `${siteUrl}/BrandKlip%20OG%20Image.png`;
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": organizationId,
   name: "BrandKlip",
   alternateName: ["Brand Klip", "BrandKlip UGC"],
+  legalName: "BrandKlip",
   url: siteUrl,
+  logo: `${siteUrl}/brandklip-mint-logo.png`,
+  description:
+    "BrandKlip is an escrow-backed UGC platform for D2C brands in India, focused on approval-first creator payouts.",
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: "hello@brandklip.com",
+      availableLanguage: ["English"],
+    },
+  ],
   sameAs: [
     "https://www.linkedin.com/company/brandklip/",
     "https://www.instagram.com/usebrandklip",
+    "https://x.com/brandklip",
   ],
 };
 
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": websiteId,
   name: "BrandKlip",
   alternateName: ["Brand Klip", "BrandKlip UGC"],
   url: siteUrl,
+  publisher: {
+    "@id": organizationId,
+  },
 };
 ---
 
@@ -58,6 +78,8 @@ const websiteJsonLd = {
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     <meta name="author" content="BrandKlip" />
+    <meta name="application-name" content="BrandKlip" />
+    <meta name="apple-mobile-web-app-title" content="BrandKlip" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
@@ -106,9 +128,11 @@ const websiteJsonLd = {
       }
     </script>
 
+    <link rel="icon" type="image/svg+xml" href="/brandklip-logo.svg" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/logo-black.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" href="/brandklip-mint-logo.png" />
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
@@ -126,6 +150,7 @@ const websiteJsonLd = {
       const normalizedPath = window.location.pathname.replace(/\/+$/, "") || "/";
       const knownRoutes = new Set([
         "/",
+        "/about",
         "/blog",
         "/contact",
         "/creators",
