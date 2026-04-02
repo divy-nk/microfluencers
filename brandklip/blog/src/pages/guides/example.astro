@@ -1,0 +1,29 @@
+---
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import Footer from "../../components/marketing/Footer.astro";
+---
+
+<MarketingLayout
+  title="Guide Removed"
+  description="This guide page has been removed."
+  canonicalPath="/guides/example"
+  robots="noindex,follow"
+>
+  <section class="relative z-10 min-h-[70vh] flex items-center justify-center px-6 py-24">
+    <div class="w-full max-w-3xl text-center" data-reveal>
+      <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--ink-45)] mb-5">Removed Page</p>
+      <h1 class="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--brand-black)] mb-6 leading-tight">
+        This guide no longer exists.
+      </h1>
+      <p class="text-lg text-[var(--ink-60)] max-w-2xl mx-auto mb-10">
+        We have moved all active content to our blog.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="/blog" class="hero-cta hero-cta-static">Browse Blog</a>
+        <a href="/" class="hero-cta" style="background: transparent; color: var(--brand-black); border: 1px solid var(--line-soft);">Back to Homepage</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</MarketingLayout>

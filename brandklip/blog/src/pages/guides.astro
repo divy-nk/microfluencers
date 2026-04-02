@@ -1,0 +1,29 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import Footer from "../components/marketing/Footer.astro";
+---
+
+<MarketingLayout
+  title="Guides Retired"
+  description="The legacy guides section has been retired."
+  canonicalPath="/guides"
+  robots="noindex,follow"
+>
+  <section class="relative z-10 min-h-[70vh] flex items-center justify-center px-6 py-24">
+    <div class="w-full max-w-3xl text-center" data-reveal>
+      <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--ink-45)] mb-5">Content Update</p>
+      <h1 class="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--brand-black)] mb-6 leading-tight">
+        Guides were retired.
+      </h1>
+      <p class="text-lg text-[var(--ink-60)] max-w-2xl mx-auto mb-10">
+        This legacy section is no longer available. Use our blog for the latest playbooks and product guidance.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="/blog" class="hero-cta hero-cta-static">Go to Blog</a>
+        <a href="/" class="hero-cta" style="background: transparent; color: var(--brand-black); border: 1px solid var(--line-soft);">Back to Homepage</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</MarketingLayout>

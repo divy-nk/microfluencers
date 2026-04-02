@@ -25,6 +25,7 @@ export default defineConfig({
           "/dashboard",
           "/branddashboard",
           "/creatordashboard",
+          "/guides",
         ];
 
         return !blocked.some((prefix) =>
