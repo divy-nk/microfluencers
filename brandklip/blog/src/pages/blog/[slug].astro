@@ -28,9 +28,12 @@ const siteUrl = "https://www.brandklip.com";
 const blogPostingJsonLd = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
+  name: post.data.title,
   headline: post.data.title,
   description: post.data.description,
   datePublished: getBlogDate(post).toISOString(),
+  dateModified: getBlogDate(post).toISOString(),
+  url: `${siteUrl}/blog/${slug}`,
   author: {
     "@type": "Organization",
     name: post.data.authors?.[0] || "BrandKlip"

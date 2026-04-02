@@ -1,12 +1,22 @@
 User-agent: *
 Allow: /
 
-# Exclude signed-in/app routes in case they ever leak to Astro
-Disallow: /signup
-Disallow: /login
-Disallow: /dashboard
-Disallow: /branddashboard
-Disallow: /creatordashboard
-Disallow: /account
+User-agent: GPTBot
+Allow: /
 
-Sitemap: https://www.brandklip.com/sitemap-index.xml
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://www.brandklip.com/sitemap.xml

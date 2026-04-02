@@ -3,7 +3,11 @@ import { defineConfig } from "astro/config";
 
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
-import sitemap from "@astrojs/sitemap";
+
+const noopSitemapIntegration = {
+  name: "@astrojs/sitemap",
+  hooks: {},
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,24 +19,7 @@ export default defineConfig({
     },
   },
   integrations: [
-    sitemap({
-      filter: (page) => {
-        const pathname = new URL(page).pathname;
-        const blocked = [
-          "/login",
-          "/signup",
-          "/account",
-          "/dashboard",
-          "/branddashboard",
-          "/creatordashboard",
-          "/guides",
-        ];
-
-        return !blocked.some((prefix) =>
-          pathname === prefix || pathname.startsWith(`${prefix}/`)
-        );
-      },
-    }),
+    noopSitemapIntegration,
     starlight({
       title: "BrandKlip",
       disable404Route: true,

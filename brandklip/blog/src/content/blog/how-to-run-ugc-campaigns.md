@@ -303,4 +303,11 @@ Which will you be?
 
 ---
 
+## Related Reading
+
+- Compare models: [The UGC Revolution: Why D2C Brands Are Ditching Influencers](/blog/ugc-vs-influencer-marketing)
+- Creator-side path: [For Creators](/creators)
+
+---
+
 *Ready to launch your first UGC campaign? [Create a Drop on BrandKlip →](/signup)*
