@@ -13,12 +13,31 @@ function useInView(threshold = 0.15) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+
+    const fallbackId = window.setTimeout(() => {
+      setInView(true);
+    }, 1800);
+
     const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } },
-      { threshold }
+      ([e]) => {
+        if (e.isIntersecting) {
+          setInView(true);
+          window.clearTimeout(fallbackId);
+          obs.disconnect();
+        }
+      },
+      { threshold, rootMargin: "0px 0px -8% 0px" }
     );
     obs.observe(el);
-    return () => obs.disconnect();
+    return () => {
+      window.clearTimeout(fallbackId);
+      obs.disconnect();
+    };
   }, [threshold]);
   return [ref, inView];
 }
@@ -59,10 +78,16 @@ function MilestoneTracker({ inView, isMobile }) {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    if (!inView || isMobile) return;
+    if (!inView) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
     const id = setInterval(() => {
       setActive((p) => (p >= steps.length - 1 ? 0 : p + 1));
-    }, 1800);
+    }, isMobile ? 2200 : 1800);
+
     return () => clearInterval(id);
   }, [inView, isMobile]);
 
@@ -140,18 +165,20 @@ function VerificationAnim({ inView, isMobile }) {
   useEffect(() => {
     if (!inView) return;
 
-    if (isMobile) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setPhase(2);
       return;
     }
 
     const cycle = () => {
       setPhase(0);
-      setTimeout(() => setPhase(1), 1500);
-      setTimeout(() => setPhase(2), 3000);
+      setTimeout(() => setPhase(1), isMobile ? 1200 : 1500);
+      setTimeout(() => setPhase(2), isMobile ? 2400 : 3000);
     };
+
     cycle();
-    const id = setInterval(cycle, 5000);
+    const id = setInterval(cycle, isMobile ? 4200 : 5000);
+
     return () => clearInterval(id);
   }, [inView, isMobile]);
 

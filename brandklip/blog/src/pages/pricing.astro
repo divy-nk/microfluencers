@@ -26,13 +26,6 @@ import Footer from "../components/marketing/Footer.astro";
           Beta intro pricing is <strong>₹499</strong> per approved video <span class="pricing-inline-strike">(regular ₹799)</span>. No retainers, no hidden management cut, and no payout unless content is verified against your brief.
         </p>
 
-        <div class="mt-7 flex flex-col sm:flex-row gap-3">
-          <a href="/signup" class="micro-cta no-underline">
-            <span>Start Campaign</span>
-            <span class="micro-cta__icon" aria-hidden="true">&rarr;</span>
-          </a>
-          <a href="/contact" class="pricing-secondary-link no-underline">Talk to team</a>
-        </div>
       </section>
 
       <section class="pricing-plan-card" data-reveal data-reveal-delay="0.08">
@@ -67,6 +60,14 @@ import Footer from "../components/marketing/Footer.astro";
             <p>Estimated platform fee (beta)</p>
             <p id="pricing-total" class="slot-number slot-number--total" aria-live="polite">₹5,988</p>
           </div>
+        </div>
+
+        <div class="pricing-cta-group mt-5 flex flex-col sm:flex-row gap-3">
+          <a href="/signup" class="micro-cta no-underline">
+            <span>Start Campaign</span>
+            <span class="micro-cta__icon" aria-hidden="true">&rarr;</span>
+          </a>
+          <a href="/contact" class="pricing-secondary-link no-underline">Talk to team</a>
         </div>
       </section>
     </div>
@@ -217,7 +218,7 @@ import Footer from "../components/marketing/Footer.astro";
 
     .pricing-plan-card {
       position: relative;
-      overflow: clip;
+      overflow: visible;
       border-radius: 0;
       border: 0;
       background: transparent;
@@ -461,7 +462,7 @@ import Footer from "../components/marketing/Footer.astro";
         border-radius: 1.55rem;
       }
 
-      .pricing-copy .micro-cta,
+      .pricing-cta-group .micro-cta,
       .pricing-secondary-link {
         width: 100%;
         justify-content: center;

@@ -329,16 +329,16 @@ export default function FinalCTAAnimated() {
             text-wrap: pretty;
           }
           .bk-final-cta-buttons {
-            flex-direction: row;
+            flex-direction: column;
             align-items: center;
             width: 100%;
-            max-width: 420px;
+            max-width: 340px;
             margin: 0 auto;
             gap: 10px;
           }
           .bk-final-primary-link {
-            width: auto;
-            flex: 1 1 0;
+            width: 100%;
+            flex: 1 1 auto;
             min-width: 0;
             margin: 0;
             justify-content: center;
@@ -350,8 +350,8 @@ export default function FinalCTAAnimated() {
             box-shadow: none;
           }
           .bk-final-btn-secondary {
-            width: auto;
-            flex: 1 1 0;
+            width: 100%;
+            flex: 1 1 auto;
             min-width: 0;
             min-height: 48px;
             padding: 0 12px;
