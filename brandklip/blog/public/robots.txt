@@ -9,4 +9,4 @@ Disallow: /branddashboard
 Disallow: /creatordashboard
 Disallow: /account
 
-Sitemap: https://www.brandklip.com/sitemap.xml
+Sitemap: https://www.brandklip.com/sitemap-index.xml

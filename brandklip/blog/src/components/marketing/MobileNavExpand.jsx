@@ -203,7 +203,12 @@ export function MobileNavExpand({ loginHref, signupHref, triggerSelector = ".men
   };
 
   return (
-    <div id="mobile-nav-expand" className="mobile-nav-expand" ref={rootRef} aria-hidden={!isOpen}>
+    <div
+      id="mobile-nav-expand"
+      className="mobile-nav-expand"
+      ref={rootRef}
+      aria-hidden={!isOpen}
+    >
       <div className="mobile-nav-expand-inner" ref={innerRef}>
         <div className="mobile-nav-expand-divider" ref={dividerRef} />
         <div className="mobile-nav-expand-links">

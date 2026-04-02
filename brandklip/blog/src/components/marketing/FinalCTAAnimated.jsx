@@ -30,6 +30,17 @@ export default function FinalCTAAnimated() {
 
   useEffect(() => {
     let ctx;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouchDevice =
+      window.matchMedia("(pointer: coarse)").matches ||
+      navigator.maxTouchPoints > 0;
+
+    if (prefersReducedMotion || isTouchDevice) {
+      setPriceDisplay("₹0");
+      return undefined;
+    }
+
     const initGSAP = async () => {
       const gsapModule = await import("gsap");
       const g = gsapModule.gsap || gsapModule.default || gsapModule;
@@ -154,8 +165,6 @@ export default function FinalCTAAnimated() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap');
-
         .bk-final-cta {
           max-width: 720px;
           margin: 0 auto;
@@ -185,7 +194,7 @@ export default function FinalCTAAnimated() {
           line-height: 1.08;
           color: #0D0D0D;
           margin: 0 0 4px;
-          opacity: 0;
+          opacity: 1;
         }
 
         .bk-final-price {
@@ -201,7 +210,7 @@ export default function FinalCTAAnimated() {
           color: #6b7280;
           max-width: 500px;
           margin: 20px auto 32px;
-          opacity: 0;
+          opacity: 1;
         }
 
         .bk-final-cta-buttons {
@@ -210,7 +219,7 @@ export default function FinalCTAAnimated() {
           justify-content: center;
           gap: 12px;
           flex-wrap: wrap;
-          opacity: 0;
+          opacity: 1;
         }
 
         .bk-final-primary-link {
@@ -283,7 +292,7 @@ export default function FinalCTAAnimated() {
           font-size: 13px;
           font-weight: 600;
           color: #22C55E;
-          opacity: 0;
+          opacity: 1;
         }
         .bk-final-spots-dot-wrap {
           position: relative;
@@ -319,18 +328,35 @@ export default function FinalCTAAnimated() {
             margin: 16px auto 24px;
             text-wrap: pretty;
           }
-          .bk-final-cta-buttons { flex-direction: column; width: 100%; }
-          .bk-final-primary-link {
+          .bk-final-cta-buttons {
+            flex-direction: row;
+            align-items: center;
             width: 100%;
-            max-width: 360px;
-            justify-content: center;
+            max-width: 420px;
             margin: 0 auto;
+            gap: 10px;
+          }
+          .bk-final-primary-link {
+            width: auto;
+            flex: 1 1 0;
+            min-width: 0;
+            margin: 0;
+            justify-content: center;
+          }
+          .bk-final-primary-link.micro-cta {
+            min-height: 48px;
+            padding: 0 12px;
+            font-size: 14px;
+            box-shadow: none;
           }
           .bk-final-btn-secondary {
-            align-self: center;
             width: auto;
+            flex: 1 1 0;
+            min-width: 0;
             min-height: 48px;
-            padding: 0 10px 0 16px;
+            padding: 0 12px;
+            font-size: 14px;
+            justify-content: center;
             border: 1.5px solid #dadde1;
             background: #f4f4f4;
             box-shadow: none;
@@ -339,7 +365,7 @@ export default function FinalCTAAnimated() {
             display: inline-flex;
             width: 34px;
             height: 34px;
-            margin-left: 12px;
+            margin-left: 8px;
             background: #e6e6e6;
           }
           .bk-final-spots { margin-top: 16px; }

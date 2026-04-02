@@ -59,7 +59,7 @@ const websiteJsonLd = {
     <meta name="robots" content={robots} />
     <meta name="author" content="BrandKlip" />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="sitemap" href="/sitemap.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="BrandKlip" />
@@ -76,15 +76,34 @@ const websiteJsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <!-- Google tag (gtag.js) -->
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-SKBZLTYCVJ"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    <script>
+      const w = window as any;
+      w.dataLayer = w.dataLayer || [];
 
-      gtag('config', 'G-SKBZLTYCVJ');
+      const bkGtag = (...args: unknown[]) => {
+        w.dataLayer.push(args);
+      };
+
+      bkGtag('js', new Date());
+
+      // Defer analytics script so it doesn't compete with first paint/LCP.
+      const loadGtag = () => {
+        if (w.__bkGtagLoaded) return;
+        w.__bkGtagLoaded = true;
+
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtag/js?id=G-SKBZLTYCVJ";
+        document.head.appendChild(script);
+
+        bkGtag('config', 'G-SKBZLTYCVJ');
+      };
+
+      if (typeof w.requestIdleCallback === "function") {
+        w.requestIdleCallback(loadGtag, { timeout: 2500 });
+      } else {
+        globalThis.setTimeout(loadGtag, 1500);
+      }
     </script>
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -99,7 +118,7 @@ const websiteJsonLd = {
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/styles/marketing.css" />
   </head>
   <body>
@@ -108,85 +127,134 @@ const websiteJsonLd = {
       <slot />
     </main>
     <script>
-      import Lenis from "lenis";
-
+      const w = window as any;
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const isTouchDevice =
         window.matchMedia("(pointer: coarse)").matches ||
         navigator.maxTouchPoints > 0;
+      const revealNodes = Array.from(document.querySelectorAll("[data-reveal]"));
 
-      // Keep native momentum scrolling on mobile/touch to avoid jerky interpolation.
-      if (!prefersReducedMotion && !isTouchDevice) {
+      const showAllRevealNodes = () => {
+        revealNodes.forEach((node) => {
+          if (node instanceof HTMLElement) {
+            node.style.opacity = "1";
+            node.style.transform = "none";
+          }
+        });
+      };
+
+      const startLenis = async () => {
+        if (w.__bkLenisStarted) return;
+        w.__bkLenisStarted = true;
+
+        const { default: Lenis } = await import("lenis");
         const lenis = new Lenis({
           smoothWheel: true,
           syncTouch: false,
           infinite: false,
-          wheelMultiplier: 1,
-          touchMultiplier: 1,
+          wheelMultiplier: 0.9,
+          touchMultiplier: 0.9,
+          duration: 0.9,
         });
 
+        let rafId = 0;
         const raf = (time: number) => {
           lenis.raf(time);
-          requestAnimationFrame(raf);
+          rafId = requestAnimationFrame(raf);
         };
 
-        requestAnimationFrame(raf);
-      }
-    </script>
-    <script>
-      import gsap from "gsap";
-      import { ScrollTrigger } from "gsap/ScrollTrigger";
+        const onVisibility = () => {
+          if (document.hidden) {
+            cancelAnimationFrame(rafId);
+            return;
+          }
+          rafId = requestAnimationFrame(raf);
+        };
 
-      gsap.registerPlugin(ScrollTrigger);
+        const teardown = () => {
+          cancelAnimationFrame(rafId);
+          document.removeEventListener("visibilitychange", onVisibility);
+          lenis.destroy();
+          if (w.__bkLenis === lenis) {
+            delete w.__bkLenis;
+          }
+          delete w.__bkLenisStarted;
+        };
 
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const isTouchDevice =
-        window.matchMedia("(pointer: coarse)").matches ||
-        navigator.maxTouchPoints > 0;
+        w.__bkLenis = lenis;
+        document.addEventListener("visibilitychange", onVisibility);
+        window.addEventListener("pagehide", teardown, { once: true });
+        rafId = requestAnimationFrame(raf);
+      };
 
-      if (!(prefersReducedMotion || isTouchDevice)) {
-        // Enhanced scroll reveals (desktop only)
-        const revealNodes = document.querySelectorAll('[data-reveal]');
+      const startGsapReveal = async () => {
+        if (!revealNodes.length) return;
+
+        if (prefersReducedMotion || isTouchDevice) {
+          showAllRevealNodes();
+          return;
+        }
+
+        const gsapModule = await import("gsap");
+        const stModule = await import("gsap/ScrollTrigger");
+        const gsap = gsapModule.gsap || gsapModule.default || gsapModule;
+        const ScrollTrigger = stModule.ScrollTrigger || stModule.default;
+
+        if (!gsap || !ScrollTrigger) {
+          showAllRevealNodes();
+          return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        const lenis = w.__bkLenis;
+        if (lenis && !w.__bkLenisScrollTriggerBound) {
+          lenis.on("scroll", ScrollTrigger.update);
+          w.__bkLenisScrollTriggerBound = true;
+        }
 
         revealNodes.forEach((node) => {
-          // Skip if it's in a page that handles its own animations
-          if (node.closest('.home-hero')) return;
+          if (!(node instanceof HTMLElement)) return;
+          if (node.closest(".home-hero")) return;
 
-          const variant = node.getAttribute('data-reveal-variant') || 'fadeUp';
-          const delay = parseFloat(node.getAttribute('data-reveal-delay') || '0');
+          const variant = node.getAttribute("data-reveal-variant") || "fadeUp";
+          const delay = Number.parseFloat(node.getAttribute("data-reveal-delay") || "0") || 0;
 
-          let animation = {};
-
-          switch(variant) {
-            case 'fadeLeft':
-              animation = { x: -60, opacity: 0 };
-              break;
-            case 'fadeRight':
-              animation = { x: 60, opacity: 0 };
-              break;
-            case 'scale':
-              animation = { scale: 0.9, opacity: 0 };
-              break;
-            case 'blur':
-              animation = { filter: "blur(10px)", opacity: 0 };
-              break;
-            default: // fadeUp
-              animation = { y: 40, opacity: 0 };
-          }
+          let animation: Record<string, unknown> = { y: 26, autoAlpha: 0 };
+          if (variant === "fadeLeft") animation = { x: -34, autoAlpha: 0 };
+          if (variant === "fadeRight") animation = { x: 34, autoAlpha: 0 };
+          if (variant === "scale") animation = { scale: 0.95, autoAlpha: 0 };
+          if (variant === "blur") animation = { filter: "blur(8px)", autoAlpha: 0 };
 
           gsap.from(node, {
             ...animation,
-            duration: 0.8,
-            delay: delay,
-            immediateRender: false,
+            duration: 0.62,
+            delay,
             ease: "power2.out",
+            immediateRender: false,
+            clearProps: "opacity,transform,filter,visibility",
             scrollTrigger: {
               trigger: node,
-              start: "top 85%",
-              toggleActions: "play none none none"
-            }
+              start: "top 86%",
+              once: true,
+              fastScrollEnd: true,
+            },
           });
         });
+      };
+
+      const boot = () => {
+        if (!prefersReducedMotion && !isTouchDevice) {
+          startLenis();
+        }
+
+        startGsapReveal();
+      };
+
+      if (document.readyState === "complete") {
+        boot();
+      } else {
+        window.addEventListener("load", boot, { once: true });
       }
     </script>
 

@@ -14,11 +14,24 @@ export default defineConfig({
       dedupe: ["react", "react-dom"],
     },
   },
-  redirects: {
-    "/brands": "/",
-  },
   integrations: [
-    sitemap(),
+    sitemap({
+      filter: (page) => {
+        const pathname = new URL(page).pathname;
+        const blocked = [
+          "/login",
+          "/signup",
+          "/account",
+          "/dashboard",
+          "/branddashboard",
+          "/creatordashboard",
+        ];
+
+        return !blocked.some((prefix) =>
+          pathname === prefix || pathname.startsWith(`${prefix}/`)
+        );
+      },
+    }),
     starlight({
       title: "BrandKlip",
       disable404Route: true,

@@ -41,6 +41,16 @@ export default function TrustEscrowAnimated() {
 
   useEffect(() => {
     let ctx;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouchDevice =
+      window.matchMedia("(pointer: coarse)").matches ||
+      navigator.maxTouchPoints > 0;
+
+    if (prefersReducedMotion || isTouchDevice) {
+      return undefined;
+    }
+
     const initGSAP = async () => {
       const gsapModule = await import("gsap");
       const g = gsapModule.gsap || gsapModule.default || gsapModule;
@@ -164,8 +174,6 @@ export default function TrustEscrowAnimated() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap');
-
         .bk-trust {
           max-width: 1120px;
           margin: 0 auto;
@@ -196,7 +204,7 @@ export default function TrustEscrowAnimated() {
           color: #0D0D0D;
           margin: 0;
           max-width: 480px;
-          opacity: 0;
+          opacity: 1;
         }
         .bk-trust-desc {
           font-size: 15px;
@@ -204,7 +212,7 @@ export default function TrustEscrowAnimated() {
           color: #6b7280;
           margin: 12px 0 0;
           max-width: 480px;
-          opacity: 0;
+          opacity: 1;
         }
 
         .bk-trust-razorpay {
@@ -215,7 +223,7 @@ export default function TrustEscrowAnimated() {
           background: #fff;
           border: 1px solid #e5e7eb;
           border-radius: 12px;
-          opacity: 0;
+          opacity: 1;
           position: relative;
           overflow: hidden;
           flex-shrink: 0;
@@ -262,7 +270,7 @@ export default function TrustEscrowAnimated() {
           background: #fff;
           border: 1.5px solid #e5e7eb;
           border-radius: 16px;
-          opacity: 0;
+          opacity: 1;
           position: relative;
           transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
@@ -287,8 +295,8 @@ export default function TrustEscrowAnimated() {
           font-size: 13px;
           color: #15803d;
           margin-bottom: 14px;
-          opacity: 0;
-          transform: scale(0);
+          opacity: 1;
+          transform: scale(1);
         }
 
         .bk-trust-step-title {
@@ -369,7 +377,7 @@ export default function TrustEscrowAnimated() {
             </div>
             <div className="bk-trust-razorpay" ref={razorpayRef}>
               <div className="bk-trust-razorpay-shimmer" ref={shimmerRef} />
-              <img src="/razorpay-logo.png" alt="Razorpay" className="bk-trust-razorpay-logo-img" loading="lazy" decoding="async" />
+              <img src="/razorpay-logo.png" alt="Razorpay" width="110" height="24" className="bk-trust-razorpay-logo-img" loading="lazy" decoding="async" />
               <span className="bk-trust-razorpay-label">Trusted payment partner</span>
             </div>
           </div>

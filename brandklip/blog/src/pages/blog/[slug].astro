@@ -63,15 +63,13 @@ const blogBreadcrumbJsonLd = {
 };
 ---
 
-<script is:inline type="application/ld+json" set:html={JSON.stringify(blogPostingJsonLd)} />
-<script is:inline type="application/ld+json" set:html={JSON.stringify(blogBreadcrumbJsonLd)} />
-
 <MarketingLayout
   title={post.data.title}
   description={post.data.description || "BrandKlip blog post."}
   canonicalPath={`/blog/${slug}`}
   ogType="article"
   articleDate={getBlogDate(post).toISOString()}
+  jsonLd={[blogPostingJsonLd, blogBreadcrumbJsonLd]}
 >
   <main class="blog-page">
     <article class="blog-container" style="max-width: 52rem;">

@@ -141,8 +141,46 @@ const {
 <script>
   import gsap from "gsap";
 
-  // FAQ Accordion with GSAP
+  // FAQ accordion animation
   const faqItems = document.querySelectorAll('[data-faq-item]');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const closeItem = (item: Element) => {
+    const content = item.querySelector('[data-faq-content-wrap]');
+    if (!content) return;
+
+    gsap.to(content, {
+      height: 0,
+      opacity: 0,
+      duration: 0.3,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        item.removeAttribute('open');
+      },
+    });
+  };
+
+  const openItem = (item: Element) => {
+    const content = item.querySelector('[data-faq-content-wrap]');
+    if (!content) return;
+
+    item.setAttribute('open', '');
+    const targetHeight = content.scrollHeight;
+
+    gsap.fromTo(
+      content,
+      { height: 0, opacity: 0 },
+      {
+        height: targetHeight,
+        opacity: 1,
+        duration: 0.36,
+        ease: 'power2.out',
+        onComplete: () => {
+          gsap.set(content, { height: 'auto' });
+        },
+      }
+    );
+  };
   
   faqItems.forEach((item) => {
     const trigger = item.querySelector('[data-faq-trigger]');
@@ -150,7 +188,6 @@ const {
     
     if (!trigger || !content) return;
     
-    // Set initial state for closed items
     if (!item.hasAttribute('open')) {
       gsap.set(content, { height: 0, opacity: 0 });
     }
@@ -158,63 +195,34 @@ const {
     trigger.addEventListener('click', (e) => {
       e.preventDefault();
       const isOpen = item.hasAttribute('open');
+
+      if (prefersReducedMotion) {
+        faqItems.forEach((otherItem) => {
+          if (otherItem !== item) {
+            otherItem.removeAttribute('open');
+          }
+        });
+
+        if (isOpen) {
+          item.removeAttribute('open');
+        } else {
+          item.setAttribute('open', '');
+        }
+
+        return;
+      }
       
       if (isOpen) {
-        // Closing
-        gsap.to(content, {
-          height: 0,
-          opacity: 0,
-          duration: 0.4,
-          ease: "power2.inOut",
-          onComplete: () => {
-            item.removeAttribute('open');
-          }
-        });
+        closeItem(item);
       } else {
-        // Opening - close others first
         faqItems.forEach((otherItem) => {
           if (otherItem !== item && otherItem.hasAttribute('open')) {
-            const otherContent = otherItem.querySelector('[data-faq-content-wrap]');
-            gsap.to(otherContent, {
-              height: 0,
-              opacity: 0,
-              duration: 0.3,
-              ease: "power2.in",
-              onComplete: () => {
-                otherItem.removeAttribute('open');
-              }
-            });
+            closeItem(otherItem);
           }
         });
-        
-        // Open this one
-        item.setAttribute('open', '');
-        const targetHeight = content.scrollHeight;
-        
-        gsap.fromTo(content, 
-          { height: 0, opacity: 0 },
-          { 
-            height: targetHeight,
-            opacity: 1,
-            duration: 0.5,
-            ease: "power2.out",
-            onComplete: () => {
-              gsap.set(content, { height: 'auto' });
-            }
-          }
-        );
-        
-        // Animate text content
-        const textElements = content.querySelectorAll('p');
-        gsap.from(textElements, {
-          y: -10,
-          opacity: 0,
-          duration: 0.4,
-          delay: 0.2,
-          ease: "power2.out"
-        });
+
+        openItem(item);
       }
     });
   });
-</script>
 </script>

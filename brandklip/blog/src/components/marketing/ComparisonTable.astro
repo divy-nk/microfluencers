@@ -113,7 +113,7 @@ const renderValue = (value: string | boolean, highlighted: boolean, feature: str
                     {
                       isBrandKlipColumn(column) ? (
                         <div class="inline-flex flex-wrap items-center gap-1.5 pr-2">
-                          <img src="/logo-black.png" alt="BrandKlip" class="h-5 w-auto max-w-[7.5rem] shrink-0 object-contain" loading="lazy" decoding="async" />
+                          <img src="/logo-black.png" alt="BrandKlip" width="88" height="20" class="h-5 w-auto max-w-[7.5rem] shrink-0 object-contain" loading="lazy" decoding="async" />
                           <span class="text-sm sm:text-[15px] font-semibold text-[var(--brand-black)]" style='font-family: "Bricolage Grotesque", sans-serif;'>BrandKlip</span>
                         </div>
                       ) : (
@@ -153,7 +153,7 @@ const renderValue = (value: string | boolean, highlighted: boolean, feature: str
                   {
                     isBrandKlipColumn(column) ? (
                       <div class="inline-flex items-center gap-2.5">
-                        <img src="/logo-black.png" alt="BrandKlip" class="h-7 w-auto object-contain" loading="lazy" decoding="async" />
+                        <img src="/logo-black.png" alt="BrandKlip" width="124" height="28" class="h-7 w-auto object-contain" loading="lazy" decoding="async" />
                         <p class="text-[1.05rem] font-semibold text-[var(--brand-black)]" style='font-family: "Bricolage Grotesque", sans-serif;'>BrandKlip</p>
                       </div>
                     ) : (
@@ -173,7 +173,7 @@ const renderValue = (value: string | boolean, highlighted: boolean, feature: str
                 {row.values.map((value, index) => (
                   <td class={`${getColumnCellClass(columns[index])} py-4 border-b border-[color:var(--line-faint)]`} style={getColumnCellStyle(columns[index])}>
                     {typeof normalizeCellValue(row.feature, columns[index], value) === "boolean" ? (
-                      <span class={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${columns[index]?.highlighted ? "bg-[var(--white)] text-[var(--brand-black)] shadow-[0_2px_8px_rgba(0,0,0,0.08)]" : "bg-[color:var(--line-faint)] text-[var(--ink-65)]"}`}>
+                      <span class={`status-icon inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${columns[index]?.highlighted ? "bg-[var(--white)] text-[var(--brand-black)] shadow-[0_2px_8px_rgba(0,0,0,0.08)]" : "bg-[color:var(--line-faint)] text-[var(--ink-65)]"}`}>
                         {renderValue(normalizeCellValue(row.feature, columns[index], value), Boolean(columns[index]?.highlighted), row.feature)}
                       </span>
                     ) : (
@@ -204,47 +204,85 @@ const renderValue = (value: string | boolean, highlighted: boolean, feature: str
 </section>
 
 <script>
-  import gsap from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  const table = document.querySelector(".comparison-table");
+  if (!table) {
+    // no-op
+  } else {
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouchDevice =
+      window.matchMedia("(pointer: coarse)").matches ||
+      navigator.maxTouchPoints > 0;
 
-  gsap.registerPlugin(ScrollTrigger);
+    const rows = Array.from(table.querySelectorAll("tbody tr"));
+    const icons = Array.from(table.querySelectorAll(".status-icon"));
 
-  // Animate table rows on scroll
-  const rows = document.querySelectorAll(".comparison-table tbody tr");
-  
-  const shouldAnimateTable = window.matchMedia("(min-width: 768px)").matches;
+    const showAll = () => {
+      rows.forEach((row) => {
+        if (row instanceof HTMLElement) {
+          row.style.opacity = "1";
+          row.style.transform = "none";
+        }
+      });
 
-  if (shouldAnimateTable && rows.length > 0) {
-    gsap.from(rows, {
-      x: -30,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.08,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: ".comparison-table",
-        start: "top 80%",
-        toggleActions: "play none none none"
-      }
-    });
-  }
+      icons.forEach((icon) => {
+        if (icon instanceof HTMLElement) {
+          icon.style.opacity = "1";
+          icon.style.transform = "none";
+        }
+      });
+    };
 
-  // Animate icons within cells
-  const icons = document.querySelectorAll(".comparison-table tbody tr td span[class*='inline-flex']");
-  
-  if (shouldAnimateTable && icons.length > 0) {
-    gsap.from(icons, {
-      scale: 0,
-      rotation: -180,
-      duration: 0.5,
-      stagger: 0.05,
-      ease: "back.out(1.7)",
-      scrollTrigger: {
-        trigger: ".comparison-table",
-        start: "top 70%",
-        toggleActions: "play none none none"
-      }
-    });
+    if (!isDesktop || prefersReducedMotion || isTouchDevice) {
+      showAll();
+    } else {
+      const initGsapTable = async () => {
+        const gsapModule = await import("gsap");
+        const stModule = await import("gsap/ScrollTrigger");
+        const gsap = gsapModule.gsap || gsapModule.default || gsapModule;
+        const ScrollTrigger = stModule.ScrollTrigger || stModule.default;
+
+        if (!gsap || !ScrollTrigger) {
+          showAll();
+          return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.from(rows, {
+          x: -22,
+          autoAlpha: 0,
+          duration: 0.52,
+          stagger: 0.06,
+          ease: "power2.out",
+          clearProps: "opacity,transform,visibility",
+          scrollTrigger: {
+            trigger: table,
+            start: "top 82%",
+            once: true,
+            fastScrollEnd: true,
+          },
+        });
+
+        gsap.from(icons, {
+          scale: 0.72,
+          rotation: -16,
+          autoAlpha: 0,
+          duration: 0.38,
+          stagger: 0.028,
+          ease: "back.out(1.6)",
+          clearProps: "opacity,transform,visibility",
+          scrollTrigger: {
+            trigger: table,
+            start: "top 76%",
+            once: true,
+            fastScrollEnd: true,
+          },
+        });
+      };
+
+      initGsapTable();
+    }
   }
 </script>
 

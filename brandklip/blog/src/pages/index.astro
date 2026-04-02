@@ -21,12 +21,65 @@ const brandComparisonRows = [
   { feature: "Creator accountability", values: ["High", "Low", "Medium"] },
   { feature: "Per-video economics", values: ["Transparent", "Unpredictable", "Retainer heavy"] },
 ];
+
+const faqItems = [
+  {
+    id: "faq-1",
+    question: "What if the creator takes the product and disappears?",
+    answer:
+      "They buy it themselves with their own money. No product is ever sent by you, because creators purchase directly from your store.",
+  },
+  {
+    id: "faq-2",
+    question: "What if the content is unusable?",
+    answer:
+      "You do not pay until BrandKlip verifies the content meets your brief. Submissions are reviewed against one clear standard.",
+  },
+  {
+    id: "faq-3",
+    question: "What about rights and licensing?",
+    answer:
+      "Every approved video includes perpetual usage rights, so you can run it on ads, PDPs, and social without renewal stress.",
+  },
+  {
+    id: "faq-4",
+    question: "How fast do creators usually submit content?",
+    answer:
+      "Most campaigns see first submissions within a few days, depending on product delivery timelines and your brief complexity.",
+  },
+  {
+    id: "faq-5",
+    question: "Can I request revisions before payout is released?",
+    answer:
+      "Yes. If a submission misses the brief, BrandKlip can route a revision before any payout is released from escrow.",
+  },
+  {
+    id: "faq-6",
+    question: "Do I need to commit to retainers or long contracts?",
+    answer:
+      "No retainers. You run campaign by campaign and pay only for approved outcomes inside the platform workflow.",
+  },
+];
+
+const faqPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
 ---
 
 <MarketingLayout
   title="Automated UGC & UPI Escrow"
   description="BrandKlip helps D2C brands run zero-risk UGC campaigns with escrow-backed creator workflows and approval-first payouts."
   canonicalPath="/"
+  jsonLd={[faqPageJsonLd]}
 >
   <section class="home-hero relative z-10 flex flex-col items-center justify-center min-h-[100svh] overflow-hidden px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-16 sm:pb-20 md:pb-24 border-none">
     <div class="site-aurora" aria-hidden="true"></div>
@@ -82,7 +135,7 @@ const brandComparisonRows = [
   </div>
 
   <div class="section-band section-band-mint-deep" id="faq">
-    <BrandRiskCards heading="Frequently asked questions" />
+    <BrandRiskCards heading="Frequently asked questions" items={faqItems} />
   </div>
 
   <section id="cta" class="cta-island relative z-10 w-full overflow-hidden">
@@ -92,21 +145,6 @@ const brandComparisonRows = [
   <Footer />
 </MarketingLayout>
 
-<script>
-  // Force hero elements to stay visible - disable any animations
-  document.addEventListener('DOMContentLoaded', () => {
-    const heroSection = document.querySelector('.home-hero');
-    if (heroSection) {
-      // Force opacity on all text elements in hero
-      const heroElements = heroSection.querySelectorAll('h1, p, div, span, a');
-      heroElements.forEach(el => {
-        if (el instanceof HTMLElement) {
-          el.style.setProperty('opacity', '1', 'important');
-        }
-      });
-    }
-  });
-</script>
 <style>
   /* Force hero text visibility - override any animations */
   .home-hero h1,

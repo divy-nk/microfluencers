@@ -14,7 +14,7 @@ const dashboardHref = new URL("/dashboard", authBaseUrl).toString();
   <div class="nav-shell">
     <div class="nav-main-row">
       <a href="/" class="brand">
-        <img src="/logo-black.png" alt="BrandKlip" class="brand-logo" />
+        <img src="/logo-black.png" alt="BrandKlip" width="176" height="40" class="brand-logo" />
         <span class="brand-text">BrandKlip</span>
       </a>
 
@@ -36,7 +36,7 @@ const dashboardHref = new URL("/dashboard", authBaseUrl).toString();
       </div>
     </div>
 
-    <MobileNavExpand loginHref={loginHref} signupHref={signupHref} client:load />
+    <MobileNavExpand loginHref={loginHref} signupHref={signupHref} client:media="(max-width: 720px)" />
   </div>
 </header>
 

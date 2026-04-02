@@ -59,12 +59,12 @@ function MilestoneTracker({ inView, isMobile }) {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || isMobile) return;
     const id = setInterval(() => {
       setActive((p) => (p >= steps.length - 1 ? 0 : p + 1));
     }, 1800);
     return () => clearInterval(id);
-  }, [inView]);
+  }, [inView, isMobile]);
 
   return (
     <div style={{ width: "100%", padding: "0" }}>
@@ -139,6 +139,12 @@ function VerificationAnim({ inView, isMobile }) {
   const [phase, setPhase] = useState(0); // 0=scanning, 1=checking, 2=approved
   useEffect(() => {
     if (!inView) return;
+
+    if (isMobile) {
+      setPhase(2);
+      return;
+    }
+
     const cycle = () => {
       setPhase(0);
       setTimeout(() => setPhase(1), 1500);
@@ -147,7 +153,7 @@ function VerificationAnim({ inView, isMobile }) {
     cycle();
     const id = setInterval(cycle, 5000);
     return () => clearInterval(id);
-  }, [inView]);
+  }, [inView, isMobile]);
 
   return (
     <div style={{
@@ -291,8 +297,6 @@ export default function BrandKlipBentoGrid() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap');
-
         @keyframes scanDown {
           0% { transform: translateY(0); }
           50% { transform: translateY(77px); }
