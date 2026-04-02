@@ -122,10 +122,10 @@ const websiteJsonLd = {
     <link rel="stylesheet" href="/styles/marketing.css" />
 
     <script>
+      const routeWindow = window as any;
       const normalizedPath = window.location.pathname.replace(/\/+$/, "") || "/";
       const knownRoutes = new Set([
         "/",
-        "/404",
         "/blog",
         "/contact",
         "/creators",
@@ -137,9 +137,9 @@ const websiteJsonLd = {
       const isKnownRoute =
         knownRoutes.has(normalizedPath) || normalizedPath.startsWith("/blog/");
 
-      // App Platform fallback serves index.html on unknown paths; redirect those to the real 404 page.
+      // App Platform fallback serves homepage HTML for unknown paths. Flag unknown paths for runtime 404 rendering.
       if (!isKnownRoute) {
-        window.location.replace("/404");
+        routeWindow.__bkUnknownRoute = normalizedPath;
       }
     </script>
   </head>
@@ -148,6 +148,44 @@ const websiteJsonLd = {
     <main class="relative z-10">
       <slot />
     </main>
+    <script>
+      const routeWindow = window as any;
+      const unknownPath = routeWindow.__bkUnknownRoute;
+      if (unknownPath) {
+        document.title = "BrandKlip | Page Not Found";
+
+        const robotsMeta = document.querySelector('meta[name="robots"]');
+        if (robotsMeta) {
+          robotsMeta.setAttribute("content", "noindex,follow");
+        }
+
+        const canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) {
+          canonical.setAttribute("href", "https://www.brandklip.com/404");
+        }
+
+        const main = document.querySelector("main");
+        if (main) {
+          main.innerHTML = `
+            <section class="relative z-10 min-h-[70vh] flex items-center justify-center px-6 py-24">
+              <div class="w-full max-w-3xl text-center">
+                <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--ink-45)] mb-5">Error 404</p>
+                <h1 class="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--brand-black)] mb-6 leading-tight">
+                  Wrong endpoint.
+                </h1>
+                <p class="text-lg text-[var(--ink-60)] max-w-2xl mx-auto mb-10">
+                  The page you requested does not exist.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <a href="/" class="hero-cta hero-cta-static">Back to Homepage</a>
+                  <a href="/contact" class="hero-cta" style="background: transparent; color: var(--brand-black); border: 1px solid var(--line-soft);">Contact Support</a>
+                </div>
+              </div>
+            </section>
+          `;
+        }
+      }
+    </script>
     <script>
       const w = window as any;
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
