@@ -2,7 +2,7 @@
 const currentYear = new Date().getFullYear();
 const waspOrigin =
   import.meta.env.PUBLIC_WASP_ORIGIN ||
-  (import.meta.env.DEV ? "http://localhost:3000" : "");
+  (import.meta.env.DEV ? "http://localhost:3000" : "https://api.brandklip.com");
 const signupHref = waspOrigin ? new URL("/signup", waspOrigin).toString() : "/signup";
 ---
 

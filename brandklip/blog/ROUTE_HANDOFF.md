@@ -20,6 +20,9 @@ This document defines Phase 5 ownership split for production routing.
 - Wasp app owns:
   - `/signup`
   - `/login`
+  - `/oauth/callback`
+  - `/auth/*`
+  - `/auth/google/callback`
   - `/dashboard`
   - `/branddashboard`
   - `/creatordashboard`
@@ -33,6 +36,7 @@ This document defines Phase 5 ownership split for production routing.
 
 1. Keep non-www -> www 301 redirect rule active.
 2. Add highest-priority route rules for Wasp paths (dashboard/auth/app paths) to origin `WASP_ORIGIN`.
+  - Required explicit rules: `/auth/*`, `/oauth/callback`, `/signup`, `/login`.
 3. Route all marketing/blog paths listed above to Astro static origin `ASTRO_ORIGIN`.
 4. Add permanent redirect: `/brands` -> `/`.
 5. Keep default/fallback behavior explicit; do not rely on implicit wildcard order.
@@ -56,6 +60,8 @@ Run these checks after route switch:
 3. `curl -I https://www.brandklip.com/branddashboard` returns Wasp response.
 4. `curl -I https://www.brandklip.com/robots.txt` returns Astro response.
 5. `curl -I https://www.brandklip.com/sitemap.xml` returns Astro response.
-6. Confirm canonical tags on Astro pages point to `https://www.brandklip.com/[path]`.
-7. Confirm JSON-LD is present on Astro marketing pages and blog pages.
-8. Re-run GSC URL Inspection for `/`, `/creators`, `/contact`, `/privacypolicy`, `/terms`, `/blog`, and one `/blog/[slug]`.
+6. `curl -I https://www.brandklip.com/oauth/callback` returns Wasp response.
+7. `curl -I https://www.brandklip.com/auth/google/callback` returns Wasp response.
+8. Confirm canonical tags on Astro pages point to `https://www.brandklip.com/[path]`.
+9. Confirm JSON-LD is present on Astro marketing pages and blog pages.
+10. Re-run GSC URL Inspection for `/`, `/creators`, `/contact`, `/privacypolicy`, `/terms`, `/blog`, and one `/blog/[slug]`.

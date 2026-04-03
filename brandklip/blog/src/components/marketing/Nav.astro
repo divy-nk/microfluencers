@@ -3,7 +3,7 @@ import { MobileNavExpand } from "./MobileNavExpand.jsx";
 
 const authBaseUrl =
   import.meta.env.PUBLIC_WASP_ORIGIN ||
-  (import.meta.env.DEV ? "http://localhost:3000" : "https://www.brandklip.com");
+  (import.meta.env.DEV ? "http://localhost:3000" : "https://api.brandklip.com");
 
 const loginHref = new URL("/login", authBaseUrl).toString();
 const signupHref = new URL("/signup", authBaseUrl).toString();
